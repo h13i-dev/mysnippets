@@ -1,0 +1,18 @@
+@layer components {
+  .c-figure {
+    box-sizing: content-box;
+    display: flex;
+    flex-direction: column;
+    width: fit-content;
+    margin-inline: auto;
+
+    img {
+      margin-inline: auto;
+    }
+  }
+
+  .c-figure_caption {
+    width: fit-content;
+    margin-inline: auto;
+  }
+}

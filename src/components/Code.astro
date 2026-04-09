@@ -1,0 +1,93 @@
+---
+interface Props {
+  lang: string; // コードの言語
+  preview?: "true" | "false"; // プレビュー表示の有無
+  class?: string; // クラス名
+}
+
+import { Code as AstroCode } from "astro:components";
+const { lang, preview, class: className } = Astro.props as Props;
+let code = await Astro.slots.render("default");
+
+const formatCode = (code: string, lang: string) => {
+  code = code
+    .replace(/&lt;/g, "<")
+    .replace(/&gt;/g, ">")
+    .replace(/&#39;/g, "'")
+    .replace(/&quot;/g, '"')
+    .replace(/&amp;/g, "&");
+
+  /**
+   * HTML
+   */
+  if (lang === "html") {
+    return code.replace(/^ /, "").replace(/(>) (<)/g, "$1\n$2");
+  }
+
+  return code.trim();
+};
+
+code = formatCode(code, lang);
+---
+
+<>
+  {
+    lang === "html" && preview !== "false" && (
+      <div class:list={["astro-preview-area", className]}>
+        <Fragment set:html={code} />
+      </div>
+    )
+  }
+
+<!-- eslint-disable-next-line @html-eslint/require-attrs, @html-eslint/sort-attrs -->
+  <div class:list={["astro-code_wrapper", lang !== "html" && className]}>
+    <AstroCode code={code} lang={lang} theme="dark-plus" />
+    <div class="astro-code_icons">
+      <span role="img" class="icon_return" aria-label="コードを折り返す"></span>
+      <span role="img" class="icon_copy" aria-label="コードをコピーする"></span>
+    </div>
+  </div>
+</>
+
+<script>
+  const codeWrappers = document.querySelectorAll(".astro-code_wrapper");
+
+  codeWrappers.forEach((wrapper) => {
+    const code = wrapper.querySelector(".astro-code");
+    returnCode(wrapper, code);
+    copyCode(wrapper, code);
+  });
+
+  function returnCode(wrapper: Element, el: Element | null) {
+    const returnIcon = wrapper.querySelector(".icon_return");
+    if (returnIcon && el) {
+      returnIcon.addEventListener("click", () => {
+        const currentWhiteSpace = window.getComputedStyle(el).whiteSpace;
+        (el as HTMLElement).style.whiteSpace = currentWhiteSpace === "pre" ? "pre-wrap" : "pre";
+      });
+    }
+  }
+
+  function copyCode(wrapper: Element, el: Element | null) {
+    // コピーボタンの機能を追加
+    const copyIcon = wrapper.querySelector(".icon_copy");
+    if (copyIcon && el) {
+      copyIcon.addEventListener("click", () => {
+        const codeElement = el.querySelector("code");
+        if (!codeElement) return;
+        const code = codeElement.innerText;
+        navigator.clipboard.writeText(code).then(() => {
+          // Create and show toast notification
+          const toast = document.createElement("div");
+          toast.className = "astro-code_copy-toast";
+          toast.textContent = "コピーしました";
+          wrapper.appendChild(toast);
+          setTimeout(() => {
+            toast.style.opacity = "0";
+            setTimeout(() => toast.remove(), 300);
+          }, 1500);
+        });
+      });
+    }
+  }
+</script>

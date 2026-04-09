@@ -1,0 +1,66 @@
+@use "@assets/sass/foundations/global/" as g;
+
+@layer components {
+  .p-heading-lv1 {
+    padding-bottom: theme("spacing.1");
+    font-size: theme("fontSize.3xl");
+    font-weight: bold;
+    border-bottom: 1px solid var(--color-primary);
+  }
+
+  .p-heading-lv2 {
+    font-size: theme("fontSize.2xl");
+    font-weight: bold;
+  }
+
+  .p-heading-lv3 {
+    font-size: theme("fontSize.xl");
+    font-weight: 500;
+  }
+
+  @include g.hover {
+    .p-heading-lv1,
+    .p-heading-lv2,
+    .p-heading-lv3 {
+      position: relative;
+
+      .p-heading-internal-link {
+        position: absolute;
+        top: 2px;
+        bottom: 0;
+        left: g.minmax(-22px, -20px, "xl", "sm");
+        display: inline-block;
+        width: auto;
+        height: 18px;
+        aspect-ratio: 1;
+        background-image: url("/src/assets/images/common/icon_link.svg");
+        background-repeat: no-repeat;
+        background-size: contain;
+        opacity: 0;
+        transition-timing-function: opacity theme("transitionTimingFunction.in-out");
+        transition-duration: theme("transitionDuration.300");
+      }
+
+      &:hover .p-heading-internal-link {
+        opacity: 0.5;
+      }
+    }
+
+    :where(.p-heading-lv1, .p-heading-lv2, .p-heading-lv3) .p-heading-internal-link {
+      @apply u-mt-adjust-[18px];
+    }
+  }
+}
+
+/**
+* コンテンツのタイトル
+*/
+@layer components {
+  .p-contents-title {
+    padding: theme("spacing.3") theme("spacing.5");
+    font-size: theme("fontSize.3xl");
+    font-weight: bold;
+    color: theme("colors.white");
+    background: linear-gradient(135deg, var(--color-primary) 50%, var(--color-secondary) 100%);
+  }
+}

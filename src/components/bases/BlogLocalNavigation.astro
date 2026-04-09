@@ -1,0 +1,55 @@
+---
+import { normalizePath } from "@src/utils/frontmatter/normalizePath";
+import { BlogFrontmatter } from "@src/utils/frontmatter/getFrontmatter";
+
+const localNavigationData = await BlogFrontmatter();
+---
+
+<aside class="l-localnav u-space-y-sm">
+  {
+    Object.entries(localNavigationData).map(([key, { heading, data, type }]) => (
+      <section class="l-localnav_section">
+        <h2 class="l-localnav_heading">
+          {type === "blog" && <a href="/blog/">{heading}</a>}
+          {type === "memo" && <a href="/memo/">{heading}</a>}
+          {type === "zenn" && <a href="https://zenn.dev/kg98ztd" target="_blank">{heading}</a>}
+        </h2>
+        <ul class="l-localnav_list">
+          {data.map((item) => {
+            if (type === "blog") {
+              const isActive = normalizePath(Astro.url.pathname) === normalizePath(`/blog/${item.slug}`);
+              return (
+                // <!-- eslint-disable-next-line @html-eslint/sort-attrs -->
+                <li class:list={["l-localnav_item", `${isActive ? "is-active" : ""}`]}>
+                  <a href={`/blog/${item.slug}/`} tabindex={isActive ? "-1" : null}>
+                    {item.data.icon} {item.data.title}
+                  </a>
+                </li>
+              );
+            } else if (type === "memo") {
+              const isActive = normalizePath(Astro.url.pathname) === normalizePath(`/memo/${item.slug}`);
+              return (
+                // <!-- eslint-disable-next-line @html-eslint/sort-attrs -->
+                <li class:list={["l-localnav_item", `${isActive ? "is-active" : ""}`]}>
+                  <a href={`/memo/${item.slug}/`} tabindex={isActive ? "-1" : null}>
+                    {item.data.icon} {item.data.title}
+                  </a>
+                </li>
+              );
+            } else {
+              // Zenn記事は外部リンク
+              return (
+                <li class="l-localnav_item">
+                  <a href={`https://zenn.dev${item.path}`} target="_blank" >
+                    {item.emoji} {item.title}
+                    <span class="l-localnav_external">↗</span>
+                  </a>
+                </li>
+              );
+            }
+          })}
+        </ul>
+      </section>
+    ))
+  }
+</aside>

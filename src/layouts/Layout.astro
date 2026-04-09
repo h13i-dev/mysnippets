@@ -1,0 +1,73 @@
+---
+import "@assets/sass/master.scss";
+import Header from "@components/bases/Header.astro";
+// import GoogleTagManager from "@components/bases/GoogleTagManager.astro";
+import { getCategory } from "@src/utils/frontmatter/getCategory";
+const { frontmatter } = Astro.props;
+const siteName = "My Snippets";
+
+/**
+ * @head
+ */
+const siteUrl = Astro.site?.origin;
+const currentPath = Astro.url.pathname;
+
+const generateMetaTitle = (title: string, Category: string | null, siteName: string): string => {
+  if (title === "") return siteName;
+  return Category ? `${title}｜${Category}｜${siteName}` : `${title}｜${siteName}`;
+};
+
+const Category = getCategory(currentPath);
+const metaTitle = generateMetaTitle(frontmatter.title, Category, siteName);
+const ogType = currentPath === import.meta.env.BASE_URL ? "website" : "article";
+const ogpPath = "/assets/images/ogp.png";
+
+// Google Fonts
+const notoSans = "https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@300;400;500;700&display=swap";
+const bigShoulders = "https://fonts.googleapis.com/css2?family=Big+Shoulders+Stencil:opsz,wght@10..72,700&display=swap&text=MySnippets";
+---
+
+<!doctype html>
+<html lang="ja">
+  <!-- eslint-disable-next-line @html-eslint/sort-attrs -->
+  <head prefix=`og: http://ogp.me/ns# fb: http://ogp.me/ns/fb# ${ogType}: http://ogp.me/ns/${ogType}#`>
+    <!-- <GoogleTagManager type="head" /> -->
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1" />
+    <meta name="format-detection" content="telephone=no" />
+    <title>{metaTitle}</title>
+    <meta name="description" content={frontmatter.description} />
+    <meta property="og:title" content={metaTitle} />
+    <meta property="og:description" content={frontmatter.description} />
+    <meta property="og:image" content={siteUrl + ogpPath} />
+    <meta property="og:url" content={siteUrl + currentPath} />
+    <meta property="og:type" content={ogType} />
+    <meta property="og:locale" content="ja_JP" />
+    <meta name="twitter:title" content={metaTitle} />
+    <meta name="twitter:description" content={frontmatter.description} />
+    <meta name="twitter:image" content={siteUrl + ogpPath} />
+    <link rel="canonical" href={siteUrl + currentPath} />
+    <link rel="shortcut icon" href="/favicon.ico" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link rel="preload" as="style" fetchpriority="high" href={notoSans} />
+    <link rel="stylesheet" href={notoSans} media="print" onload="this.media='all'" />
+    <link rel="preload" as="style" fetchpriority="high" href={bigShoulders} />
+    <link rel="stylesheet" href={bigShoulders} />
+    <link rel="sitemap" href="/sitemap-index.xml" />
+    <slot name="end-head" />
+  </head>
+
+  <body id="pagetop">
+    <!-- <GoogleTagManager type="body" /> -->
+    <Header siteName={siteName} />
+
+    <slot />
+
+    <script>
+      import "@assets/js/main.ts";
+    </script>
+    <slot name="end-body" />
+  </body>
+</html>

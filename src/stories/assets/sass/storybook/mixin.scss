@@ -1,0 +1,81 @@
+/* stylelint-disable rule-nesting-at-rule-required-list */
+@use "@assets/sass/foundations/global/" as g;
+
+/**
+* 矢印要素
+*/
+
+.p-mixin-arrow {
+  display: inline-block;
+
+  &.-up {
+    @include g.arrow("up", 12px);
+  }
+
+  &.-right {
+    @include g.arrow("right", 12px);
+  }
+
+  &.-down {
+    @include g.arrow("down", 12px);
+  }
+
+  &.-left {
+    @include g.arrow("left", 12px);
+  }
+}
+
+/*
+* 疑似要素
+*/
+.p-mixin-pseudo {
+  position: relative;
+
+  &::before {
+    @include g.pseudo-base("before");
+  }
+
+  &::after {
+    @include g.pseudo-base("after");
+    @include g.pseudo-center;
+  }
+}
+
+/*
+* 三角要素
+*/
+.p-mixin-triangle {
+  display: inline-block;
+
+  &.-up {
+    @include g.triangle("up", 12px, 12px);
+  }
+
+  &.-right {
+    @include g.triangle("right", 12px, 12px);
+  }
+
+  &.-down {
+    @include g.triangle("down", 12px, 12px);
+  }
+
+  &.-left {
+    @include g.triangle("left", 12px, 12px);
+  }
+
+  &.-top-left {
+    @include g.triangle("top-left", 12px, 12px);
+  }
+
+  &.-top-right {
+    @include g.triangle("top-right", 12px, 12px);
+  }
+
+  &.-bottom-left {
+    @include g.triangle("bottom-left", 12px, 12px);
+  }
+
+  &.-bottom-right {
+    @include g.triangle("bottom-right", 12px, 12px);
+  }
+}

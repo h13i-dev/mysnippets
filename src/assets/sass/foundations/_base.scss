@@ -1,0 +1,60 @@
+@use "@assets/sass/foundations/global/" as g;
+
+@layer base {
+  :root {
+    // カラーパレット
+    --color-primary: #2d3748;
+    --color-secondary: #4fd1c5;
+    --color-text: theme("colors.slate.800");
+    --color-danger: theme("colors.red.600");
+    --color-bg-backdrop: rgb(0 0 0 / 50%);
+
+    // default gap
+    --column-gap: theme("spacing.md");
+    --row-gap: theme("spacing.md");
+
+    // z-index
+    --z-header: theme("zIndex.20");
+    --z-backdrop: theme("zIndex.10");
+
+    // その他
+    --container-space-inline: #{g.minmax(24px, 40px)};
+    --default-transition: theme("transitionDuration.150") theme("transitionTimingFunction.in-out");
+    --viewport-width: calc(100vw - var(--scrollbar-width, 0px));
+  }
+
+  html {
+    scroll-padding-top: calc(var(--header-height) * 2);
+  }
+
+  body {
+    display: grid;
+    text-autospace: normal;
+    grid-template-areas:
+      "header"
+      "main"
+      "footer";
+    grid-template-rows: auto 1fr auto;
+    min-block-size: 100dvb;
+    font-family: "Noto Sans JP", "ヒラギノ角ゴ ProN W3", "Hiragino Kaku Gothic ProN", "HiraKakuProN-W3", "ヒラギノ角ゴ Pro W3", "Hiragino Kaku Gothic Pro", "メイリオ", "ＭＳ Ｐゴシック", sans-serif;
+    font-size: theme("fontSize.base");
+    color: theme("colors.text");
+    background-color: #fff;
+
+    @include g.mq("lg") {
+      &:has(.l-localnav) {
+        grid-template-areas:
+          "header header"
+          "localnav main"
+          "localnav footer";
+        grid-template-columns: 14rem 1fr;
+      }
+    }
+
+    @include g.mq-max(375px) {
+      zoom: progress(100vw, 0px, 375px);
+
+      // text-size-adjust: initial; /* iOS Safariのバグを回避 */
+    }
+  }
+}

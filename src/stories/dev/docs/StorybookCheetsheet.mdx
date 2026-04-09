@@ -1,0 +1,144 @@
+import { Meta } from "@storybook/addon-docs/blocks";
+
+<Meta title="_Dev/Docs/Storybook設定チートシート" />
+
+# Storybook設定チートシート
+
+### タイトル下に説明文を入れる
+
+import title from "@stories/assets/images/dev/docs/storybook-cheetsheet/title.png";
+import heading from "@stories/assets/images/dev/docs/storybook-cheetsheet/heading.png";
+import hiddenPreview from "@stories/assets/images/dev/docs/storybook-cheetsheet/hidden-preview.png";
+import hiddenShowCodeBtn from "@stories/assets/images/dev/docs/storybook-cheetsheet/hidden-showcode-btn.png";
+
+<img src={title} class="u-border sm:u-w-4/5" alt="Storybook設定チートシートのタイトル画像" />
+
+```typescript
+const meta = {
+  title: "タイトルが入ります",
+  component: XXX,
+  parameters: {
+    docs: {
+      description: {
+        component: "ここにメッセージを入力する方法",
+      },
+    },
+  },
+};
+```
+### 見出し下に説明文を入れる
+<img src={heading} class="u-border sm:u-w-4/5" alt="Storybook設定チートシートの見出し画像" />
+
+```typescript
+export const Default: Story = {
+  name: "見出しが入ります",
+  parameters: {
+    docs: {
+      description: {
+        story: "ここにメッセージを入力する方法",
+      },
+    },
+  },
+  args: {},
+};
+```
+
+### タイトル下のプレビューを非表示にする
+
+<img src={hiddenPreview} class="u-border sm:u-w-4/5" alt="Storybook設定チートシートのプレビュー非表示画像" />
+
+非表示設定が見つからなかったため、力技で非表示	Storybook設定チートシートのプレビュー非表示画像<br />
+※要素を非表示にするときは、`display: none`などで要素を消してしまうとjsを使用している場合、効かなくなるため、要素を存在させつつ非表示にする方法でスタイルを調整する
+
+```typescript
+const meta = {
+  title: "タイトルが入ります",
+  component: XXX,
+  decorators: [
+    (Story) => (
+      <>
+        <style>{`
+          .sbdocs-preview.css-hd7ysc {
+            position: fixed; 
+            opacity: 0;
+          }
+      `}</style>
+        <Story />
+      </>
+    ),
+  ],
+};
+```
+
+### プレビューの `Show code` ボタンを非表示にする
+
+<img src={hiddenShowCodeBtn} class="u-border sm:u-w-4/5" alt="Storybook設定チートシートのShow codeボタン非表示画像" />
+
+```typescript
+const meta = {
+  title: "タイトルが入ります",
+  component: XXX,
+  parameters: {
+    docs: {
+      canvas: {
+        sourceState: "none",
+      },
+    },
+  },
+};
+```
+
+### 自動でドキュメントを作成したい
+
+```typescript
+const meta = {
+  title: "タイトルが入ります",
+  tags: ["autodocs"],
+};
+```
+
+### サイドバーからUIを非表示にしたい
+
+```typescript
+export const Default: Story = {
+  name: "見出しが入ります",
+  tags: ["!dev"],
+  args: {},
+};
+```
+
+### コード表示に影響せずプレビューをカスタマイズする
+
+```typescript
+const meta = {
+  title: "タイトルが入ります",
+  decorators: [
+    (Story) => (
+      <div className="u-flex u-flex-wrap u-gap-y-xs u-gap-x-sm">
+        <Story />
+      </div>
+    ),
+  ],
+};
+```
+
+### optionsの値をマッピングする
+```typescript
+const meta = {
+  title: "タイトルが入ります",
+  args: {
+    className: "",
+  },
+  argTypes: {
+    className: {
+      description: "クラス名を指定",
+      control: { type: "radio" },
+      options: ["指定なし", "-number"],
+      mapping: {
+        "指定なし": "", // optionsの値を自由に変更できる
+        "-number": "-number",
+      },
+    },
+  }, 
+};
+```

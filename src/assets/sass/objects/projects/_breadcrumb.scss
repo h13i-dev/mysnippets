@@ -1,0 +1,36 @@
+@use "@assets/sass/foundations/global/" as g;
+
+/**
+* Breadcrumb.astroでスタイルを直接読み込み
+*/
+
+@layer components {
+  .p-breadcrumb {
+    position: absolute;
+    padding: theme("spacing.2") theme("spacing.md");
+    border-bottom: 1px solid var(--color-border-light);
+  }
+
+  .p-breadcrumb_item {
+    display: inline;
+    font-size: theme("fontSize.sm");
+
+    a {
+      color: theme("colors.sky.700");
+      text-decoration: underline;
+
+      @include g.hover {
+        &[href]:hover {
+          text-decoration: none;
+        }
+      }
+    }
+
+    .icon_arrow-forward {
+      width: g.minmax(14px, 16px);
+      margin-inline: 4px;
+      vertical-align: g.minmax(-3px, -2px, "xl", "sm");
+      background-color: theme("colors.slate.500");
+    }
+  }
+}

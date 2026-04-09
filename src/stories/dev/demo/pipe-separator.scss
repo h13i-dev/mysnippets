@@ -1,0 +1,63 @@
+/* 共通リンクスタイル */
+.c-link {
+  color: #0066cc;
+  text-decoration: none;
+  padding: 0.25rem 0.5rem;
+
+  &:hover {
+    text-decoration: underline;
+  }
+}
+
+/* flex + gap 方式 */
+.p-pipe_flex-gap {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.5rem;
+
+  .pipe {
+    display: inline-block;
+    width: 1px;
+    height: 1em;
+    background-color: #ccc;
+  }
+}
+
+/* border 方式 */
+.p-pipe_border {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+
+  .c-link {
+    border-right: 1px solid #ccc;
+    line-height: 1.5;
+
+    &:last-child {
+      border-right: none;
+    }
+  }
+}
+
+/* ::after 疑似要素方式 */
+.p-pipe_after {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+
+  .c-link {
+    position: relative;
+
+    &:not(:last-child)::after {
+      content: "";
+      position: absolute;
+      right: 0;
+      top: 50%;
+      transform: translateY(-50%);
+      width: 1px;
+      height: 1em;
+      background-color: #ccc;
+    }
+  }
+}

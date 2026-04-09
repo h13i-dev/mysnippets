@@ -1,0 +1,15 @@
+{
+  // comment
+  "": "empty key violation",
+  "  ": "whitespace key violation",
+  "duplicate": "first value",
+  "duplicate": "second value",
+  "cafe\u0301": "combining accent mark violation",
+  "z": "out of order",
+  "a": "should come first",
+  "unsafe": 1e+10000,
+  "surrogate": "\uD800",
+  "large": 9007199254740992,
+  "zero": 0.0000000000000000000000000000000000000001,
+  "subnormal": 2.2250738585072014e-308
+}

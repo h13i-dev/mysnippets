@@ -1,0 +1,160 @@
+@use "@assets/sass/foundations/global/" as g;
+
+$progress-top: calc(var(--header-height) + 2rem);
+
+@layer components {
+  .p-progress {
+    position: fixed;
+    top: $progress-top;
+    right: -100vw;
+    z-index: 1;
+    max-height: calc(100dvh - calc(#{$progress-top} + 2rem));
+    transition: right var(--default-transition);
+
+    button {
+      position: absolute;
+      left: calc(theme("spacing.md") * -1);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      width: theme("spacing.md");
+      height: 32px;
+      background-color: theme("colors.slate.100");
+      border-top: 2px solid var(--color-primary);
+    }
+
+    .icon_caret-left {
+      margin: 0;
+      transition: transform var(--default-transition);
+    }
+
+    &.is-open {
+      .icon_caret-left {
+        transform: rotateY(180deg);
+      }
+    }
+
+    @include g.mq("xl") {
+      position: initial;
+      top: initial;
+      display: block;
+      grid-area: progress;
+      width: g.minmax(13rem, 18rem, "xl", "2xl");
+      max-height: initial;
+
+      button {
+        display: none;
+      }
+    }
+  }
+
+  .p-progress_inner {
+    position: sticky;
+    top: $progress-top;
+    max-height: calc(100dvh - calc(#{$progress-top} + 2rem));
+    padding: theme("spacing.sm");
+    overflow: auto;
+    scrollbar-width: thin;
+    background-color: theme("colors.slate.100");
+    border-top: 2px solid var(--color-primary);
+  }
+
+  .p-progress_heading {
+    font-weight: bold;
+  }
+
+  .p-progress_list {
+    position: relative;
+    font-size: g.minmax(12px, 14px, "xl", "2xl");
+    color: theme("colors.slate.600");
+
+    &::before {
+      position: absolute;
+      top: 0;
+      bottom: 0;
+      left: 7px;
+      display: block;
+      width: 2px;
+      height: calc(100% - 14px);
+      margin-block: auto;
+      content: "";
+      background-color: #7f8b9f;
+    }
+
+    li {
+      margin-top: 8px;
+
+      a {
+        position: relative;
+        display: block;
+        padding-left: 24px;
+
+        &::before {
+          position: absolute;
+          bottom: 0;
+          display: block;
+          content: "";
+          background-color: #7f8b9f;
+          border: 2px solid theme("colors.slate.100");
+          border-radius: theme("borderRadius.full");
+        }
+
+        @include g.hover {
+          &[href]:hover {
+            color: theme("colors.black");
+          }
+        }
+      }
+    }
+
+    &.-depth-1 {
+      li {
+        font-weight: bold;
+
+        a::before {
+          top: g.minmax(3px, 5px, "xl", "2xl");
+          left: 2px;
+          width: 12px;
+          height: 12px;
+        }
+
+        &.is-active {
+          font-weight: bold;
+          color: theme("colors.black");
+
+          > a::before {
+            background-color: var(--color-primary);
+            border: 2px solid #c3d3f0;
+          }
+        }
+      }
+    }
+
+    &.-depth-2 {
+      li {
+        font-weight: normal;
+
+        a::before {
+          top: 0.5em;
+          left: 4px;
+          width: 8px;
+          height: 8px;
+        }
+
+        &.is-active {
+          font-weight: bold;
+          color: theme("colors.black");
+
+          > a::before {
+            top: g.minmax(3px, 5px, "xl", "2xl");
+            left: 3px;
+            width: 10px;
+            height: 10px;
+            background-color: var(--color-primary);
+            border: 2px solid theme("colors.slate.200");
+          }
+        }
+      }
+    }
+  }
+}

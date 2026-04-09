@@ -1,0 +1,55 @@
+---
+import Layout from "@layouts/Layout.astro";
+import Footer from "@components/bases/Footer.astro";
+import BlogLocalNavigation from "@components/bases/BlogLocalNavigation.astro";
+import Breadcrumb from "@components/bases/Breadcrumb";
+import { Button } from "@components/index.tsx";
+import { pageDataSortByOrder } from "@src/utils/frontmatter/pageDataSortByOrder";
+
+// demo記事を取得
+const demoArticles = pageDataSortByOrder(import.meta.glob<ArticleData>(["/src/pages/demo/*/index.astro", "!/src/pages/demo/_*/index.astro", "!/src/pages/demo/index.astro", "!/src/pages/demo/tests/**/*.astro"], { eager: true }));
+
+export const frontmatter: Frontmatter = {
+  title: "Demo",
+  description: "",
+};
+---
+
+<Layout frontmatter={frontmatter}>
+  <BlogLocalNavigation />
+
+  <main id="main" class="l-main">
+    <!-- eslint-disable-next-line @html-eslint/sort-attrs -->
+    <Breadcrumb paths={[{ title: frontmatter.title }]} />
+    <div class="p-contents-layout">
+      <article class="html-contents">
+        <h1 class="p-contents-title">{frontmatter.title}</h1>
+        <p>このページでは、UIコンポーネントやモジュールのデモを掲載しています。各デモページで実装をご確認いただけます。</p>
+
+        <section class="u-space-y-md">
+          <h2 class="p-heading-lv1">
+            <a href="/demo/">{frontmatter.title}</a>
+          </h2>
+          <ol class="c-grid u-gap-xs" data-config="[2][sm:3][xl:4]">
+            {
+              demoArticles.map(({ url, frontmatter }) => {
+                return (
+                  <li>
+                    <Button className="u-w-full" href={`${url}/`}>
+                      {frontmatter.title}
+                    </Button>
+                  </li>
+                );
+              })
+            }
+          </ol>
+        </section>
+      </article>
+    </div>
+    <Footer />
+  </main>
+
+  <Fragment slot="end-head">
+    <meta name="robots" content="noindex,nofollow" />
+  </Fragment>
+</Layout>

@@ -1,0 +1,15 @@
+@layer components {
+  .p-home-heading {
+    margin-bottom: 2rem;
+    text-align: center;
+  }
+
+  .p-home-heading_title {
+    font-size: theme("fontSize.5xl");
+    color: var(--color-primary);
+  }
+
+  .p-home-heading_subtitle {
+    margin-top: 0.5em;
+  }
+}

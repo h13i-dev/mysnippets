@@ -1,0 +1,52 @@
+@use "@assets/sass/foundations/global/" as g;
+
+@layer components {
+  $breakpoint: "sm";
+
+  .l-header {
+    position: sticky;
+    inset-inline: 0;
+    top: 0;
+    z-index: var(--z-header);
+    display: flex;
+    grid-area: header;
+    align-items: center;
+    justify-content: center;
+    height: 56px;
+    padding-inline: theme("spacing.md");
+    color: var(--color-secondary);
+    background-color: var(--color-primary);
+
+    body:has(.js-gnavSpBtn.is-active) & {
+      width: 100%;
+    }
+
+    @apply u-shadow;
+
+    @include g.mq(#{$breakpoint}) {
+      height: 64px;
+    }
+  }
+
+  .l-header_inner {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    width: 100%;
+  }
+
+  .l-header_logo {
+    font-size: 30px;
+
+    @include g.mq(#{$breakpoint}) {
+      font-size: 36px;
+    }
+  }
+
+  .c-logo {
+    font-family: "Big Shoulders Stencil", sans-serif;
+    font-style: normal;
+    font-weight: bold;
+    font-optical-sizing: auto;
+  }
+}

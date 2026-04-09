@@ -1,0 +1,53 @@
+@use "@assets/sass/foundations/global/" as g;
+
+@layer components {
+  /* -----------------------------------------------
+共通
+----------------------------------------------- */
+  .p-list {
+    position: relative;
+
+    > li {
+      padding-left: 1.25em;
+
+      + li {
+        margin-top: 0.5em;
+      }
+
+      > .p-list {
+        margin-top: 0.5em;
+      }
+
+      &::before {
+        position: absolute;
+        left: 0;
+        content: "・";
+      }
+    }
+  }
+
+  /* -----------------------------------------------
+序列リスト
+----------------------------------------------- */
+
+  .p-list.-number {
+    counter-reset: number 0;
+
+    > li::before {
+      content: counter(number) ".";
+      counter-increment: number 1;
+    }
+  }
+
+  /* -----------------------------------------------
+ 任意リスト
+----------------------------------------------- */
+  .p-list:has(.p-list_marker) > li::before {
+    content: none;
+  }
+
+  .p-list_marker {
+    position: absolute;
+    left: 0;
+  }
+}

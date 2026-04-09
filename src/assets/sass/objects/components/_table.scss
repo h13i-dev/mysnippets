@@ -1,0 +1,160 @@
+@use "@assets/sass/foundations/global/" as g;
+
+/* =================================================
+  定義
+================================================= */
+
+$thead-th: "& > thead th";
+$tbody: "& > tbody";
+$tbody-tr: "& > tbody > tr";
+$tbody-th: "& > tbody > tr > th";
+$tbody-td: "& > tbody > tr > td";
+
+@layer components {
+  @function get-selector($prefix, $style) {
+    // prettier-ignore
+    $selector: if(
+    sass($prefix == ""):
+      '&:where([data-config="#{$style}"], [data-config*="[#{$style}]"])';
+    else:
+      '&:where([data-config*="[#{$prefix}#{$style}]"])'
+  );
+
+    @return $selector;
+  }
+
+  /*
+* 表組みの種類定義
+*/
+  @mixin config-default($prefix: "", $style: "default") {
+    $selector: get-selector($prefix, $style);
+
+    #{$selector} {
+      table-layout: initial; // equal 打ち消し（[equal][sm:default]）
+
+      #{$tbody} {
+        display: table-row-group; // row設定を上書き（[row][sm:default] or [row][sm:equal]）
+      }
+
+      #{$tbody-tr} {
+        display: table-row; // row設定を上書き（[row][sm:default] or [row][sm:equal]）
+      }
+
+      // セル設定
+      #{$tbody-th},
+      #{$tbody-td} {
+        display: table-cell; // column設定を上書き（[column][sm:default] or [column][sm:equal]）
+      }
+    }
+  }
+
+  @mixin config-equal($prefix: "", $style: "equal") {
+    $selector: get-selector($prefix, $style);
+
+    #{$selector} {
+      table-layout: fixed;
+
+      #{$thead-th} {
+        width: 100%; // thead th が存在すれば、幅を均等にする
+      }
+
+      #{$tbody} {
+        display: table-row-group; // row設定を上書き（[row][sm:default] or [row][sm:equal]）
+      }
+
+      #{$tbody-tr} {
+        display: table-row; // row設定を上書き（[row][sm:default] or [row][sm:equal]）
+      }
+
+      #{$thead-th} {
+        font-size: 0.85em;
+      }
+
+      // セル設定
+      #{$tbody-th},
+      #{$tbody-td} {
+        display: table-cell; // column設定を上書き（[column][sm:default] or [column][sm:equal]）
+        font-size: 0.85em;
+      }
+    }
+  }
+
+  @mixin config-column($prefix: "", $style: "column") {
+    $selector: get-selector($prefix, $style);
+
+    #{$selector} {
+      table-layout: initial; // equal 打ち消し（[equal][sm:column]）
+
+      #{$tbody} {
+        display: table-row-group; // row 打ち消し（[row][sm:column]）
+      }
+
+      #{$tbody-th},
+      #{$tbody-td} {
+        display: block; // default, equal 打ち消し（[default][sm:column], [equal][sm:column]）
+        margin-top: -1px;
+      }
+    }
+  }
+
+  @mixin config-row($prefix: "", $style: "row") {
+    $selector: get-selector($prefix, $style);
+
+    #{$selector} {
+      table-layout: initial; // equal 打ち消し（[equal][sm:row]）
+
+      #{$tbody} {
+        display: flex;
+      }
+
+      #{$tbody-tr} {
+        display: flex;
+        flex-direction: column;
+
+        &:last-child {
+          margin-left: -1px;
+        }
+      }
+
+      #{$tbody-th} {
+        margin-top: initial; // column 打ち消し（[column][sm:row]）
+      }
+
+      #{$tbody-td} {
+        margin-top: -1px;
+      }
+    }
+  }
+
+  /* =================================================
+  .c-table -grid（グリッドスタイル）
+================================================= */
+  .c-table {
+    width: 100%;
+
+    @each $bp in g.$module-breakpoints {
+      @if $bp == "" {
+        @include config-default;
+        @include config-equal;
+        @include config-column;
+        @include config-row;
+      } @else {
+        @include g.mq($bp) {
+          @include config-default($prefix: "#{$bp}\\:");
+          @include config-equal($prefix: "#{$bp}\\:");
+          @include config-column($prefix: "#{$bp}\\:");
+          @include config-row($prefix: "#{$bp}\\:");
+        }
+      }
+    }
+  }
+
+  /* =================================================
+  スクロール
+================================================= */
+
+  .c-scrollable:has(.c-table) {
+    overflow-y: clip;
+    scrollbar-width: thin;
+  }
+}

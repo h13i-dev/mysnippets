@@ -1,0 +1,155 @@
+---
+import { getCollection } from "astro:content";
+import Layout from "@layouts/Layout.astro";
+import Footer from "@components/bases/Footer.astro";
+import Breadcrumb from "@components/bases/Breadcrumb";
+import Progress from "@components/bases/Progress.astro";
+import BlogLocalNavigation from "@components/bases/BlogLocalNavigation.astro";
+
+export async function getStaticPaths() {
+  const memoEntries = await getCollection("memo");
+  return memoEntries.map((entry) => ({
+    params: { slug: entry.slug },
+    props: { entry },
+  }));
+}
+
+const { entry } = Astro.props;
+const { Content } = await entry.render();
+const breadcrumb = [{ title: "メモ一覧", path: "/memo/" }, { title: entry.data.title }];
+---
+
+<Layout frontmatter={entry.data}>
+  <BlogLocalNavigation />
+  <main id="main" class="l-main">
+    <Breadcrumb paths={breadcrumb} />
+    <div class="p-contents-layout">
+      <Progress />
+      <header class="markdown-header">
+        <h1 class="markdown-title"><span class="markdown-icon">{entry.data.icon}</span>{entry.data.title}</h1>
+        <div class="markdown-date">
+          <time class="markdown-date_public" datetime={entry.data.pubDate.toISOString()}>
+            投稿日: {entry.data.pubDate.toLocaleDateString("ja-JP", { year: "numeric", month: "2-digit", day: "2-digit" }).replace(/\//g, ".")}
+          </time>
+          {
+            entry.data.updatedDate && (
+              <time class="markdown-date_updated" datetime={entry.data.updatedDate.toISOString()}>
+                （更新日: {entry.data.updatedDate.toLocaleDateString("ja-JP", { year: "numeric", month: "2-digit", day: "2-digit" }).replace(/\//g, ".")}）
+              </time>
+            )
+          }
+        </div>
+        {
+          entry.data.tags && (
+            <ul class="c-tags">
+              {entry.data.tags.map((tag) => (
+                <li>
+                  <a href={`/tags/${tag.replace(" ", "%20")}/`} class="c-tag">
+                    #{tag}
+                  </a>
+                </li>
+              ))}
+            </ul>
+          )
+        }
+      </header>
+
+      <div class="markdown-contents">
+        <Content />
+      </div>
+    </div>
+    <Footer />
+  </main>
+</Layout>
+
+<script>
+  // YouTube動画情報をクライアントサイドで取得
+  (function () {
+    // キャッシュ
+    const cache = new Map();
+
+    // YouTube oEmbed APIでタイトルを取得
+    async function fetchYouTubeInfo(videoId) {
+      if (cache.has(videoId)) {
+        return cache.get(videoId);
+      }
+
+      try {
+        const response = await fetch(`https://www.youtube.com/oembed?url=https://www.youtube.com/watch?v=${videoId}&format=json`);
+
+        if (!response.ok) {
+          throw new Error(`HTTP ${response.status}`);
+        }
+
+        const data = await response.json();
+        const info = {
+          title: data.title || "YouTube動画",
+          channelName: data.author_name || "YouTube",
+        };
+
+        cache.set(videoId, info);
+        return info;
+      } catch (error) {
+        console.warn(`YouTube API failed for ${videoId}:`, error.message);
+        // フォールバック
+        const fallback = {
+          title: "YouTube動画",
+          channelName: "YouTube",
+        };
+        cache.set(videoId, fallback);
+        return fallback;
+      }
+    }
+
+    // YouTubeカードを更新
+    async function updateYouTubeCard(card) {
+      const videoId = card.getAttribute("data-video-id");
+      if (!videoId) return;
+
+      const titleElement = card.querySelector(".youtube-title");
+      const channelElement = card.querySelector(".youtube-channel-name");
+
+      if (!titleElement || !channelElement) return;
+
+      try {
+        const info = await fetchYouTubeInfo(videoId);
+
+        // タイトルを更新
+        titleElement.textContent = info.title;
+        titleElement.setAttribute("title", info.title);
+
+        // チャンネル名を更新
+        channelElement.textContent = info.channelName;
+
+        // ローディング状態を解除
+        card.classList.add("loaded");
+      } catch (error) {
+        console.warn("Failed to update YouTube card:", error);
+        titleElement.textContent = "YouTube動画";
+        channelElement.textContent = "YouTube";
+        card.classList.add("loaded");
+      }
+    }
+
+    // すべてのYouTubeカードを初期化
+    function initializeYouTubeCards() {
+      const cards = document.querySelectorAll(".youtube-link-card[data-video-id]");
+      console.log("Found YouTube cards:", cards.length);
+
+      cards.forEach((card, index) => {
+        console.log("Processing card:", card.getAttribute("data-video-id"));
+        // 少し遅延させて順次読み込み
+        setTimeout(() => {
+          updateYouTubeCard(card);
+        }, index * 500);
+      });
+    }
+
+    // DOM読み込み完了後に実行
+    if (document.readyState === "loading") {
+      document.addEventListener("DOMContentLoaded", initializeYouTubeCards);
+    } else {
+      initializeYouTubeCards();
+    }
+  })();
+</script>

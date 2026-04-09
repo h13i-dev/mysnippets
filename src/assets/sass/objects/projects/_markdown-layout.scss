@@ -1,0 +1,55 @@
+@use "@assets/sass/foundations/global/" as g;
+@use "@assets/sass/objects/projects/heading";
+@use "@assets/sass/objects/projects/list";
+@tailwind components;
+
+@layer components {
+  $breakpoint: "sm";
+
+  .markdown-header {
+    grid-area: markdown-header;
+    font-size: 0.875rem;
+    color: #64748b;
+    text-align: center;
+
+    .c-tags {
+      justify-content: center;
+      margin-top: theme("spacing.xs");
+    }
+  }
+
+  .markdown-title {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+    align-items: center;
+    justify-content: center;
+    font-size: theme("fontSize.3xl");
+    font-weight: bold;
+    color: var(--color-primary);
+
+    .emoji--title {
+      width: 1.2em;
+      height: auto;
+      aspect-ratio: 1;
+    }
+
+    @include g.mq(#{$breakpoint}) {
+      flex-direction: row;
+      font-size: theme("fontSize.4xl");
+    }
+  }
+
+  .markdown-icon {
+    font-size: 30px;
+
+    @include g.mq(#{$breakpoint}) {
+      font-size: 24px;
+    }
+  }
+
+  .markdown-date {
+    display: block;
+    margin-top: theme("spacing.xs");
+  }
+}

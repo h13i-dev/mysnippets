@@ -1,0 +1,59 @@
+---
+import { normalizePath } from "@src/utils/frontmatter/normalizePath";
+import { BlogFrontmatter } from "@src/utils/frontmatter/getFrontmatter";
+
+const localNavigationData = await BlogFrontmatter();
+---
+
+<dl class="p-description u-p-md u-pb-lg lg:u-hidden">
+  {
+    Object.entries(localNavigationData).map(([key, { heading, data, type }], i) => (
+      <>
+        <dt>
+          {type === "blog" && <a href="/blog/">{heading}</a>}
+          {type === "memo" && <a href="/memo/">{heading}</a>}
+          {type === "zenn" && (
+            <a href="https://zenn.dev/kg98ztd" target="_blank">
+              {heading}
+            </a>
+          )}
+        </dt>
+
+        {data.map((item, j) => {
+          const isLast = i === Object.entries(localNavigationData).length - 1 && j === data.length - 1 ? "js-gnav-end" : "";
+
+          if (type === "blog") {
+            const isActive = normalizePath(Astro.url.pathname) === normalizePath(`/blog/${item.slug}`);
+            const activeClass = isActive ? "is-active" : "";
+            return (
+              <dd class={activeClass}>
+                <a class={isLast} href={`/blog/${item.slug}/`} tabindex={isActive ? "-1" : null}>
+                  {item.data.icon} {item.data.title}
+                </a>
+              </dd>
+            );
+          } else if (type === "memo") {
+            const isActive = normalizePath(Astro.url.pathname) === normalizePath(`/memo/${item.slug}`);
+            const activeClass = isActive ? "is-active" : "";
+            return (
+              <dd class={activeClass}>
+                <a class={isLast} href={`/memo/${item.slug}/`} tabindex={isActive ? "-1" : null}>
+                  {item.data.icon} {item.data.title}
+                </a>
+              </dd>
+            );
+          } else {
+            // Zenn記事は外部リンク
+            return (
+              <dd>
+                <a class={isLast} href={`https://zenn.dev${item.path}`} target="_blank">
+                  {item.emoji} {item.title}↗
+                </a>
+              </dd>
+            );
+          }
+        })}
+      </>
+    ))
+  }
+</dl>

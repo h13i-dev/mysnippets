@@ -1,0 +1,15 @@
+@use "@assets/sass/foundations/global/" as g;
+
+@layer components {
+  .l-footer {
+    grid-area: footer;
+    padding-block: theme("spacing.sm");
+    padding-inline: var(--container-space-inline);
+    text-align: center;
+    background-color: theme("colors.slate.100");
+
+    @include g.mq("xl") {
+      width: 100%;
+    }
+  }
+}

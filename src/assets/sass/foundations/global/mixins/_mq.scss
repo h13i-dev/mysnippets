@@ -1,0 +1,38 @@
+@use "sass:meta";
+
+// ---------------------------------------------------
+// 共通関数定義
+// ---------------------------------------------------
+@function resolve-breakpoint($breakpoint) {
+  @return if(sass(meta.type-of($breakpoint) == "number"): $breakpoint; else: theme("screens.#{$breakpoint}"));
+}
+
+// ---------------------------------------------------
+// mq(media query)
+// ---------------------------------------------------
+@mixin mq($breakpoint: "sm") {
+  @media (width >= #{resolve-breakpoint($breakpoint)}) {
+    @content;
+  }
+}
+
+@mixin mq-max($breakpoint: "sm") {
+  @media (width < #{resolve-breakpoint($breakpoint)}) {
+    @content;
+  }
+}
+
+// ---------------------------------------------------
+// container query
+// ---------------------------------------------------
+@mixin container($breakpoint: "sm") {
+  @container (width >= #{resolve-breakpoint($breakpoint)}) {
+    @content;
+  }
+}
+
+@mixin container-max($breakpoint: "sm") {
+  @container (width < #{resolve-breakpoint($breakpoint)}) {
+    @content;
+  }
+}

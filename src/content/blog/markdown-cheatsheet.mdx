@@ -1,0 +1,300 @@
+---
+icon: "📝"
+title: "Markdown記法チートシート"
+description: "このサイトのMarkdownの全ての記法を網羅したチートシート"
+pubDate: 2025-07-27
+tags: ["ブログ", "Markdown", "Cheat Sheet"]
+---
+
+import { LinkCard, Highlight, Accordion } from '@components/index.tsx';
+import Code from '@components/Code.astro';
+
+このブログで利用されているMarkdown記法の一覧です。
+
+## 見出し（Headings）
+
+<Code lang="markdown">{`
+## 見出し2（H2）
+### 見出し3（H3）
+#### 見出し4（H4）
+`}</Code>
+
+## テキスト装飾
+
+<Code lang="markdown">{`
+**太字（Bold）**
+_斜体（Italic）_
+~~取り消し線（Strikethrough）~~
+\`インラインコード\`
+`}</Code>
+
+**太字（Bold）**  
+_斜体（Italic）_  
+~~取り消し線（Strikethrough）~~  
+`インラインコード`
+
+## リスト（Lists）
+
+### 番号なしリスト
+
+<Code lang="markdown">{`
+- リストアイテム1
+- リストアイテム2
+  - ネストしたアイテム
+  - ネストしたアイテム2
+    - ネストしたアイテム
+    - ネストしたアイテム2
+- リストアイテム3
+
+* 別の記法
+`}</Code>
+
+- リストアイテム1
+- リストアイテム2
+  - ネストしたアイテム
+  - ネストしたアイテム2
+    - ネストしたアイテム
+    - ネストしたアイテム2
+- リストアイテム3
+
+* 別の記法
+
+### 番号付きリスト
+
+<Code lang="markdown">{`
+1. 最初のアイテム
+2. 2番目のアイテム
+  1. ネストした番号付きリスト
+  2. ネストした番号付きリスト2
+    1. ネストした番号付きリスト
+    2. ネストした番号付きリスト2
+3. 3番目のアイテム
+`}</Code>
+
+1. 最初のアイテム
+2. 2番目のアイテム
+   1. ネストした番号付きリスト
+   2. ネストした番号付きリスト2
+      1. ネストした番号付きリスト
+      2. ネストした番号付きリスト2
+3. 3番目のアイテム
+
+## リンク（Links）
+
+<Code lang="markdown">{`
+[内部リンク](/)
+[外部リンク](https://example.com)
+[タイトル付きリンク](https://example.com "ツールチップ")
+https://example.com
+`}</Code>
+
+[内部リンク](/)  
+[外部リンク](https://example.com)  
+[タイトル付きリンク](https://example.com "ツールチップ")  
+https://example.com
+
+## 画像（Images）
+
+<Code lang="markdown">{`
+![代替テキスト](https://picsum.photos/600/338 "画像のタイトル")
+`}</Code>
+![代替テキスト](https://picsum.photos/600/338 "画像のタイトル")
+
+## コードブロック（Code Blocks）
+
+### 基本的なコードブロック
+
+<Code lang="astro">{`
+<Code lang="markdown">{\`
+プレーンなコードブロック
+\`}</Code>
+`}</Code>
+
+<Code lang="markdown">{`プレーンなコードブロック`}</Code>
+
+### 言語指定あり
+
+<Code lang="astro">{`
+<Code lang="javascript">{\`
+const message = "Hello, World!";
+console.log(message);
+\`}</Code>
+`}</Code>
+
+<Code lang="javascript">{`
+const message = "Hello, World!";
+console.log(message);
+`}</Code>
+
+### 差分表示
+
+<Code lang="markdown">{`
+<Code lang="diff">{\`
+- const oldCode = "古いコード";
++ const newCode = "新しいコード";
+\`}</Code>
+`}</Code>
+
+<Code lang="diff">{`
+- const oldCode = "古いコード";
++ const newCode = "新しいコード";
+`}</Code>
+
+### HTML出力
+<Code lang="astro">{`
+<Code lang="html">
+<p>HTMLのサンプルを出力することができます。</p>
+</Code>
+`}</Code>
+
+
+<Code lang="html">
+<p>HTMLのサンプルを出力することができます。</p>
+</Code>
+
+
+
+## 表（Tables）
+
+<Code lang="markdown">{`
+| Head | Head | Head |
+| ---- | ---- | ---- |
+| Text | Text | Text |
+| Text | Text | Text |
+
+| 左揃え | 中央揃え |  右揃え |
+| :----  | :-----: | -----: |
+| 左     |   中央   |     右 |
+`}</Code>
+
+| ヘッダー1 | ヘッダー2 | ヘッダー3 |
+| --------- | --------- | --------- |
+| セル1     | セル2     | セル3（長文テキストが入ります）     |
+| セル4     | セル5     | セル6     |
+
+| 左揃え | 中央揃え | 右揃え |
+| :----- | :------: | -----: |
+| 左     |   中央   |     右 |
+
+## 引用（Blockquotes）
+
+### 短文引用
+<Code lang="markdown">{`
+> 親譲りの無鉄砲で小供の時から損ばかりしている。
+`}</Code>
+
+> 親譲りの無鉄砲で小供の時から損ばかりしている。
+
+### 長文・ネスト引用
+
+<Code lang="markdown">{`
+> 親譲りの無鉄砲で小供の時から損ばかりしている。小学校に居る時分学校の二階から飛び降りて一週間ほど腰を抜かした事がある。なぜそんな無闇をしたと聞く人があるかも知れぬ。別段深い理由でもない。
+>
+> 新築の二階から首を出していたら、同級生の一人が冗談に、いくら威張っても、そこから飛び降りる事は出来まい。弱虫やーい。と囃したからである。小使に負ぶさって帰って来た時、おやじが大きな眼をして二階ぐらいから飛び降りて腰を抜かす奴があるかと云ったから、この次は抜かさずに飛んで見せますと答えた。
+> > これはネストした引用テキストです。これはネストした引用テキストです。これはネストした引用テキストです。これはネストした引用テキストです。これはネストした引用テキストです。これはネストした引用テキストです。
+>
+> _引用: [リンクテキスト](https://example.com)_
+`}</Code>
+
+> 親譲りの無鉄砲で小供の時から損ばかりしている。小学校に居る時分学校の二階から飛び降りて一週間ほど腰を抜かした事がある。なぜそんな無闇をしたと聞く人があるかも知れぬ。別段深い理由でもない。
+>
+> 新築の二階から首を出していたら、同級生の一人が冗談に、いくら威張っても、そこから飛び降りる事は出来まい。弱虫やーい。と囃したからである。小使に負ぶさって帰って来た時、おやじが大きな眼をして二階ぐらいから飛び降りて腰を抜かす奴があるかと云ったから、この次は抜かさずに飛んで見せますと答えた。
+> > これはネストした引用テキストです。これはネストした引用テキストです。これはネストした引用テキストです。これはネストした引用テキストです。これはネストした引用テキストです。これはネストした引用テキストです。
+>
+> _引用: [リンクテキスト](https://example.com)_
+
+## 水平線（Horizontal Rules）
+
+<Code lang="markdown">{`
+---
+`}</Code>
+
+---
+
+## 脚注（Footnotes）
+
+<Code lang="markdown">{`
+これは脚注の例です[^1]。  
+別の脚注もあります[^note]。
+
+[^1]: これが脚注の内容です。  
+[^note]: 名前付きの脚注も使えます。
+`}</Code>
+
+これは脚注の例です[^1]。  
+別の脚注もあります[^note]。
+
+[^1]: これが脚注の内容です。
+[^note]: 名前付きの脚注も使えます。
+
+## チェックボックス（Task Lists）
+
+<Code lang="markdown">{`
+- [x] 完了したタスク
+- [ ] 未完了のタスク
+- [x] テキストが長いタスクが入ります。テキストが長いタスクが入ります。テキストが長いタスクが入ります。テキストが長いタスクが入ります。テキストが長いタスクが入ります。テキストが長いタスクが入ります。
+`}</Code>
+
+- [x] 完了したタスク
+- [ ] 未完了のタスク
+- [x] テキストが長いタスクが入ります。テキストが長いタスクが入ります。テキストが長いタスクが入ります。テキストが長いタスクが入ります。テキストが長いタスクが入ります。テキストが長いタスクが入ります。
+
+## エスケープ文字
+
+<Code lang="markdown">{`
+\* アスタリスクをそのまま表示
+\_ アンダースコアをそのまま表示
+\# ハッシュをそのまま表示
+\[リンク記法をエスケープ\]
+`}</Code>
+
+\* アスタリスクをそのまま表示  
+\_ アンダースコアをそのまま表示  
+\# ハッシュをそのまま表示  
+\[リンク記法をエスケープ\]
+
+## アコーディオン
+
+<Code lang="astro">{`
+<Accordion title="タイトルが入ります">
+  <p>コンテンツが入ります。<br>HTMLタグを入れることができます。</p>
+</Accordion>
+`}</Code>
+<Accordion title="タイトルが入ります">
+  <p>コンテンツが入ります。<br />HTMLタグを入れることができます。</p>
+</Accordion>
+
+## 埋め込みコンテンツ
+
+### リンクカード
+
+<Code lang="astro">{`
+<LinkCard url="https://zenn.dev/kg98ztd/articles/364a63a9491ae7" />
+`}</Code>
+<LinkCard url="https://zenn.dev/kg98ztd/articles/364a63a9491ae7" />
+
+### YouTube埋め込み
+埋め込み用のURLではなく、通常みるURLを使用します。
+<Code lang="astro">{`
+<LinkCard url="https://www.youtube.com/watch?v=kIsiitITIes" />
+`}</Code>
+<LinkCard url="https://www.youtube.com/watch?v=kIsiitITIes" />
+
+## 高度な記法
+
+### 上付き・下付き文字
+
+<Code lang="astro">{`
+X<sup>2</sup>（上付き）
+H<sub>2</sub>O（下付き）
+`}</Code>
+X<sup>2</sup>（上付き）  
+H<sub>2</sub>O（下付き）
+
+### 強調（ハイライト）
+
+#### ハイライト
+<Highlight>HEX指定でハイライトされたテキスト</Highlight>
+<Code lang="astro">{`
+<Highlight>HEX指定でハイライトされたテキスト</Highlight>
+`}</Code>

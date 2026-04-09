@@ -1,0 +1,124 @@
+@use "@assets/sass/foundations/global/" as g;
+
+@layer components {
+  @include g.scrollbar-stable(".p-gnav-sp:popover-open");
+
+  html:has(.p-gnav-sp:popover-open) {
+    body *:not(header, header *) {
+      pointer-events: none;
+      cursor: default;
+    }
+  }
+
+  .p-gnav-sp {
+    top: var(--header-height);
+    visibility: hidden;
+    width: 100%;
+    height: fit-content;
+    padding: initial;
+    margin-inline: initial;
+    margin-top: initial;
+    overflow-y: auto;
+    color: var(--color-primary);
+    scrollbar-width: thin;
+    background-color: theme("colors.slate.200");
+    opacity: 0;
+    transition:
+      visibility var(--default-transition),
+      opacity var(--default-transition),
+      display var(--default-transition) allow-discrete,
+      overlay var(--default-transition) allow-discrete;
+
+    &.is-overflow {
+      height: auto;
+    }
+
+    .c-grid {
+      flex-direction: column;
+      gap: 0;
+
+      li {
+        border-bottom: 1px solid theme("colors.slate.400");
+      }
+
+      a {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        padding: theme("spacing.sm") theme("spacing.md");
+        font-weight: bold;
+      }
+    }
+
+    &:popover-open {
+      visibility: visible;
+      width: 100%;
+      opacity: 1;
+    }
+
+    @starting-style {
+      &:popover-open {
+        opacity: 0;
+      }
+    }
+
+    &::backdrop {
+      margin-top: var(--header-height);
+      background-color: var(--color-bg-backdrop);
+      opacity: 0;
+      transition:
+        opacity var(--default-transition),
+        display var(--default-transition) allow-discrete,
+        overlay var(--default-transition) allow-discrete;
+    }
+
+    &:popover-open::backdrop {
+      opacity: 1;
+    }
+
+    @starting-style {
+      &:popover-open::backdrop {
+        opacity: 0;
+      }
+    }
+
+    a {
+      @include g.hover {
+        &[href]:hover {
+          text-decoration: underline;
+        }
+      }
+    }
+  }
+
+  .p-gnav-pc {
+    @include g.mq("lg") {
+      display: flex;
+      flex-direction: row;
+
+      .icon_caret-right {
+        display: none;
+      }
+
+      a {
+        font-weight: 500;
+        text-decoration: underline;
+        text-decoration-color: transparent;
+
+        @include g.hover {
+          transition: text-decoration-color var(--default-transition);
+
+          &[href]:hover {
+            text-decoration-color: currentcolor;
+          }
+        }
+      }
+
+      // チラツキ防止
+      &:not([data-popover-ready]) {
+        visibility: hidden !important;
+        opacity: 0 !important;
+      }
+    }
+  }
+}

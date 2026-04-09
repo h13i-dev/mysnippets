@@ -1,0 +1,64 @@
+---
+import { getCollection } from "astro:content";
+import Layout from "@layouts/Layout.astro";
+import Footer from "@components/bases/Footer.astro";
+import BlogLocalNavigation from "@components/bases/BlogLocalNavigation.astro";
+import Breadcrumb from "@components/bases/Breadcrumb";
+import { ArticleCard } from "@components/index.tsx";
+
+export async function getStaticPaths() {
+  // blogとmemoの両方から記事を取得
+  const allBlogPosts = await getCollection("blog");
+  const allMemoPosts = await getCollection("memo");
+  const allPosts = [...allBlogPosts, ...allMemoPosts];
+  const allTags = [...new Set(allPosts.flatMap((post) => post.data.tags || []))];
+
+  return allTags.map((tag) => {
+    const filteredPosts = allPosts.filter((post) => post.data.tags?.includes(tag) && !post.data.draft);
+
+    return {
+      params: { tag: tag },
+      props: {
+        tag: tag,
+        posts: filteredPosts.sort((a, b) => new Date(b.data.pubDate).getTime() - new Date(a.data.pubDate).getTime()),
+      },
+    };
+  });
+}
+
+const { tag, posts } = Astro.props;
+---
+
+<!-- eslint-disable-next-line @html-eslint/sort-attrs -->
+<Layout frontmatter={{ title: `タグ: #${tag}`, description: `${tag}タグの記事一覧` }}>
+  <BlogLocalNavigation />
+
+  <main id="main" class="l-main">
+    <!-- eslint-disable-next-line @html-eslint/sort-attrs -->
+    <Breadcrumb paths={[{ title: "タグ一覧", path: "/tags/" }, { title: `タグ: #${tag}` }]} />
+    <div class="p-contents-layout">
+      <article class="html-contents">
+        <h1 class="p-contents-title">タグ: #{tag}</h1>
+        {
+          posts.length === 0 ? (
+            <div class="u-text-center">
+              <p>このタグの記事が見つかりませんでした。</p>
+            </div>
+          ) : (
+            <div class="c-grid" data-config="[1][md:2]">
+              {posts.map((post) => {
+                // postがblogまmemoかを判定
+                const isFromBlog = post.collection === "blog";
+                const linkBase = isFromBlog ? "/blog/" : "/memo/";
+                const tagLinkBase = "/tags/";
+
+                return <ArticleCard href={`${linkBase}${post.slug}/`} title={post.data.title} icon={post.data.icon} date={post.data.pubDate.toLocaleDateString("ja-JP", { year: "numeric", month: "2-digit", day: "2-digit" }).replace(/\//g, ".")} tags={post.data.tags} tagLinkBase={tagLinkBase} />;
+              })}
+            </div>
+          )
+        }
+      </article>
+    </div>
+    <Footer />
+  </main>
+</Layout>

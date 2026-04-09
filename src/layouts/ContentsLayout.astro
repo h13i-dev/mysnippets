@@ -1,0 +1,27 @@
+---
+import Layout from "@layouts/Layout.astro";
+import Footer from "@components/bases/Footer.astro";
+import Progress from "@components/bases/Progress.astro";
+import BlogLocalNavigation from "@components/bases/BlogLocalNavigation.astro";
+import Breadcrumb from "@components/bases/Breadcrumb";
+const frontmatter = Astro.props.frontmatter;
+---
+
+<Layout frontmatter={frontmatter}>
+  <BlogLocalNavigation />
+
+  <main id="main" class="l-main">
+    <!-- eslint-disable-next-line @html-eslint/sort-attrs -->
+    <Breadcrumb paths={[{ title: "Demo", path: "/demo/" }, { title: frontmatter.title }]} />
+
+    <div class="p-contents-layout">
+      <Progress />
+      <slot />
+    </div>
+
+    <Footer />
+  </main>
+
+  <slot slot="end-head" name="end-head" />
+  <slot slot="end-body" name="end-body" />
+</Layout>

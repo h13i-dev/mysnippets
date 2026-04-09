@@ -1,0 +1,269 @@
+﻿---
+icon: "🗂️"
+title: "コーディングガイドライン"
+description: ""
+pubDate: 2025-08-24
+updatedDate: 2025-08-26
+tags: ["ブログ", "HTML", "CSS", "SCSS", "JavaScript", "TypeScript", "json", "a11y", "git"]
+---
+
+import Code from '@components/Code.astro';
+
+## ガイドライン策定の背景・目的
+私自身がコーディングする中で、日によって書き方が変わってしまったり、プロジェクトごとに書き方が異なってしまうことがよくあります。その度にどのような書き方がベストなのか悩んでしまうこともあります。
+
+そのため、以下のような目的でコーディングガイドラインを策定しました。
+- 一貫性のあるコードを書くため
+- コードの可読性と保守性を向上させるため
+- プロジェクトの品質を向上させるため
+- コーディングを作業効率を向上させるため
+
+## 動作保証ブラウザ
+### バージョン選定基準
+
+**Chrome・Firefox・Edge**: 自動アップデート機能により、大多数のユーザーが最新版を使用しているため、**最新版のみ**をサポート対象とします。
+
+**Safari (macOS / iOS)**: OSのアップデートに依存し、古いバージョンが一定数残る特性があります。そのため、世界的な標準設定である[Browserslistのdefaults設定](https://browsersl.ist/#q=defaults)に準拠し、**複数バージョン**をサポートします。
+
+#### Safariのサポート範囲（Browserslist defaults設定）
+defaults設定では、以下の条件に該当するブラウザ・デバイスが対象となります：
+
+- **\> 0.5%**: 世界シェア0.5%以上の利用率がある
+- **last 2 versions**: 各ブラウザの最新2バージョン
+- **Firefox ESR**: 長期サポート版
+- **not dead**: 公式サポートが終了していない
+
+#### 設定ファイル（package.json）
+
+```json
+"browserslist": [
+  "defaults"
+]
+```
+
+<section class="p-box -gray">
+<h3 class="u-text-xl u-font-bold u-mb-sm" data-progress="false">※日本シェアではなく、世界シェア（defaults）を採用する理由</h3>
+
+日本国内のシェアのみを基準にすると、OSアップデートが遅れがちな古い環境（iOS 15等）がサポート範囲に含まれ続けます。しかし、これらはセキュリティリスクが高く、最新のWeb技術（パフォーマンスやUI表現）の適用を妨げる要因となります。
+
+PayPay等の主要サービスもiOS 16未満のサポートを終了（2025年時点）するなど、レガシー環境の切り捨ては業界的なトレンドです。
+https://paypay.ne.jp/notice/20250404/f-01/
+
+そのため、「日本特有の古い環境」に引きずられず、世界標準のセキュリティと品質を維持するため、あえて世界シェア（defaults）を基準として採用します。
+
+<figure class="c-figure u-mt-sm u-max-w-[431px]">
+<img src="/assets/images/blog/coding-guideline/iOS15.jpg" alt="Browserslistによる日本のデバイスシェアを示した画像。2025年8月現在、iOS 15.6-15.8が0.69%のシェアを占めている。" width="768" height="432" loading="lazy" />
+<figcaption class="c-figure_caption">2025年8月現在、日本シェアではiOS15が依然として0.5%以上を占めている（世界シェアでは対象外）</figcaption>
+</figure>
+</section>
+
+## コーディング全般
+
+### 文書型宣言
+特別な理由がなければHTML Living Stardardの仕様に準拠とします。
+```html
+<!DOCTYPE html>
+```
+
+### エディター
+#### エディターの指定
+エディターの指定はしませんが、Visual Studio Code（以下、VSCode）を推奨します。
+
+#### 拡張機能のインストール
+プロジェクトにインストール必須の拡張機能がある場合は、明示的に指定してください。
+例えば、VSCodeであれば`.vscode/extensions.json`に記載します。
+そうすることで、拡張機能の検索欄に`@recommended`と入力することで、推奨されている拡張機能を一覧で確認できます。
+
+
+#### 文字コード
+特別な理由がない限り⽂字コードはUTF-8（BOM なし）とします。
+
+#### インデント
+基本的なインデントは半角スペース2つを使用します。
+ただし、プロジェクトや言語の慣習に応じて、異なるスペース数を採用しても構いません。
+
+#### 改行コード（EOL）
+改行コードは、`lf`とします。
+
+#### その他ルール
+- 行末には不要なスペースを入れないでください。
+- ファイルの末尾には必ず1行の改行を入れてください。（POSIX仕様に準拠）
+
+### ブレイクポイント
+Tailwind CSS をベースに下記のブレイクポイントを使用します。
+
+| Breakpoint prefix | Minimum width | 備考 |
+| ---- | ----   | ---- |
+| xs   | 375px  | |
+| sm   | 640px  | SPからタブレットへの切り替え |
+| md   | 768px  | |
+| lg   | 1024px | |
+| xl   | 1280px | タブレットからPCへの切り替え |
+| 2xl  | 1536px | |
+| 3xl  | 1920px | |
+
+参考：https://tailwindcss.com/docs/responsive-design
+
+### assetsフォルダの配置場所
+プロジェクトのルートに`assets`フォルダを作成し、画像やフォントなどの静的アセットを格納します。
+
+| assets名 | ファイルパス | 備考 |
+| ---- | ----   | ---- |
+| 画像ファイル | /assets/images/配下 | .jpg, .png, .webp, .svgなど |
+| cssファイル | /assets/css/配下 | |
+| JavaScriptファイル | /assets/js/配下 | |
+| PDFファイル | /assets/pdf/配下 | |
+| フォントファイル | /assets/fonts/配下 | .woff2, .woff, .ttfなど |
+| 動画ファイル | /assets/videos/配下 | |
+| データファイル | /assets/data/配下 | .jsonなど |
+
+### テキストの省略について
+ファイル名での省略表記（例：image → img）は、HTML・CSS・JavaScriptなどの技術仕様で使用されている場合にのみ使用を認めます。それ以外では、可読性とメンテナンス性を重視し、省略せずに正式名称を使用してください。また慣例で省略を使用しているものについては許可します（参考：[Bootstrap](https://getbootstrap.jp/)など）
+
+### 命名規則について
+
+- ルートパス（/）は `home` と定義し、pagetop 機能との混同を避けるため `toppage` は使用禁止とします。
+
+{/* ## 画像 */}
+
+## HTML
+⽂書構造や⽂脈を理解し、マークアップ（意味付け）として最も最適なタグ（要素）を⽤いてマークアップしてください。
+
+### HTMLコーディングルール
+HTMLコーディングルールは、[html-eslintルール](https://html-eslint.org/docs/rules)の推奨設定をベースとし、プロジェクトの要件に応じてカスタマイズしてください。また、フォーマッターは[Prettier](https://prettier.io/)を使用してください。
+実装完了後は、[Nu Html Checker](https://validator.w3.org/nu/#textarea)での検証を行ってください。（※Nu Html Checkerの一部ルールは更新が遅れている場合があるので注意）
+
+### パスの記述
+特に理由がなければ原則としてルートパスで記述してください。
+```html
+<img src="/assets/images/foo.jpg" alt="">
+```
+
+### メタデータ
+#### title
+Googleの検索結果ページでタイトルが途中で切れないように全⾓28 ⽂字以内としてください。
+
+#### description
+Googleの検索結果ページで説明⽂が途中で切れないように全⾓120⽂字以内とします。（ただし、スマートフォンでは全⾓50⽂字程度までしか表⽰されない）
+
+## CSS・SCSS
+
+### CSS設計について
+下記4つの良いCSS設計の原則を守るようにしてください。
+1. 予測しやすい
+2. 再利用しやすい
+3. 保守しやすい
+4. 拡張しやすい
+
+参考：[【暫定】コーダー歴3年で辿り着いた保守しやすいコーディング手法](https://zenn.dev/haniwaman/articles/bf392f397c8db7341881)
+
+#### CSS設計手法について
+CSS設計手法は、[FLOCSS](https://github.com/hiloki/flocss)をベースとし、プロジェクトの要件に応じてカスタマイズしてください。
+
+
+
+### CSS・SCSSコーディングルール
+CSS・SCSSコーディングルールは、[stylelintルール](https://stylelint.io/user-guide/rules/)・[stylelint-scssルール](https://github.com/stylelint-scss/stylelint-scss)の推奨設定をベースとし、プロジェクトの要件に応じてカスタマイズしてください。また、フォーマッターは[Prettier](https://prettier.io/)を使用してください。
+
+| ルール名 | Docsリンク | Rulesリンク | 備考 |
+| ---- | ---- | ---- | ---- |
+| ① stylelint-config-recommended | [Docsリンク](https://github.com/stylelint/stylelint-config-recommended) | [Rulesリンク](https://github.com/stylelint/stylelint-config-recommended/blob/main/index.js) | |
+| ② stylelint-config-standard | [Docsリンク](https://github.com/stylelint/stylelint-config-standard) | [Rulesリンク](https://github.com/stylelint/stylelint-config-standard/blob/main/index.js) | ①の拡張 |
+| ③ stylelint-config-recommended-scss | [Docsリンク](https://github.com/stylelint-scss/stylelint-config-recommended-scss) | [Rulesリンク](https://github.com/stylelint-scss/stylelint-config-recommended-scss/blob/master/index.js) | ①の拡張 |
+| ④ stylelint-config-standard-scss | [Docsリンク](https://github.com/stylelint-scss/stylelint-config-standard-scss) | [Rulesリンク](https://github.com/stylelint-scss/stylelint-config-standard-scss/blob/main/index.js) | ①③の拡張 |
+
+#### CSS・SCSSの記述方法について
+クラスセレクターは分離せずに、必ず結合して記述してください。クラスセレクターを分離をすると検索に引っかからなくなり、影響範囲の把握が困難となるため保守性が下がります。
+```scss
+// 誤：下記のようにクラスセレクターを分離しないでください。
+.foo {
+  &_bar {}
+}
+
+// 正：クラスセレクターは結合して記述してください。
+.foo_bar {}
+```
+
+#### hover
+hoverスタイルは、可読性を高めるため、hoverする要素にまとめて記述します。
+```scss
+// 誤：下記のようにhoverスタイルを分離しないでください。
+.foo {
+  &:hover{
+  }
+}
+.foo_bar {
+  .foo &:hover{
+    // .fooをhoverしたときのスタイル
+  }
+}
+
+// 正：hoverスタイルは、hoverする要素にまとめて記述してください。
+.foo:hover {
+  .foo_bar {}
+}
+```
+
+## クラスプロパティの命名規則
+- 慣例で省略しているものについては省略を許可する（[Bootstrap](https://getbootstrap.jp/)などを参考）
+
+### プロパティの並び順について
+CSS・SCSSのプロパティの並び順は、[recess](https://github.com/twitter-archive/recess/blob/29bccc870b7b4ccaa0a138e504caf608a6606b59/lib/lint/strict-property-order.js)に準拠してください。
+
+### ヘルパークラスの実装について
+ヘルパークラスの実装は[Tailwind CSS](https://v3.tailwindcss.com/)を利用してください。（※[v4はSassに対応していない](https://tailwindcss.com/docs/compatibility#sass-less-and-stylus)ため、Sassを活用する場合はv3の利用を推奨）
+
+
+## JavaScript・TypeScript
+### JavaScript・TypeScriptコーディングルール
+JavaScript・TypeScriptコーディングルールは、ESLintルールの推奨設定をベースとし、プロジェクトの要件に応じてカスタマイズしてください。また、フォーマッターは[Prettier](https://prettier.io/)を使用してください。
+
+- [JavaScript ESLint recommended rules](https://eslint.org/docs/latest/rules/)
+- [TypeScript ESLint recommended rules](https://typescript-eslint.io/rules/)
+
+## json
+### jsonコーディングルール
+jsonコーディングルールは、[ESLint JSON Language Pluginルール](https://github.com/eslint/json)の推奨設定をベースとし、プロジェクトの要件に応じてカスタマイズしてください。また、フォーマッターは[Prettier](https://prettier.io/)を使用してください。
+
+## アクセシビリティ
+
+{/* ### alt属性の記述 */}
+
+### 不要な改行タグによるアクセシビリティの問題
+`<br />`タグは文中に明示的に改行を挿入するために用意されたタグですが、多くの場合でデザイン目的で使用されています。そのため、スクリーンリーダーなどの支援技術を使用しているユーザーにとっては、不要な改行が挿入されることになり、読み上げの妨げになる可能性があります。この問題を回避するために、基本的に下記のように`<br />`タグに`aria-hidden="true"`属性を追加してください。
+```html
+<br aria-hidden="true" />
+```
+もし段落を分けたい場合は、`<br />`タグではなく`<p>`タグを使用してください。
+
+{/* ## SEO */}
+
+## git
+
+### コミットメッセージのルール
+
+| prefix | 説明 | 備考 |
+| ---- | ---- | ---- |
+| add: | 機能・ファイルなどを追加 | |
+| fix: | コードやバグなどの修正（文字修正なども含む） | |
+| improve: | コードやパフォーマンスなどの改善 | |
+| update: | パッケージやドキュメント、データなどの更新 | |
+| remove: | ファイルやコードなどの削除 | |
+| move: | ファイルやディレクトリなどの移動 | |
+| chore: | 上記のどれにも該当しないその他の変更（ビルド関連、ツール設定など） | |
+
+## 制作環境
+### node 
+Node.jsのバージョン管理は、package.jsonで[Volta](https://volta.sh/)を使用して管理してください。
+```json
+"volta": {
+  "node": "20.12.2"
+}
+```
+#### nodeバージョンの選び方
+- 偶数バージョンを使用（LTSとなるため）
+- Active LTS または Maintenance LTS リリースのみ使用
+
+> Node.jsのメジャーバージョンは6か月間 Current ステータスとなり、ライブラリー開発者にサポートを追加する時間を与えます。6か月後、奇数のバージョン（9、11など）はサポートが終了し、偶数バージョン（10、12など）は Active LTS ステータスに移行し、一般公開向けの準備が整います。 LTS ステータスは「長期間サポート」であり、通常は合計30か月間の重大なバグ修正が保証されます。本番環境のアプリケーションでは Active LTS または Maintenance LTS スターテスのバージョンを利用する必要があります。
+>
+> 引用：https://nodejs.org/ja/about/previous-releases

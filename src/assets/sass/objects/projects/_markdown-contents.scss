@@ -1,0 +1,229 @@
+@use "@assets/sass/foundations/global/" as g;
+@use "@assets/sass/objects/projects/heading";
+@use "@assets/sass/objects/projects/list";
+@use "@assets/sass/objects/components/link";
+@use "@assets/sass/objects/projects/blockquote";
+@tailwind components;
+
+@layer components {
+  .markdown-contents {
+    grid-area: contents;
+    padding: theme("spacing.md");
+    overflow-wrap: break-word;
+    background-color: theme("colors.white");
+
+    &.c-container {
+      width: var(--viewport-width);
+      height: fit-content;
+      margin-left: calc(50% - 50vw + (var(--scrollbar-width) / 2));
+
+      @include g.mq("sm") {
+        width: initial;
+        margin-left: initial;
+      }
+    }
+
+    /**
+  * マークダウンの基本スタイル
+  */
+    h2:not([class]) {
+      @apply p-heading-lv1;
+
+      margin-block: 2.4em 0.8em;
+
+      &:first-child {
+        margin-top: 0;
+      }
+
+      + *:not(h2, h3, h4),
+      .p-contents-title + section > & {
+        margin-top: 0;
+      }
+    }
+
+    h3:not([class]) {
+      @apply p-heading-lv2;
+
+      margin-block: 1.5em 0.4em;
+
+      + *:not(h2, h3, h4) {
+        margin-top: 0;
+      }
+    }
+
+    h4:not([class]) {
+      @apply p-heading-lv3;
+
+      margin-block: 1.4em 0.4em;
+
+      + *:not(h2, h3, h4) {
+        margin-top: 0;
+      }
+    }
+
+    :where(p:not([class]) + p:not([class])) {
+      margin-top: 1.5em;
+    }
+
+    ul:not([class]) {
+      @apply p-list;
+
+      margin-block: theme("spacing.xs");
+
+      > li > ul {
+        margin-top: 0.5em;
+      }
+    }
+
+    ol:not([class]) {
+      @apply p-list;
+
+      margin-block: theme("spacing.xs");
+      counter-reset: number 0;
+
+      > li::before {
+        content: counter(number) ".";
+        counter-increment: number 1;
+      }
+
+      > li > ol {
+        margin-top: 0.5em;
+      }
+    }
+
+    a:not([class]) {
+      @apply c-link;
+
+      &[target="_blank"]::after {
+        display: inline-block;
+        width: 1em;
+        height: 1em;
+        margin-left: 0.25em;
+        vertical-align: middle;
+        content: "";
+        background-color: currentcolor;
+        mask: url("/src/assets/images/common/icon_external.svg") no-repeat center/contain;
+      }
+    }
+
+    img:not([class]) {
+      margin-inline: auto;
+    }
+
+    blockquote:not([class]) {
+      @apply p-blockquote;
+
+      margin-block: theme("spacing.xs");
+      word-break: break-all;
+
+      blockquote:not([class]) {
+        padding: theme("spacing.4") theme("spacing.5");
+        margin-top: 1.5em;
+        background-color: theme("colors.slate.200");
+      }
+
+      :where(blockquote, p) {
+        + :where(blockquote, p) {
+          margin-top: 1.5em;
+        }
+
+        &:has(em:only-child) {
+          margin-top: 0;
+        }
+      }
+
+      em {
+        display: block;
+        margin-top: 1.5em;
+        font-size: theme("fontSize.sm");
+      }
+    }
+
+    hr:not([class]) {
+      margin-block: theme("spacing.lg");
+      border-color: theme("colors.slate.300");
+    }
+
+    pre {
+      padding: 1rem;
+      overflow-x: auto;
+      background: #f8fafc;
+
+      &:has(+ *) {
+        margin-bottom: theme("spacing.sm");
+      }
+
+      * + & {
+        margin-top: theme("spacing.sm");
+      }
+    }
+
+    .astro-code_wrapper pre {
+      margin-block: 0;
+    }
+
+    code {
+      padding: 0.125rem 0.25rem;
+      font-size: 0.875rem;
+      background: #f1f5f9;
+      border-radius: 4px;
+    }
+
+    pre code {
+      padding: 0;
+      background: none;
+    }
+
+    .data-footnote-backref {
+      color: #0369a1;
+    }
+
+    /**
+  * マークダウン拡張スタイル
+  */
+    .p-link-card {
+      margin-block: theme("spacing.xs");
+    }
+
+    .task-list-item {
+      position: relative;
+      padding-left: 1.5em;
+      margin-block: theme("spacing.xs");
+
+      + .task-list-item {
+        margin-top: 0.5em;
+      }
+
+      input {
+        position: absolute;
+        top: calc((1lh - 1em) / 2);
+        left: 0;
+        margin-top: g.minmax(1px, 3px);
+        font-size: inherit;
+        line-height: inherit;
+      }
+    }
+
+    .footnotes {
+      margin-top: theme("spacing.lg");
+      border-top: 1px solid theme("colors.slate.300");
+    }
+
+    table {
+      width: 100%;
+      margin-block: theme("spacing.xs");
+
+      th,
+      td {
+        padding: 0.6em 0.8em;
+        font-size: 0.85em;
+        border: 1px solid theme("colors.slate.300");
+      }
+
+      thead th {
+        font-weight: bold;
+        background-color: theme("colors.slate.100");
+      }
+    }
+  }
+}

@@ -1,0 +1,37 @@
+@use "@assets/sass/foundations/global/" as g;
+
+@layer components {
+  /***************************
+  * コンテンツ内スクロールモーダル
+  *************************** */
+  .p-modal-contents {
+    overscroll-behavior: contain;
+    opacity: 0;
+    transform: scale(0.95);
+    transition:
+      opacity var(--default-transition),
+      transform var(--default-transition),
+      display var(--default-transition) allow-discrete,
+      overlay var(--default-transition) allow-discrete;
+
+    &:modal {
+      opacity: 1;
+      transform: scale(1);
+    }
+
+    @starting-style {
+      &:modal {
+        opacity: 0;
+        transform: scale(0.95);
+      }
+    }
+
+    .c-modal_contents {
+      height: fit-content;
+      max-height: 60vh;
+      overflow: auto;
+      overscroll-behavior: contain;
+      scrollbar-width: thin;
+    }
+  }
+}

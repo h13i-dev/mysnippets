@@ -1,0 +1,195 @@
+import { Meta } from "@storybook/addon-docs/blocks";
+
+<Meta title="Modules/グローバルナビゲーション" />
+
+# グローバルナビゲーション
+
+## 概要
+サイトのグローバルナビゲーションメニューを管理するモジュールです。モバイル用ハンバーガーメニューなどの開閉機能を提供します。
+
+[デモページ](demo/global-navigation/)
+
+### HTMLコード
+```html
+<button type="button" id="nav-toggle" class="js-nav-toggle" aria-label="サイトナビゲーションボタン" aria-controls="gnav">メニュー</button>
+<nav id="gnav" class="js-global-nav" aria-hidden="true">
+  <!-- ナビゲーションコンテンツ -->
+</nav>
+<div class="c-backdrop js-backdrop" aria-hidden="true"></div>
+```
+
+### 使い方
+```javascript
+import GlobalNavigation from "@assets/js/modules/GlobalNavigation";
+import Backdrop from "@assets/js/modules/Backdrop";
+
+new GlobalNavigation({
+  button: ".js-nav-toggle",
+  navigation: ".js-global-nav",
+  closeButton: ".js-nav-close",
+  closeOnResize: true,
+  excludeClose: [".search-form"],
+  focusTrap: [".first-link", ".last-link"],
+  activeClass: "is-active"
+});
+
+new Backdrop({
+  button: ".js-nav-toggle",
+  backdrop: ".js-backdrop"
+});
+```
+
+### 設定オプション
+
+<table>
+  <thead>
+    <tr>
+      <th>オプション</th>
+      <th>型</th>
+      <th>必須</th>
+      <th>デフォルト</th>
+      <th>概要</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>button</td>
+      <td>`string`</td>
+      <td>✓</td>
+      <td>-</td>
+      <td>トグルボタンのセレクター</td>
+    </tr>
+    <tr>
+      <td>navigation</td>
+      <td>`string`</td>
+      <td>✓</td>
+      <td>-</td>
+      <td>グローバルナビゲーションのセレクター</td>
+    </tr>
+    <tr>
+      <td>closeButton</td>
+      <td>`string`</td>
+      <td>-</td>
+      <td>-</td>
+      <td>閉じるボタンのセレクター</td>
+    </tr>
+    <tr>
+      <td>closeOnResize</td>
+      <td>`boolean`</td>
+      <td>-</td>
+      <td>`false`</td>
+      <td>windowリサイズ時にナビゲーションを閉じるか</td>
+    </tr>
+    <tr>
+      <td>excludeClose</td>
+      <td>`Array<string>`</td>
+      <td>-</td>
+      <td>-</td>
+      <td>クリックイベントを無視するエリアのセレクター</td>
+    </tr>
+    <tr>
+      <td>focusTrap</td>
+      <td>`[string, string]`</td>
+      <td>-</td>
+      <td>-</td>
+      <td>フォーカストラップの最初と最後の要素のセレクター</td>
+    </tr>
+    <tr>
+      <td>activeClass</td>
+      <td>`string`</td>
+      <td>-</td>
+      <td>`'is-active'`</td>
+      <td>アクティブ時に付与されるクラス名</td>
+    </tr>
+  </tbody>
+</table>
+
+### 主な機能
+- ボタンクリックでナビゲーションの開閉
+- ESCキーで閉じる
+- ナビゲーション外クリックで閉じる
+- ナビゲーション内のリンク・ボタンクリックで自動的に閉じる
+- 除外エリア設定（特定のエリアをクリックしても閉じない）
+- フォーカストラップによるキーボードナビゲーション制御
+- aria-hidden、aria-expanded属性による適切なアクセシビリティ対応
+- リサイズ時の自動クローズオプション
+
+## オプション
+
+### button
+
+トグルボタンのセレクターを指定します（必須）。
+```js
+new GlobalNavigation({
+  button: ".js-nav-toggle",
+  navigation: ".js-global-nav",
+});
+```
+
+### navigation
+
+グローバルナビゲーションのセレクターを指定します（必須）。
+```js
+new GlobalNavigation({
+  button: ".js-nav-toggle",
+  navigation: ".js-global-nav",
+});
+```
+
+### closeButton
+
+閉じるボタンのセレクターを指定します。ナビゲーション内に専用の閉じるボタンを配置する場合に使用します。
+```js
+new GlobalNavigation({
+  button: ".js-nav-toggle",
+  navigation: ".js-global-nav",
+  closeButton: ".js-nav-close",
+});
+```
+
+### closeOnResize
+
+windowリサイズ時にナビゲーションを閉じるかどうかを設定します。デフォルトはfalseです。
+```js
+new GlobalNavigation({
+  button: ".js-nav-toggle",
+  navigation: ".js-global-nav",
+  closeOnResize: true,
+});
+```
+
+### excludeClose
+
+クリックイベントを無視するエリアのセレクターを配列で指定します。検索フォームなど特定のエリアをクリックしてもナビゲーションが閉じないようにできます。
+```js
+new GlobalNavigation({
+  button: ".js-nav-toggle",
+  navigation: ".js-global-nav",
+  excludeClose: [".search-form", ".user-menu"],
+});
+```
+
+### focusTrap
+
+フォーカストラップの最初と最後の要素のセレクターをタプル（配列）で指定します。キーボードナビゲーションをナビゲーション内に制御できます。
+```js
+new GlobalNavigation({
+  button: ".js-nav-toggle",
+  navigation: ".js-global-nav",
+  focusTrap: [".first-focusable", ".last-focusable"],
+});
+```
+
+### activeClass
+
+アクティブ時に付与されるクラス名を指定します。デフォルトは'is-active'です。
+```js
+new GlobalNavigation({
+  button: ".js-nav-toggle",
+  navigation: ".js-global-nav",
+  activeClass: "is-open",
+});
+```
+
+## 技術メモ
+グローバルナビゲーションで、dialogを使用した実装は難しい。dialogを使用すると、`::backdrop`の上部にmarginを適用しても背後のボタンが押せなくなる。

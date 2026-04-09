@@ -1,0 +1,11 @@
+@use "@assets/sass/foundations/global/" as g;
+
+@layer components {
+  .c-container {
+    position: relative;
+    box-sizing: content-box;
+    max-width: min(1260px, 100%);
+    padding: g.minmax(40px, 80px) var(--container-space-inline);
+    margin-inline: auto;
+  }
+}

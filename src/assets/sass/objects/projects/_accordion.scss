@@ -1,0 +1,72 @@
+@use "@assets/sass/foundations/global/" as g;
+
+@layer components {
+  .p-accordion {
+    overflow: hidden;
+
+    + .p-accordion {
+      margin-top: theme("spacing.xs");
+    }
+  }
+
+  .p-accordion_summary {
+    position: relative;
+    display: flex;
+    gap: theme("gap.sm");
+    padding: theme("spacing.sm");
+    padding-right: g.minmax(50px, 60px);
+    font-weight: bold;
+    color: var(--color-primary);
+    cursor: pointer;
+    list-style: none;
+    background-color: theme("colors.slate.100");
+
+    &::-webkit-details-marker {
+      /* Safariで表示されるデフォルトの三角形アイコンを削除 */
+      display: none;
+    }
+  }
+
+  .p-accordion_switch {
+    position: absolute;
+    top: 50%;
+    right: theme("spacing.sm");
+    flex-shrink: 0;
+    width: g.minmax(24px, 28px);
+    height: g.minmax(24px, 28px);
+    margin-left: auto;
+    background-color: theme("colors.white");
+    border-radius: 50%;
+    transform: translateY(-50%);
+
+    span {
+      position: absolute;
+      inset: 0;
+      width: g.minmax(12px, 15px);
+      height: 2px;
+      margin: auto;
+      content: "";
+      background-color: var(--color-primary);
+      transition: transform var(--default-transition);
+
+      .p-accordion &:last-child {
+        transform: rotate(90deg);
+      }
+
+      .p-accordion[open] &:last-child {
+        transform: rotate(0deg);
+      }
+    }
+  }
+
+  .p-accordion_body {
+    padding: theme("spacing.sm");
+    margin-top: g.minmax(-4px, -2px, "xl", "sm");
+    background-color: theme("colors.white");
+    border: g.minmax(2px, 4px) solid theme("colors.slate.100");
+
+    .p-accordion:not([open]) & {
+      margin-top: g.minmax(-8px, -4px, "xl", "sm");
+    }
+  }
+}

@@ -1,0 +1,67 @@
+@use "@assets/sass/foundations/global/" as g;
+
+@layer components {
+  .p-menu-btn {
+    position: relative;
+    width: 50px;
+    height: 50px;
+    margin: 0;
+    margin-right: -8px;
+    cursor: pointer;
+
+    @include g.mq("lg") {
+      display: none;
+    }
+  }
+
+  .p-menu-btn span {
+    position: absolute;
+    left: 8px;
+    display: inline-block;
+    height: 4px;
+    background-color: var(--color-secondary);
+    border-radius: 1px;
+    transition:
+      transform var(--default-transition),
+      opacity var(--default-transition),
+      left var(--default-transition),
+      width var(--default-transition),
+      top var(--default-transition);
+
+    &:nth-of-type(1) {
+      top: 14px;
+      width: 34px;
+    }
+
+    &:nth-of-type(2) {
+      top: 24px;
+      width: 34px;
+      opacity: 1;
+    }
+
+    &:nth-of-type(3) {
+      top: 34px;
+      width: 34px;
+    }
+  }
+
+  .p-menu-btn.is-active {
+    & span:nth-of-type(1) {
+      top: 17px;
+      left: 9px;
+      width: 60%;
+      transform: translateY(6px) rotate(-45deg);
+    }
+
+    & span:nth-of-type(2) {
+      opacity: 0;
+    }
+
+    & span:nth-of-type(3) {
+      top: 29px;
+      left: 9px;
+      width: 60%;
+      transform: translateY(-6px) rotate(45deg);
+    }
+  }
+}

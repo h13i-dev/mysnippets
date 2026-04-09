@@ -1,0 +1,264 @@
+@use "@assets/sass/foundations/global/" as g;
+
+/* =================================================
+  .c-img-layout
+================================================= */
+// 設定
+$row-space: theme("spacing.md");
+$column-space: theme("spacing.md");
+$row-img-size: 288px;
+
+// ベース定義
+@mixin apply-layout($selector) {
+  #{$selector} {
+    @content;
+  }
+}
+
+@layer components {
+  .c-img-layout {
+    @mixin generate-layout($prefix: "") {
+      /**
+      * Float Layouts
+      */
+      @each $float in (left, right) {
+        // prettier-ignore
+        $selector: if(
+          sass($prefix == ""):
+            '&[data-config="float-#{$float}"], &[data-config*="[float-#{$float}]"]';
+          else:
+            '&[data-config*="[#{$prefix}float-#{$float}]"]'
+        );
+
+        @include apply-layout($selector) {
+          display: block;
+
+          @apply u-clearfix;
+        }
+      }
+
+      /**
+      * Grid Layouts
+      */
+      @each $direction in (row, row-reverse, column, column-reverse) {
+        // prettier-ignore
+        $selector: if(
+          sass($prefix == ""):
+            '&[data-config="#{$direction}"], &[data-config*="[#{$direction}]"]';
+          else:
+            '&[data-config*="[#{$prefix}#{$direction}]"]'
+        );
+
+        @include apply-layout($selector) {
+          display: grid;
+
+          &::after {
+            content: none; // Float Layout clearfix 打ち消し
+          }
+
+          @if ($direction == "row") {
+            grid-template-columns: min($row-img-size, calc(50% - $column-space / 2)) 1fr;
+            row-gap: initial; // column, column-revese 打ち消し
+            column-gap: $column-space;
+          }
+
+          @if ($direction == "row-reverse") {
+            grid-template-columns: 1fr min($row-img-size, calc(50% - $column-space / 2));
+            row-gap: initial; // column, column-revese 打ち消し
+            column-gap: $column-space;
+          }
+
+          @if ($direction == "column") {
+            grid-template-columns: initial; // row, row-reverse 打ち消し
+            row-gap: $row-space;
+          }
+
+          @if ($direction == "column-reverse") {
+            grid-template-columns: initial; // row, row-reverse 打ち消し
+            row-gap: $row-space;
+          }
+        }
+      }
+    }
+
+    @each $bp in g.$module-breakpoints {
+      @if $bp == "" {
+        @include generate-layout;
+      } @else {
+        @include g.mq($bp) {
+          @include generate-layout($prefix: "#{$bp}\\:");
+        }
+      }
+    }
+  }
+
+  .c-img-layout_figure {
+    @mixin generate-image-layout($prefix: "") {
+      display: flex;
+      flex-direction: column;
+
+      /**
+      * Float Layouts
+      */
+      @each $float in (left, right) {
+        // prettier-ignore
+        $selector: if(
+          sass($prefix == ""):
+            '[data-config="float-#{$float}"] &, [data-config*="[float-#{$float}]"] &';
+          else:
+            '[data-config*="[#{$prefix}float-#{$float}]"] &'
+        );
+
+        @include apply-layout($selector) {
+          float: $float;
+          clear: both;
+          max-width: min($row-img-size, calc(50% - $column-space / 2));
+          margin-inline: if(sass($float == left): 0 $column-space; else: $column-space 0);
+          margin-bottom: calc($column-space / 2);
+
+          &[class*="u-px-figure"] {
+            padding-inline: initial !important; // Column Layout で使用するヘルパークラスの打ち消し
+          }
+
+          &:has(+ .c-img-layout_figure) {
+            margin-bottom: initial;
+          }
+
+          & + .c-img-layout_figure {
+            margin-top: 1.5em;
+          }
+        }
+      }
+
+      /**
+      * Row Layout
+      */
+      @each $direction in ("row", "row-reverse") {
+        // prettier-ignore
+        $selector: if(
+          sass($prefix == ""):
+            '[data-config="#{$direction}"] &, [data-config*="[#{$direction}]"] &';
+          else:
+            '[data-config*="[#{$prefix}#{$direction}]"] &'
+        );
+
+        @include apply-layout($selector) {
+          order: initial; // Column Layout 打ち消し
+          max-width: initial; // Float Layouts 打ち消し
+          margin-inline: initial; // Float, Column Layouts 打ち消し
+
+          &[class*="u-px-figure"] {
+            padding-inline: initial !important; // Column Layout で使用するヘルパークラスの打ち消し
+          }
+
+          & + .c-img-layout_figure {
+            margin-top: 1.5em;
+            margin-bottom: initial; // Flaot Layout 打ち消し
+          }
+        }
+      }
+
+      /**
+      * Column Layout
+      */
+      @each $direction in ("column", "column-reverse") {
+        // prettier-ignore
+        $selector: if(
+          sass($prefix == ""):
+            '[data-config="#{$direction}"] &, [data-config*="[#{$direction}]"] &';
+          else:
+            '[data-config*="[#{$prefix}#{$direction}]"] &'
+        );
+
+        @include apply-layout($selector) {
+          max-width: 100%;
+          margin-inline: auto;
+          margin-bottom: initial; // float margin 打ち消し
+
+          &[class*="u-px-figure"] {
+            @apply u-px-figure !important;
+          }
+
+          @if ($direction == "column") {
+            order: 1;
+          }
+
+          @if ($direction == "column-reverse") {
+            order: 2;
+          }
+
+          & + .c-img-layout_figure {
+            margin-top: initial; // Float, Row Layout 打ち消し
+          }
+        }
+      }
+    }
+
+    @each $bp in g.$module-breakpoints {
+      @if $bp == "" {
+        @include generate-image-layout;
+      } @else {
+        @include g.mq($bp) {
+          @include generate-image-layout($prefix: "#{$bp}\\:");
+        }
+      }
+    }
+  }
+
+  .c-img-layout_contents {
+    // text-box: trim-both cap alphabetic;
+
+    @mixin generate-contents($prefix: "") {
+      @each $direction in (row, row-reverse, column, column-reverse) {
+        // prettier-ignore
+        $selector: if(
+          sass($prefix == ""):
+            '[data-config="#{$direction}"] &, [data-config*="[#{$direction}]"] &';
+          else:
+            '[data-config*="[#{$prefix}#{$direction}]"] &'
+        );
+
+        @include apply-layout($selector) {
+          @if ($direction == "row") {
+            grid-row: 1 / 5;
+            grid-column: 2;
+            order: initial; // column, column-reverse 打ち消し
+          }
+
+          @if ($direction == "row-reverse") {
+            grid-row: 1 / 5;
+            grid-column: 1;
+            order: initial; // column, column-reverse 打ち消し
+          }
+
+          @if ($direction == "column") {
+            grid-row: initial; // row, row-reverse 打ち消し
+            grid-column: initial; // row, row-reverse 打ち消し
+            order: 2;
+          }
+
+          @if ($direction == "column-reverse") {
+            grid-row: initial; // row, row-reverse 打ち消し
+            grid-column: initial; // row, row-reverse 打ち消し
+            order: 1;
+          }
+        }
+      }
+    }
+
+    @each $bp in g.$module-breakpoints {
+      @if $bp == "" {
+        @include generate-contents;
+      } @else {
+        @include g.mq($bp) {
+          @include generate-contents($prefix: "#{$bp}\\:");
+        }
+      }
+    }
+  }
+
+  .c-img-layout_caption {
+    width: fit-content;
+    margin-inline: auto;
+  }
+}

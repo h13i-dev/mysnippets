@@ -1,0 +1,36 @@
+@use "@assets/sass/foundations/global/" as g;
+
+@layer components {
+  .p-blockquote {
+    padding: theme("spacing.6") theme("spacing.7");
+    background-color: theme("colors.slate.100");
+    border-left: 2px solid var(--color-primary);
+
+    .p-blockquote {
+      padding: theme("spacing.4") theme("spacing.5");
+      margin-top: 1.5em;
+      background-color: theme("colors.slate.200");
+    }
+  }
+
+  cite {
+    display: block;
+    margin-top: 1.5em;
+    font-size: theme("fontSize.sm");
+    color: theme("colors.slate.700");
+
+    a {
+      color: theme("colors.sky.700");
+      text-decoration: underline;
+      text-decoration-color: theme("colors.sky.700");
+
+      @include g.hover {
+        transition: text-decoration-color var(--default-duration);
+
+        &[href]:hover {
+          text-decoration-color: transparent;
+        }
+      }
+    }
+  }
+}

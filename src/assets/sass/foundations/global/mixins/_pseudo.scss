@@ -1,0 +1,16 @@
+// ----------------------------------------------------------------
+// 疑似要素生成
+// ----------------------------------------------------------------
+// 疑似要素ベース
+@mixin pseudo-base($content: "", $position: absolute, $display: inline-block) {
+  position: $position;
+  display: $display;
+  content: $content;
+}
+
+// 記事要素中央配置
+@mixin pseudo-center {
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+}

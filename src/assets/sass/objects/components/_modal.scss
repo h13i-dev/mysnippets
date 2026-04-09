@@ -1,0 +1,89 @@
+@use "@assets/sass/foundations/global/" as g;
+
+@layer components {
+  @include g.scrollbar-stable("dialog[open]");
+
+  .c-modal {
+    overflow: initial;
+
+    &::backdrop {
+      background-color: var(--color-bg-backdrop);
+      opacity: 0;
+      transition:
+        opacity var(--default-transition),
+        display var(--default-transition) allow-discrete,
+        overlay var(--default-transition) allow-discrete;
+    }
+
+    &:modal::backdrop {
+      opacity: 1;
+    }
+
+    @starting-style {
+      &:modal::backdrop {
+        opacity: 0;
+      }
+    }
+
+    &.dialog-attention {
+      animation: attention-shake 0.5s cubic-bezier(0.36, 0.07, 0.19, 0.97) both;
+    }
+  }
+
+  @keyframes attention-shake {
+    10%,
+    90% {
+      transform: translate3d(-1px, 0, 0);
+    }
+
+    20%,
+    80% {
+      transform: translate3d(2px, 0, 0);
+    }
+
+    30%,
+    50%,
+    70% {
+      transform: translate3d(-4px, 0, 0);
+    }
+
+    40%,
+    60% {
+      transform: translate3d(4px, 0, 0);
+    }
+  }
+
+  .c-modal_close-btn {
+    position: absolute;
+    top: g.minmax(8px, 10px);
+    right: g.minmax(8px, 10px);
+
+    .icon_close {
+      width: g.minmax(24px, 30px);
+    }
+  }
+
+  .c-modal_contents {
+    position: relative;
+    width: min(768px, 80vw);
+    padding: theme("spacing.md");
+    border-radius: theme("borderRadius.sm");
+    opacity: 0;
+    transform: scale(0.95);
+    transition:
+      opacity var(--default-transition),
+      transform var(--default-transition);
+  }
+
+  .c-modal:modal .c-modal_contents {
+    opacity: 1;
+    transform: scale(1);
+  }
+
+  @starting-style {
+    .c-modal:modal .c-modal_contents {
+      opacity: 0;
+      transform: scale(0.95);
+    }
+  }
+}

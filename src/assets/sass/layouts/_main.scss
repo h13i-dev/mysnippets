@@ -1,0 +1,17 @@
+@use "@assets/sass/foundations/global/" as g;
+
+@layer components {
+  .l-main {
+    display: grid;
+    grid-area: main;
+    grid-template:
+      "contents" 1fr
+      "footer" auto;
+    gap: theme("spacing.xl");
+    container-type: inline-size;
+
+    &:has(.markdown-contents) {
+      background-color: theme("colors.slate.200");
+    }
+  }
+}

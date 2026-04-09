@@ -1,0 +1,24 @@
+<svg width="32" height="32" viewBox="0 0 32 32" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <linearGradient id="grad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#4a5d6b;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#3fb384;stop-opacity:1" />
+    </linearGradient>
+  </defs>
+  
+  <!-- 背景 -->
+  <rect width="32" height="32" rx="6" fill="url(#grad)"/>
+  
+  <!-- 中括弧 { } -->
+  <path d="M10 8 Q8 8 8 10 L8 14 Q8 16 6 16 Q8 16 8 18 L8 22 Q8 24 10 24" 
+        stroke="#ffffff" 
+        stroke-width="2.5" 
+        fill="none" 
+        stroke-linecap="round"/>
+  
+  <path d="M22 8 Q24 8 24 10 L24 14 Q24 16 26 16 Q24 16 24 18 L24 22 Q24 24 22 24" 
+        stroke="#ffffff" 
+        stroke-width="2.5" 
+        fill="none" 
+        stroke-linecap="round"/>
+</svg>

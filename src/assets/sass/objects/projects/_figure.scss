@@ -1,0 +1,13 @@
+@use "@assets/sass/foundations/global/" as g;
+
+@layer components {
+  .p-figure {
+    gap: 8px;
+    max-width: 600px;
+  }
+
+  .p-figure_caption {
+    font-size: 14px;
+    line-height: 1.5;
+  }
+}

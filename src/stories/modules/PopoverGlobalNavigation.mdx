@@ -1,0 +1,194 @@
+import { Meta } from "@storybook/addon-docs/blocks";
+
+<Meta title="Modules/Popover API グローバルナビゲーション" />
+
+# Popover API グローバルナビゲーション
+
+## 概要
+Popover APIを使用したグローバルナビゲーションメニューを管理するモジュールです。複数のボタンとポップオーバーを1つのクラスで管理でき、HTML標準のPopover APIによる開閉機能を提供します。
+
+[デモページ](demo/popover-navigation/)
+
+### HTMLコード
+```html
+<button type="button" id="gnav-btn" class="js-gnavSpBtn" aria-label="サイトナビゲーションボタン" aria-controls="gnav" popovertarget="gnav">
+  <span></span>
+  <span></span>
+  <span></span>
+</button>
+
+<nav id="gnav" class="p-gnav-sp" popover="auto">
+  <ul>
+    <li><a href="/blog/">Blog</a></li>
+    <li><a href="/components/">Components</a></li>
+    <li><a class="js-gnav-end" href="/demo/">Demo</a></li>
+  </ul>
+</nav>
+```
+
+### 使い方
+```javascript
+import GlobalNavigation from "@assets/js/modules/GlobalNavigation";
+
+// グローバルナビゲーション
+new GlobalNavigation({
+  button: ".js-gnavSpBtn",
+  focusTrap: ["a:first-of-type", ".js-gnav-end"],
+  breakpoint: "lg", // 1024px以上で無効化
+});
+
+// 複数のポップオーバーを管理
+new GlobalNavigation({
+  button: ".js-popupBtn",
+  focusTrap: ["a:first-of-type", ".js-popup-end"],
+});
+```
+
+### 設定オプション
+
+<table>
+  <thead>
+    <tr>
+      <th>オプション</th>
+      <th>型</th>
+      <th>必須</th>
+      <th>デフォルト</th>
+      <th>概要</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>button</td>
+      <td>`string`</td>
+      <td>✓</td>
+      <td>-</td>
+      <td>トグルボタンのセレクター（popovertarget属性を持つボタン）</td>
+    </tr>
+    <tr>
+      <td>focusTrap</td>
+      <td>`[string, string]`</td>
+      <td>-</td>
+      <td>-</td>
+      <td>フォーカストラップの最初と最後の要素のセレクター</td>
+    </tr>
+    <tr>
+      <td>breakpoint</td>
+      <td>`'sm' | 'md' | 'lg' | 'xl' | '2xl'`</td>
+      <td>-</td>
+      <td>-</td>
+      <td>指定したブレイクポイント以上でPopover APIを無効化</td>
+    </tr>
+  </tbody>
+</table>
+
+### 主な機能
+- Popover APIによるネイティブなポップオーバー開閉
+- 複数のボタンとポップオーバーを1つの初期化で管理
+- popovertarget属性による自動的なボタンとポップオーバーの連携
+- ESCキーで閉じる（Popover API標準機能）
+- ポップオーバー外クリックで閉じる（Popover API標準機能）
+- ポップオーバー内のリンク・ボタンクリックで自動的に閉じる
+- フォーカストラップによるキーボードナビゲーション制御
+- ブレイクポイントによるレスポンシブ対応
+
+## オプション
+
+### button
+
+トグルボタンのセレクターを指定します（必須）。ボタンには`popovertarget`属性が必要です。
+```js
+new GlobalNavigation({
+  button: ".js-gnavSpBtn",
+});
+```
+
+```html
+<button type="button" class="js-gnavSpBtn" popovertarget="gnav">メニュー</button>
+<nav id="gnav" popover="auto">
+  <!-- ナビゲーションコンテンツ -->
+</nav>
+```
+
+### focusTrap
+
+フォーカストラップの最初と最後の要素のセレクターをタプル（配列）で指定します。キーボードナビゲーションをポップオーバー内に制御できます。
+```js
+new GlobalNavigation({
+  button: ".js-gnavSpBtn",
+  focusTrap: ["a:first-of-type", ".js-gnav-end"],
+});
+```
+
+```html
+<nav id="gnav" popover="auto">
+  <ul>
+    <li><a href="/blog/">Blog</a></li> <!-- 最初のフォーカス要素 -->
+    <li><a href="/components/">Components</a></li>
+    <li><a class="js-gnav-end" href="/demo/">Demo</a></li> <!-- 最後のフォーカス要素 -->
+  </ul>
+</nav>
+```
+
+### breakpoint
+
+指定したブレイクポイント以上でPopover APIを無効化します。デスクトップでは通常のナビゲーションとして表示し、モバイルでのみPopover APIを使用したい場合に便利です。
+
+利用可能な値:
+- `'sm'`: 640px以上で無効化
+- `'md'`: 768px以上で無効化
+- `'lg'`: 1024px以上で無効化
+- `'xl'`: 1280px以上で無効化
+- `'2xl'`: 1536px以上で無効化
+
+```js
+new GlobalNavigation({
+  button: ".js-gnavSpBtn",
+  focusTrap: ["a:first-of-type", ".js-gnav-end"],
+  breakpoint: "lg", // 1024px以上で無効化
+});
+```
+
+```css
+/* CSSでもレスポンシブ対応が必要 */
+@media (min-width: 1024px) {
+  #gnav {
+    /* デスクトップ用のスタイル */
+  }
+}
+
+@media (max-width: 1023px) {
+  #gnav {
+    /* モバイル用のスタイル（Popover API使用時） */
+  }
+}
+```
+
+## 複数のポップオーバーを管理
+
+1つの初期化で複数のボタンとポップオーバーを管理できます。各ボタンの`popovertarget`属性が対応するポップオーバーのIDと連携します。
+
+```html
+<button type="button" class="js-popupBtn" popovertarget="menu-1">メニュー1</button>
+<nav id="menu-1" popover="auto">
+  <ul>
+    <li><a href="#1-1">リンク1</a></li>
+    <li><a class="js-popup-end" href="#1-2">リンク2</a></li>
+  </ul>
+</nav>
+
+<button type="button" class="js-popupBtn" popovertarget="menu-2">メニュー2</button>
+<nav id="menu-2" popover="auto">
+  <ul>
+    <li><a href="#2-1">リンク1</a></li>
+    <li><a class="js-popup-end" href="#2-2">リンク2</a></li>
+  </ul>
+</nav>
+```
+
+```js
+// 1つの初期化で両方のポップオーバーを管理
+new GlobalNavigation({
+  button: ".js-popupBtn",
+  focusTrap: ["a:first-of-type", ".js-popup-end"],
+});
+```

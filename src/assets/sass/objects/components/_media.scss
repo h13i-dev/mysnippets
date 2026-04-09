@@ -1,0 +1,17 @@
+@layer components {
+  .c-media {
+    width: fit-content;
+    margin-inline: auto;
+
+    iframe,
+    video {
+      max-width: 100%;
+      height: auto;
+
+      &[src*="youtube"][src*="embed"],
+      &[src*="google"][src*="map"][src*="embed"] {
+        aspect-ratio: 16 / 9;
+      }
+    }
+  }
+}

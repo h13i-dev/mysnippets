@@ -1,0 +1,28 @@
+---
+import BlogLink from "@src/components/bases/BlogLink.astro";
+const { siteName } = Astro.props;
+---
+
+<header class="l-header">
+  <div class="l-header_inner">
+    <div class="c-logo l-header_logo">
+      <a href="/">{siteName}</a>
+    </div>
+
+    <button type="button" id="gnav-btn" class="p-menu-btn js-gnavSpBtn" aria-label="サイトナビゲーションボタン" aria-controls="gnav" popovertarget="gnav">
+      <span></span>
+      <span></span>
+      <span></span>
+    </button>
+
+    <nav id="gnav" class="max-lg:p-gnav-sp lg:p-gnav-pc" aria-label="サイトナビゲーション" popover="auto">
+      <ul class="c-grid" data-config="[flex]">
+        <!-- <li><a href="/about/">About<span role="img" class="icon_caret-right"></span></a></li> -->
+        <li><a href="/blog/">Blog<span role="img" class="icon_caret-right"></span></a></li>
+        <li><a href="/_styleguide/">Components<span role="img" class="icon_caret-right"></span></a></li>
+        <li><a href="/demo/">Demo<span role="img" class="icon_caret-right"></span></a></li>
+      </ul>
+      <BlogLink />
+    </nav>
+  </div>
+</header>

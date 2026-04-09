@@ -1,0 +1,72 @@
+---
+import Layout from "@layouts/Layout.astro";
+import BlogLocalNavigation from "@components/bases/BlogLocalNavigation.astro";
+import Breadcrumb from "@components/bases/Breadcrumb";
+
+export const frontmatter: Frontmatter = {
+  title: "ページトップ デモ",
+  description: "",
+};
+---
+
+<Layout frontmatter={frontmatter}>
+  <BlogLocalNavigation />
+
+  <main id="main" class="l-main">
+    <Breadcrumb currentPath={Astro.url.pathname} />
+    <div class="demo-contents">
+      <p>↓下へスクロールしてください↓</p>
+    </div>
+    <div class="demo-dummy"></div>
+    <div class="demo-dummy js-dummy-footer">footer前のコンテンツ</div>
+  </main>
+
+  <footer class="demo-footer">
+    footer
+    <a class="c-pagetop demo-btn demo-btn1" href="#pagetop" aria-label="このページの先頭へ">default</a>
+    <a class="c-pagetop demo-btn demo-btn2" href="#pagetop" aria-label="このページの先頭へ">threshold:0</a>
+    <a class="c-pagetop demo-btn demo-btn3" href="#pagetop" aria-label="このページの先頭へ">target:footer</a>
+    <a class="c-pagetop demo-btn demo-btn4" href="#pagetop" aria-label="このページの先頭へ">threshold:1000</a>
+    <a class="c-pagetop demo-btn demo-btn5" href="#pagetop" aria-label="このページの先頭へ">target:content</a>
+    <a class="c-pagetop demo-btn demo-btn6" href="#pagetop" aria-label="このページの先頭へ">target+threshold</a>
+    <a class="c-pagetop demo-btn demo-btn8" href="#pagetop" aria-label="このページの先頭へ">custom class</a>
+  </footer>
+
+  <Fragment slot="end-body">
+    <script>
+      import PageTop from "@assets/js/modules/PageTop.ts";
+
+      new PageTop(".demo-btn1");
+
+      new PageTop(".demo-btn2", {
+        threshold: 0,
+      });
+
+      new PageTop(".demo-btn3", {
+        target: ".demo-footer",
+      });
+      new PageTop(".demo-btn4", {
+        threshold: 1000,
+      });
+
+      new PageTop(".demo-btn5", {
+        target: ".js-dummy-footer",
+      });
+
+      new PageTop(".demo-btn6", {
+        target: ".js-dummy-footer",
+        threshold: 500,
+      });
+
+      new PageTop(".demo-btn8", {
+        activeClass: "custom-active",
+        bottomClass: "custom-bottom",
+        threshold: 300,
+      });
+    </script>
+  </Fragment>
+
+  <Fragment slot="end-head">
+    <meta name="robots" content="noindex,nofollow" />
+  </Fragment>
+</Layout>

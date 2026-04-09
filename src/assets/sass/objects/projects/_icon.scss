@@ -1,0 +1,84 @@
+@use "@assets/sass/foundations/global/" as g;
+
+%icon {
+  display: inline-block;
+  vertical-align: middle;
+  background-color: currentcolor;
+  mask-repeat: no-repeat;
+  mask-size: contain;
+
+  @include g.hover {
+    transition:
+      opacity theme("transitionDuration.150") theme("transitionTimingFunction.in-out"),
+      background-color theme("transitionDuration.150") theme("transitionTimingFunction.in-out");
+  }
+}
+
+@layer components {
+  .icon_arrow {
+    @extend %icon;
+
+    width: 20px;
+    height: 20px;
+    mask-image: url("/src/assets/images/common/icon_arrow-right-solid.svg");
+  }
+
+  .icon_external {
+    @extend %icon;
+
+    width: auto;
+    height: 1em;
+    aspect-ratio: 1;
+    mask-image: url("/src/assets/images/common/icon_external.svg");
+  }
+
+  .icon_pdf {
+    @extend %icon;
+
+    width: auto;
+    height: 1em;
+    aspect-ratio: 17.7/14.3;
+    margin-inline: 0.3em 0;
+    margin-top: -0.1em;
+    mask-image: url("/src/assets/images/common/icon_file-pdf-solid.svg");
+  }
+
+  .icon_caret-left,
+  .icon_caret-right {
+    @extend %icon;
+
+    width: auto;
+    height: 1em;
+    aspect-ratio: 15/26;
+    mask-image: url("/src/assets/images/common/icon_caret.svg");
+  }
+
+  .icon_caret-right {
+    transform: rotateY(180deg);
+  }
+
+  .icon_arrow-forward {
+    @extend %icon;
+
+    width: auto;
+    aspect-ratio: 1;
+    mask-image: url("/src/assets/images/common/icon_arrow-forward.svg");
+  }
+
+  .icon_favorite {
+    @extend %icon;
+
+    width: auto;
+    height: auto;
+    aspect-ratio: 1;
+    mask-image: url("/src/assets/images/common/icon_favorite.svg");
+  }
+
+  .icon_close {
+    @extend %icon;
+
+    height: auto;
+    aspect-ratio: 1;
+    mask-image: url("/src/assets/images/common/icon_close.svg");
+  }
+}

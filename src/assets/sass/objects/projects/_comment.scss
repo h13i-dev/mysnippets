@@ -1,0 +1,31 @@
+@use "@assets/sass/foundations/global/" as g;
+
+@layer components {
+  .p-comment {
+    padding: theme("spacing.2") theme("spacing.3");
+    margin-block: theme("spacing.xs") theme("spacing.sm");
+    font-size: theme("fontSize.sm");
+    background-color: theme("colors.slate.100");
+
+    a {
+      color: theme("colors.sky.600");
+      text-decoration: underline;
+
+      @include g.hover {
+        &[herf]:hover {
+          text-decoration: none;
+        }
+      }
+    }
+  }
+
+  :is(.p-comment, p) > code {
+    padding: 0.2em 0.4em;
+    margin: 0 0.2em;
+    font-size: 0.85em;
+    vertical-align: 0.08em;
+    color: #fff;
+    background-color: theme("colors.slate.500");
+    border-radius: 2px;
+  }
+}

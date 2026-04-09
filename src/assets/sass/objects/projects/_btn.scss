@@ -1,0 +1,74 @@
+@use "@assets/sass/foundations/global/" as g;
+
+@layer components {
+  $breakpoint: "sm";
+
+  .p-btn {
+    gap: theme("spacing.2");
+    width: 100%;
+    padding: theme("spacing.xs") theme("spacing.sm");
+    font-weight: bold;
+    color: var(--color-primary);
+    background-color: theme("colors.white");
+    border: 1px solid var(--color-primary);
+
+    @include g.mq(#{$breakpoint}) {
+      width: fit-content;
+    }
+
+    @include g.hover {
+      &:is(a[href], button) {
+        transition:
+          color var(--default-transition),
+          background-color var(--default-transition);
+
+        &:hover {
+          color: theme("colors.white");
+          background-color: var(--color-primary);
+        }
+      }
+    }
+
+    $sizes: (
+      "sm": "40",
+      "md": "64",
+      "lg": "96",
+    );
+
+    @each $name, $value in $sizes {
+      @include g.mq(#{$breakpoint}) {
+        &.-w-#{$name} {
+          width: theme("width.#{$value}");
+        }
+
+        &.-min-w-#{$name} {
+          min-width: theme("width.#{$value}");
+        }
+      }
+    }
+  }
+
+  .p-btn_label {
+    gap: theme("spacing.2");
+
+    .icon_external {
+      height: 1.1em;
+      margin-top: 0.1em;
+    }
+  }
+
+  // grid配下のボタンの高さを100%にする
+  .c-grid .p-btn {
+    height: 100%;
+  }
+
+  .p-btn .icon_caret-right {
+    margin-inline: 0.5em 0;
+    margin-top: 0.1em;
+  }
+
+  .p-btn .icon_caret-left {
+    margin-inline: 0 0.5em;
+    margin-top: 0.1em;
+  }
+}

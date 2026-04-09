@@ -1,0 +1,234 @@
+---
+icon: "⚙️"
+title: "Stylelint設定の解説"
+description: ""
+pubDate: 2025-10-25
+tags: ["ブログ", "Stylelint" ,"CSS", "Sass", "SCSS"]
+---
+
+import Code from '@components/Code.astro';
+
+当記事の公開時点でのStylelintに設定している内容について解説します。
+
+## Stylelint（.stylelintrc.js）のコード概要
+現在は下記のように設定しています。
+<Code lang="js">{`
+export default {
+    extends: [
+      'stylelint-config-recommended',
+      'stylelint-config-standard',
+      'stylelint-config-recommended-scss',
+      'stylelint-config-standard-scss',
+      'stylelint-config-recess-order',
+    ],
+    plugins: ['stylelint-plugin-use-baseline', 'stylelint-declaration-block-no-ignored-properties'],
+    rules: {
+      /**
+       * CSS
+       */
+      'no-descending-specificity': [true, { severity: 'warning' }], // 降順のセレクタの優先順位を警告
+      'declaration-no-important': [true, { severity: 'warning' }], // !importantを警告
+      'declaration-property-unit-allowed-list': /* 許可するプロパティと単位のを指定 */ {
+        'line-height': [],
+      },
+      'media-feature-name-no-vendor-prefix': null, // プレフィックスを許容
+      'selector-class-pattern': null, // クラス名のパターンを無効
+      'declaration-property-value-no-unknown': [
+        true,
+        { ignoreProperties: { '/.*$/': '/theme\\(.+?\\)/' } }, // Tailwindのtheme()関数を無視
+      ],
+
+      /**
+       * SCSS
+       */
+      'scss/at-rule-conditional-no-parentheses': null, // @ifの括弧を省略（minmax functionで使用）
+      'scss/at-rule-no-unknown': [true, { ignoreAtRules: ['tailwind', 'screen'] }], // Tailwindのatルールを無視
+
+      /**
+       * Plugin
+       */
+      // Baseline準拠のCSS機能チェック
+      'plugin/use-baseline': [
+        true,
+        {
+          severity: 'warning',
+          available: 'widely',
+          ignoreSelectors: ['nesting', '/^has/'],
+          ignoreProperties: {
+            '/^mask/': [],
+            '/^grid/': ['subgrid'],
+            '/backdrop-filter/': [],
+          },
+          ignoreAtRules: ['function'],
+        },
+      ],
+      // 使用できないプロパティの組み合わせを検出
+      'plugin/declaration-block-no-ignored-properties': true,
+    },
+    ignoreFiles: ['node_modules/**/*', 'dist/**/*'],
+};
+`}</Code>
+
+## 導入している設定・プラグイン
+### ベースルール
+方針として、公式の推奨設定と標準設定をベースに導入しています。理由は、それが最も広く使われており、デファクトスタンダードの可能性が高いからです。
+<Code lang="js">{`
+export default {
+    extends: [
+      'stylelint-config-recommended',
+      'stylelint-config-standard',
+      'stylelint-config-recommended-scss',
+      'stylelint-config-standard-scss',
+    ],
+};
+`}</Code>
+
+使用しているベースとなる推奨ルールは下記のとおりです。
+
+| ルール名 | 説明 | Rulesリンク |
+| ---- | ---- | ---- |
+| ① [stylelint-config-recommended](https://github.com/stylelint/stylelint-config-recommended) | CSSの基本的な推奨ルール | [Rules](https://github.com/stylelint/stylelint-config-recommended/blob/main/index.js) |
+| ② [stylelint-config-standard](https://github.com/stylelint/stylelint-config-standard) | ①を拡張したもの | [Rules](https://github.com/stylelint/stylelint-config-standard/blob/main/index.js) |
+| ③ [stylelint-config-recommended-scss](https://github.com/stylelint-scss/stylelint-config-recommended-scss) | ①を拡張し、SCSSルールを加えたもの | [Rules](https://github.com/stylelint-scss/stylelint-config-recommended-scss/blob/master/index.js) |
+| ④ [stylelint-config-standard-scss](https://github.com/stylelint-scss/stylelint-config-standard-scss) | ③を拡張したもの | [Rules](https://github.com/stylelint-scss/stylelint-config-standard-scss/blob/main/index.js) |
+
+### プロパティの並び順ルール
+SCSSのプロパティ並び替えは、recessに準拠しています。理由は、順番が直感的でわかりやすいためです。  
+選定参考：[stylelint order（並び替え）のパッケージについて（Zennスクラップ）](https://zenn.dev/kg98ztd/scraps/32bf1a36ba00ef)
+<Code lang="js">{`
+export default {
+    extends: [
+      'stylelint-config-recess-order',
+    ],
+};
+`}</Code>
+
+### プラグイン
+Stylelintにはないルールはプラグインを活用していますが、公式がサポートしているものではないため、導入は必要最低限に留め、メンテナンスを小まめに行う必要があります。
+<Code lang="js">{`
+export default {
+    plugins: [
+      'stylelint-plugin-use-baseline', 
+      'stylelint-declaration-block-no-ignored-properties'
+    ],
+    rules: {
+      // Baseline準拠のCSS機能チェック
+      'plugin/use-baseline': [
+        true,
+        {
+          severity: 'warning',
+          available: 'widely',
+          ignoreSelectors: ['nesting', '/^has/'],
+          ignoreProperties: {
+            '/^mask/': [], 
+            '/^grid/': ['subgrid'],
+            '/backdrop-filter/': [],
+          },
+          ignoreAtRules: ['function'],
+        },
+      ],
+      // 使用できないプロパティの組み合わせを検出
+      'plugin/declaration-block-no-ignored-properties': true,
+    },
+};
+`}</Code>
+
+使用しているプラグインは下記のとおりです。
+
+| プラグイン名 | 説明 |
+| ---- | ---- |
+| [stylelint-plugin-use-baseline](https://github.com/ryo-manba/stylelint-plugin-use-baseline) | Baseline準拠のCSS機能チェック |
+| [stylelint-declaration-block-no-ignored-properties](https://github.com/kristerkari/stylelint-declaration-block-no-ignored-properties) | 使用できないプロパティの組み合わせを検出 |
+
+
+## 個別ルールの解説
+推奨ルールをベースとしていますが、一部カスタマイズしているルールとその理由について解説します。
+
+### no-descending-specificity
+降順のセレクタの優先順位を警告します。  
+SCSSの場合、ネストすることにより、意図せず優先順位が高くなってしまうことがあるため、注意喚起のためにエラーではなく警告で設定しています。  
+Docs: https://stylelint.io/user-guide/rules/no-descending-specificity/
+<Code lang="js">{`
+'no-descending-specificity': [true, { severity: 'warning' }],
+`}</Code>
+
+### declaration-no-important
+importantの使用を警告します。  
+importantは基本的に使用しない方針ですが、どうしても使用が必要な場合が想定されるため、エラーではなく警告で設定しています。  
+Docs: https://stylelint.io/user-guide/rules/declaration-no-important/
+<Code lang="js">{`
+'declaration-no-important': [true, { severity: 'warning' }],
+`}</Code>
+
+### declaration-property-unit-allowed-list
+宣言内で許可されるプロパティと単位を指定します。  
+line-heightプロパティは単位を指定しない方針のため、空配列を設定しています。line-heightは単位を指定しないことが望ましいとされています。（参考: [MDN](https://developer.mozilla.org/ja/docs/Web/CSS/line-height#number)）  
+Docs: https://stylelint.io/user-guide/rules/declaration-property-unit-allowed-list/
+<Code lang="js">{`
+'declaration-property-unit-allowed-list': {
+  'line-height': [],
+},
+`}</Code>
+
+### media-feature-name-no-vendor-prefix
+プレフィックスを許容します。  
+Docs: https://stylelint.io/user-guide/rules/media-feature-name-no-vendor-prefix/
+<Code lang="js">{`
+'media-feature-name-no-vendor-prefix': null,
+`}</Code>
+
+許容する理由として、例えば下記のようなテキスト超過した際の三点リーダーのCSS実装には、依然としてプレフィックスを必要とするものがあるためです。
+
+<Code lang="css">{`
+.text-overflow {
+    display: -webkit-box;
+    -webkit-box-orient: vertical;
+    -webkit-line-clamp: 1;
+    overflow: hidden;
+}
+`}</Code>
+
+### selector-class-pattern
+クラス名のパターンを無効にします。  
+Docs: https://stylelint.io/user-guide/rules/selector-class-pattern/
+<Code lang="js">{`
+'selector-class-pattern': null,
+`}</Code>
+
+[stylelint-config-standard](https://github.com/stylelint/stylelint-config-standard/blob/main/index.js)では、下記のようにケバブケースを強制する設定となっているため、プロジェクトの命名規則に合わせて無効化しています。
+
+<Code lang="js">{`
+'selector-class-pattern': [
+    '^([a-z][a-z0-9]*)(-[a-z0-9]+)*$',
+    {
+      message: (selector) => \`Expected class selector \"\$\{selector\}\" to be kebab-case\`,
+    },
+],
+`}</Code>
+
+### declaration-property-value-no-unknown
+未知のプロパティ値を警告します。  
+Tailwind CSSのtheme()関数を使用する際に、プロパティ値として認識されないため、ignorePropertiesオプションで無視するように設定しています。  
+Docs: https://stylelint.io/user-guide/rules/declaration-property-value-no-unknown/
+<Code lang="js">{`
+'declaration-property-value-no-unknown': [
+    true,
+    { ignoreProperties: { '/.*$/': '/theme\\(.+?\\)/' } },
+],
+`}</Code>
+
+### scss/at-rule-conditional-no-parentheses
+@ifの括弧を省略を無効にします。    
+理由は、Sassのminmax()関数を実装する際に、括弧が必要となるためです。  
+Docs: https://github.com/stylelint-scss/stylelint-scss
+<Code lang="js">{`
+'scss/at-rule-conditional-no-parentheses': null,
+`}</Code>
+
+### scss/at-rule-no-unknown
+未知のatルールを警告します。    
+Tailwind CSSのtailwind、screenなどのatルールを使用する際に、プロパティ値として認識されないため、ignoreAtRulesオプションで無視するように設定しています。  
+Docs: https://github.com/stylelint-scss/stylelint-scss
+<Code lang="js">{`
+'scss/at-rule-no-unknown': [true, { ignoreAtRules: ['tailwind', 'screen'] }],
+`}</Code>

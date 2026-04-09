@@ -1,0 +1,19 @@
+node_modules/
+dist/
+_normalize.scss
+*.md
+*.mdx
+
+# biomeでフォーマット
+*.html
+*.css
+*.js
+*.ts
+*.jsx
+*.tsx
+*.json
+
+# src/sass
+# foundation/
+# vendor/
+# _utility.scss

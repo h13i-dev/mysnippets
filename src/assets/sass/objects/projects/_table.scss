@@ -1,0 +1,60 @@
+@use "@assets/sass/foundations/global/" as g;
+
+/* =================================================
+  定義
+================================================= */
+
+$thead-th: "& > thead th";
+$tbody-th: "& > tbody > tr > th";
+$tbody-td: "& > tbody > tr > td";
+
+@layer components {
+  .p-table {
+    line-height: 1.5;
+
+    #{$thead-th} {
+      padding: 0.6em 0.8em;
+      font-size: 0.85em;
+      color: theme("colors.white");
+      background-color: var(--color-primary);
+      border: 1px solid theme("colors.slate.300");
+    }
+
+    // セル設定
+    #{$tbody-th},
+    #{$tbody-td} {
+      padding: 0.6em 0.8em;
+      font-size: 0.85em;
+      border: 1px solid theme("colors.slate.300");
+    }
+
+    #{$tbody-th} {
+      font-weight: bold;
+      color: var(--color-primary);
+      text-align: center;
+      background-color: theme("colors.slate.100");
+    }
+
+    &:has(thead) {
+      #{$tbody-th} {
+        color: theme("colors.black");
+        background-color: theme("colors.slate.100");
+      }
+    }
+  }
+
+  /* =================================================
+  スクロール
+================================================= */
+
+  .p-scrollable:has(.c-table) {
+    .c-table {
+      width: theme("screens.lg");
+      min-height: 130px;
+
+      @include g.mq("sm") {
+        width: 100%;
+      }
+    }
+  }
+}

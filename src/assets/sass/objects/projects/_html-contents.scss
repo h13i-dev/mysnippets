@@ -1,0 +1,62 @@
+@use "@assets/sass/foundations/global/" as g;
+
+@layer components {
+  .html-contents {
+    grid-area: contents;
+    width: 100%;
+    padding-inline: var(--container-space-inline);
+    margin-inline: auto;
+
+    .p-contents-layout:has(.html-contents):has(.p-progress) & {
+      width: min(calc(theme("screens.md") + var(--container-space-inline) * 2), 100cqw);
+
+      @include g.mq("xl") {
+        width: min(theme("screens.md"), 100cqw);
+        padding-inline: initial;
+      }
+    }
+
+    /*
+    * 要素の間の余白
+    */
+    p:not([class]) + p:not([class]) {
+      margin-top: 1.5em;
+    }
+
+    .p-contents-title {
+      margin-bottom: 1.2em;
+    }
+
+    .p-heading-lv1 {
+      margin-block: 2.4em 0.8em;
+
+      + *:not(h2, h3, h4) {
+        margin-top: 0;
+      }
+    }
+
+    section:first-of-type .p-heading-lv2 {
+      margin-top: 1.6em;
+    }
+
+    .p-contents-title + section > .p-heading-lv1 {
+      margin-top: 0;
+    }
+
+    .p-heading-lv2 {
+      margin-block: 1.5em 0.4em;
+
+      + *:not(h2, h3, h4) {
+        margin-top: 0;
+      }
+    }
+
+    .p-heading-lv3 {
+      margin-block: 1.4em 0.4em;
+
+      + *:not(h2, h3, h4) {
+        margin-top: 0;
+      }
+    }
+  }
+}

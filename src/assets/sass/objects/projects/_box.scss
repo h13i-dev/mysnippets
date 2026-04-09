@@ -1,0 +1,20 @@
+@use "@assets/sass/foundations/global/" as g;
+
+// @use "@assets/sass/object/utility";
+
+/* =================================================
+  .p-box
+================================================= */
+
+@layer components {
+  .p-box {
+    padding: theme("spacing.8");
+    margin-inline: auto;
+    border: 1px solid var(--color-primary);
+
+    &:where(.-gray) {
+      background-color: theme("colors.slate.100");
+      border: none;
+    }
+  }
+}

@@ -1,0 +1,155 @@
+@use "sass:map";
+@use "sass:math";
+@use "sass:meta";
+@use "sass:string";
+@use "@assets/sass/foundations/global/variables/" as v;
+@use "remove-px" as f;
+
+/**
+* ブレークポイント
+*/
+$breakpoints: (
+  "xs": 375px,
+  "sm": 640px,
+  "md": 768px,
+  "lg": 1024px,
+  "xl": 1280px,
+  "2xl": 1536px,
+  "3xl": 1920px,
+);
+
+// ----------------------------------------------------------------
+// clamp処理
+// ----------------------------------------------------------------
+/// @param {Number} $min_value 最小で表示したい値。
+/// @param {Number} $max_value 最大で表示したい値。
+/// @param {Number | String} $min_bk 最小のブレークポイントを数値（例：500px）または文字列（例："sp"）で指定。
+/// @param {Number | String} $max_bk 最大のブレークポイントを数値（例：1400px）または文字列（例："md"）で指定。
+/// @param {String} $convert-unit 出力する単位を文字列（例："rem"、"px"）で指定。
+
+/**
+ * @example
+ *   margin-bottom: minmax(6px, 10px, "sp", "md");
+ *   margin-bottom: minmax(15px, 37px, "sm", 1400px);
+ *   margin-bottom: minmax(0.5rem, 1rem, "sm", "xl");
+ */
+@function minmax($min-value, $max-value, $min-bk: "sm", $max-bk: "xl", $convert-unit: "rem") {
+  // バリデーション
+  @if not validate-values($min-value, $max-value, $convert-unit) {
+    @return null;
+  }
+
+  // 値をpxに変換（内部計算用）
+  $min-value-px: convert-to-px($min-value);
+  $max-value-px: convert-to-px($max-value);
+
+  // ブレークポイントの値を取得
+  $min-view-px: get-breakpoint-value($breakpoints, $min-bk);
+  $max-view-px: get-breakpoint-value($breakpoints, $max-bk);
+
+  @if math.unit($min-view-px) != "px" and $min-view-px != 0 and math.unit($max-view-px) != "px" and $max-view-px != 0 {
+    @error 'ディスプレイ幅指定の単位（$min-bk, $max-bk）は「px」または「$breakpoints」の値を使用してください。';
+    @return null;
+  }
+
+  // 単位を削除
+  $min-value-px-base: f.remove-px($min-value-px);
+  $max-value-px-base: f.remove-px($max-value-px);
+  $min-view-px-base: f.remove-px($min-view-px);
+  $max-view-px-base: f.remove-px($max-view-px);
+
+  // 共通のclamp計算
+  $calc-px: math.div(($max-value-px-base - $min-value-px-base), ($max-view-px-base - $min-view-px-base));
+  $vw: $calc-px * 100vw;
+  $vw-round: math.div(math.round($vw * 100), 100);
+
+  @if $convert-unit == "rem" {
+    $browser-base-font-size: f.remove-px(v.$browser-base-font-size);
+    $max-value-rem: math.div($max-value-px-base, $browser-base-font-size);
+    $min-value-rem: math.div($min-value-px-base, $browser-base-font-size);
+    $rem: $max-value-rem - math.div($max-view-px-base * $calc-px, $browser-base-font-size);
+    $rem-round: math.div(math.round($rem * 1000), 1000);
+
+    @return clamp(#{$min-value-rem}rem, #{$rem-round}rem + #{$vw-round}, #{$max-value-rem}rem);
+  } @else {
+    $px: $max-value-px-base - $max-view-px-base * $calc-px;
+    $px-round: math.div(math.round($px * 1000), 1000);
+
+    @return clamp(#{$min-value-px-base}px, #{$px-round}px + #{$vw-round}, #{$max-value-px-base}px);
+  }
+}
+
+/**
+* バリデーション
+*/
+@function validate-values($min-value, $max-value, $convert-unit) {
+  @if meta.type-of($min-value) != "number" or meta.type-of($max-value) != "number" {
+    @error '入力した値をnumber型に修正してください。';
+    @return false;
+  }
+
+  $min-value-unit: "";
+  @if $min-value == 0 {
+    $min-value-unit: "px";
+  } @else {
+    $min-value-unit: math.unit($min-value);
+  }
+
+  $max-value-unit: "";
+  @if $max-value == 0 {
+    $max-value-unit: "px";
+  } @else {
+    $max-value-unit: math.unit($max-value);
+  }
+
+  // pxとremのみ許可
+  @if $min-value-unit != "px" and $min-value-unit != "rem" and $min-value != 0 {
+    @error '指定の単位（$min-value）は「px」または「rem」を使用してください。';
+    @return false;
+  }
+
+  @if $max-value-unit != "px" and $max-value-unit != "rem" and $max-value != 0 {
+    @error '指定の単位（$max-value）は「px」または「rem」を使用してください。';
+    @return false;
+  }
+
+  @if $convert-unit != "px" and $convert-unit != "rem" {
+    @error '出力単位（$convert-unit）は「px」または「rem」を指定してください。';
+    @return false;
+  }
+
+  @return true;
+}
+
+/**
+* 値をpxに変換
+*/
+@function convert-to-px($value) {
+  @if $value == 0 {
+    @return 0;
+  }
+
+  $unit: math.unit($value);
+
+  @if $unit == "px" {
+    @return $value;
+  } @else if $unit == "rem" {
+    $browser-base-font-size: f.remove-px(v.$browser-base-font-size);
+
+    @return math.div($value, 1rem) * $browser-base-font-size * 1px;
+  } @else {
+    @error 'サポートされていない単位です: #{$unit}';
+    @return $value;
+  }
+}
+
+/**
+* ブレイクポイントを取得
+*/
+@function get-breakpoint-value($breakpoints-map, $breakpoint) {
+  @if map.has-key($breakpoints-map, $breakpoint) {
+    @return map.get($breakpoints-map, $breakpoint);
+  } @else {
+    @return $breakpoint;
+  }
+}

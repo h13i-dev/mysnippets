@@ -1,0 +1,36 @@
+@use "sass:list";
+
+// ---------------------------------------------------
+// くの字矢印アイコン生成
+// ---------------------------------------------------
+/// @param {String} $direction 方向
+/// @param {Number} $length 横幅
+/// @param {Number} $bold 線の太さ
+/// @param {String} $color 線の色
+@mixin arrow($direction, $length, $bold: 2px, $color: currentColor) {
+  @if not list.index("up" "right" "down" "left", $direction) {
+    @error 'arrow()の方向は"up","right","down","left"から指定してください';
+  }
+
+  width: $length;
+  height: $length;
+  border-color: $color;
+  border-style: solid;
+  border-width: 0 $bold $bold 0;
+
+  @if $direction == "up" {
+    transform: rotate(225deg);
+  }
+
+  @if $direction == "right" {
+    transform: rotate(-45deg);
+  }
+
+  @if $direction == "down" {
+    transform: rotate(45deg);
+  }
+
+  @if $direction == "left" {
+    transform: rotate(135deg);
+  }
+}

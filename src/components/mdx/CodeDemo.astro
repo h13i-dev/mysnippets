@@ -1,0 +1,19 @@
+---
+interface Props {
+  title?: string;
+  language?: string;
+}
+
+const { title, language = 'javascript' } = Astro.props as Props;
+---
+
+<div class="my-6 border border-gray-200 rounded-lg overflow-hidden">
+  {title && (
+    <div class="bg-gray-50 px-4 py-2 border-b border-gray-200">
+      <h4 class="text-sm font-medium text-gray-700">{title}</h4>
+    </div>
+  )}
+  <div class="bg-gray-900 text-gray-100 p-4 overflow-x-auto">
+    <pre class="text-sm"><code class={`language-${language}`}><slot /></code></pre>
+  </div>
+</div>

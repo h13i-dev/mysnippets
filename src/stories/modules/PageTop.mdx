@@ -1,0 +1,135 @@
+import { Meta } from "@storybook/addon-docs/blocks";
+
+<Meta title="Modules/ページトップボタン" />
+
+# ページトップボタン
+
+## 概要
+ページ上部へスクロールするためのボタンを実装するモジュールです。スクロール位置に応じた表示制御と、フッター領域での位置調整機能を提供します。
+
+[デモページ](demo/pagetop/)
+
+### HTMLコード
+```html
+<a class="pagetop" href="#pagetop">ページトップへ</a>
+```
+
+### 使い方
+```javascript
+import PageTop from "@assets/js/modules/PageTop";
+
+new PageTop(".pagetop", {
+  threshold: 200,
+  activeClass: 'is-active',
+  bottomClass: 'is-bottom',
+  target: 'footer',
+  fixed: true
+});
+```
+
+### 設定オプション
+
+<table>
+  <thead>
+    <tr>
+      <th>オプション</th>
+      <th>型</th>
+      <th>必須</th>
+      <th>デフォルト</th>
+      <th>概要</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>target</td>
+      <td>`string`</td>
+      <td>-</td>
+      <td>-</td>
+      <td>フッター等の基準要素のセレクター</td>
+    </tr>
+    <tr>
+      <td>threshold</td>
+      <td>`number`</td>
+      <td>-</td>
+      <td>`200`</td>
+      <td>ボタンを表示するスクロール量（px）</td>
+    </tr>
+    <tr>
+      <td>activeClass</td>
+      <td>`string`</td>
+      <td>-</td>
+      <td>`'is-active'`</td>
+      <td>ボタン表示時に付与するクラス名</td>
+    </tr>
+    <tr>
+      <td>bottomClass</td>
+      <td>`string`</td>
+      <td>-</td>
+      <td>`'is-bottom'`</td>
+      <td>基準要素到達時に付与するクラス名</td>
+    </tr>
+    <tr>
+      <td>fixed</td>
+      <td>`boolean`</td>
+      <td>-</td>
+      <td>`true`</td>
+      <td>基準要素の手前で固定するかどうか</td>
+    </tr>
+  </tbody>
+</table>
+
+### 主な機能
+- スクロール位置に応じたボタンの表示/非表示
+- フッター領域での位置調整（フッターに重ならないように）
+- カスタマイズ可能な表示閾値
+- aria-hidden属性による適切なアクセシビリティ対応
+- スクロールとリサイズイベントの自動監視
+
+## オプション
+
+### target
+
+フッター等の基準要素のセレクターを指定します。この要素に近づくとボタンがabsoluteポジションに切り替わります。
+```js
+new PageTop(".pagetop", {
+  target: "footer",
+});
+```
+
+### threshold
+
+スクロール距離がこのピクセル値に達するとボタンが表示されます。デフォルトは200pxです。
+```js
+new PageTop(".pagetop", {
+  threshold: 500,
+});
+```
+
+### activeClass
+
+ボタン表示時に付与されるクラス名を指定できます。デフォルトは'is-active'です。
+```js
+new PageTop(".pagetop", {
+  activeClass: "is-visible",
+});
+```
+
+### bottomClass
+
+基準要素（フッターなど）到達時に付与されるクラス名を指定できます。デフォルトは'is-bottom'です。
+```js
+new PageTop(".pagetop", {
+  target: "footer",
+  bottomClass: "is-at-bottom",
+});
+```
+
+### fixed
+
+基準要素の手前で固定するかどうかを指定します。デフォルトはtrueです。falseにすると常に画面右下に固定表示されます。
+```js
+new PageTop(".pagetop", {
+  target: "footer",
+  fixed: false,
+});
+```

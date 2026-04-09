@@ -1,0 +1,23 @@
+{
+  "recommendations": [
+    // 開発者ツール関連
+    "astro-build.astro-vscode",
+    "dbaeumer.vscode-eslint",
+    "stylelint.vscode-stylelint",
+    "biomejs.biome",
+    "esbenp.prettier-vscode",
+    "EditorConfig.EditorConfig",
+    "bradlc.vscode-tailwindcss",
+
+    // 便利ツール関連
+    "formulahendry.auto-rename-tag",
+    "chunsen.bracket-select",
+    "eamodio.gitlens",
+    "bradgashler.htmltagwrap",
+    "volkerdobler.insertnums",
+    "neptunedesign.vs-html-to-css",
+    "mosapride.zenkaku",
+    "unifiedjs.vscode-mdx"
+  ],
+  "unwantedRecommendations": []
+}

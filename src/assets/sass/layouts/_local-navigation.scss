@@ -1,0 +1,75 @@
+@use "@assets/sass/foundations/global/" as g;
+
+@layer components {
+  .l-localnav {
+    display: none;
+    grid-area: localnav;
+
+    @include g.mq("lg") {
+      position: sticky;
+      inset-block: var(--header-height) 0;
+      display: block;
+      height: calc(100dvh - var(--header-height));
+      padding: theme("spacing.sm") theme("spacing.xs");
+      overflow-y: scroll;
+      scrollbar-color: gray theme("colors.slate.100");
+      scrollbar-width: thin;
+
+      .l-localnav_section {
+        display: flex;
+        flex-direction: column;
+        gap: 8px;
+      }
+
+      .l-localnav_heading {
+        font-size: theme("fontSize.sm");
+        font-weight: bold;
+        color: var(--color-primary);
+
+        @include g.hover {
+          a[href]:hover {
+            text-decoration: underline;
+          }
+        }
+      }
+
+      .l-localnav_list {
+        display: flex;
+        flex-direction: column;
+        margin-left: 4px;
+        font-size: theme("fontSize.xs");
+      }
+
+      .l-localnav_item {
+        a {
+          display: inline-block;
+          width: 100%;
+          padding-block: 4px;
+          padding-left: 12px;
+          text-decoration: underline;
+          text-decoration-color: transparent;
+          border-left: 1px solid theme("colors.slate.300");
+
+          @include g.hover {
+            transition:
+              text-decoration-color var(--default-duration),
+              border-left var(--default-duration);
+
+            &[href]:hover {
+              text-decoration-color: currentcolor;
+              border-left: 1px solid theme("colors.slate.500");
+            }
+          }
+        }
+
+        &.is-active {
+          a {
+            font-weight: bold;
+            pointer-events: none;
+            border-left: 1px solid var(--color-primary);
+          }
+        }
+      }
+    }
+  }
+}

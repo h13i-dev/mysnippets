@@ -1,0 +1,38 @@
+@use "@assets/sass/foundations/global/" as g;
+
+@layer components {
+  .c-tags {
+    z-index: 1;
+    display: flex;
+    flex-wrap: wrap;
+    gap: theme("gap.2");
+  }
+
+  .c-tag {
+    padding: theme("spacing.1") theme("spacing.2");
+    font-size: theme("fontSize.xs");
+    font-weight: 500;
+    color: var(--color-primary);
+    text-decoration: underline;
+    text-decoration-color: transparent;
+    cursor: pointer;
+    background: #ecf0f1;
+    border-radius: theme("borderRadius.sm");
+    transition:
+      background var(--default-transition),
+      text-decoration-color var(--default-transition),
+      color var(--default-transition);
+
+    @include g.hover {
+      &[href]:hover {
+        color: #fff;
+        text-decoration-color: currentcolor;
+        background: var(--color-primary);
+      }
+    }
+
+    &.-more {
+      cursor: default;
+    }
+  }
+}

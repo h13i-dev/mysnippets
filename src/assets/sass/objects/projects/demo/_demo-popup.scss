@@ -1,0 +1,93 @@
+@layer components {
+  .demo-popup-area {
+    position: relative;
+    padding: 20px;
+    margin: 20px 0;
+    background: #f9f9f9;
+    border: 2px dashed #ccc;
+  }
+
+  .demo-popup-buttons {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    padding: 0;
+    margin: 0;
+    list-style: none;
+  }
+
+  .demo-popup_item {
+    position: relative;
+    flex: 1;
+
+    > button {
+      width: 100%;
+    }
+  }
+
+  .demo-popup {
+    position: fixed;
+    top: 0;
+    left: 0;
+    z-index: 1000;
+    gap: 10px;
+    width: 250px;
+    height: 100vh;
+    padding: 20px;
+    margin-left: initial;
+    background: #fff;
+    border-right: 1px solid #ddd;
+    box-shadow: 2px 0 10px rgb(0 0 0 / 10%);
+    opacity: 0;
+    transform: translateX(-100%);
+    transition:
+      transform 0.3s ease,
+      opacity 0.3s ease,
+      display 0.3s allow-discrete,
+      overlay 0.3s allow-discrete;
+
+    &:popover-open {
+      opacity: 1;
+      transform: translateX(0);
+    }
+
+    @starting-style {
+      &:popover-open {
+        opacity: 0;
+        transform: translateX(-100%);
+      }
+    }
+  }
+
+  .demo-popup h2 {
+    padding-bottom: 10px;
+    margin: 0 0 15px;
+    color: #333;
+    border-bottom: 1px solid #eee;
+  }
+
+  .demo-popup ul {
+    padding: 0;
+    margin: 0;
+    list-style: none;
+  }
+
+  .demo-popup li {
+    margin-bottom: 8px;
+  }
+
+  .demo-popup a {
+    display: block;
+    padding: 8px 12px;
+    color: #333;
+    text-decoration: none;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    transition: all 0.2s ease;
+  }
+
+  .demo-popup a:hover {
+    background: #f0f0f0;
+    border-color: #999;
+  }
+}

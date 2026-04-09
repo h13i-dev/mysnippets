@@ -1,0 +1,89 @@
+@use "@assets/sass/foundations/global/" as g;
+
+@layer components {
+  .p-description {
+    > dt {
+      position: relative;
+      font-weight: bold;
+
+      + dd {
+        margin-top: 0.5em; // コンテンツ上余白
+      }
+
+      &::before {
+        position: absolute;
+        left: 0;
+        display: inline-block;
+      }
+
+      &:first-child {
+        margin-top: initial;
+      }
+    }
+
+    > dd {
+      + dt {
+        margin-top: 1em;
+      }
+
+      /**
+      * ネスト定義リスト対応
+      */
+      > dl {
+        margin-top: 1em; // ネスト定義リスト上余白
+      }
+
+      // ネスト定義リストの際の左余白調整
+      > .p-description:not(.-list, .-number),
+      &:has(> .p-description:where(.-list, .-number)) {
+        padding-left: 1em;
+      }
+    }
+  }
+
+  /* -----------------------------------------------
+  項目定義リスト
+  ----------------------------------------------- */
+  .p-description.-list {
+    > dt::before {
+      content: "・";
+    }
+
+    > :where(dt, dd) {
+      padding-left: 1.25em;
+    }
+  }
+
+  /* -----------------------------------------------
+  序列定義リスト
+  ----------------------------------------------- */
+
+  /**
+  * 序列定義リスト
+  */
+  .p-description.-number {
+    counter-reset: number 0;
+
+    > dt::before {
+      content: counter(number) ".";
+      counter-increment: number 1;
+    }
+
+    > :where(dt, dd) {
+      padding-left: 1.25em;
+    }
+  }
+
+  /* -----------------------------------------------
+  任意定義リスト
+  ----------------------------------------------- */
+  .p-description:has(.p-description_marker) dt::before {
+    content: none;
+  }
+
+  .p-description_marker {
+    position: absolute;
+    left: 0;
+    display: inline-block;
+  }
+}

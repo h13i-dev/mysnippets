@@ -1,0 +1,161 @@
+---
+import ProgressList from "@src/components/bases/ProgressList.astro";
+---
+
+<aside class="p-progress">
+  <button type="button"><span role="img" class="icon_caret-left"></span></button>
+  <div class="p-progress_inner">
+    <div class="p-progress_heading">目次</div>
+    <ProgressList />
+  </div>
+</aside>
+
+<script>
+  // Progress toggle functionality
+  function initProgressToggle(): void {
+    const progressElement = document.querySelector("[class*='p-progress'") as HTMLElement;
+    const button = progressElement?.querySelector("button") as HTMLElement;
+    const inner = progressElement?.querySelector(".p-progress_inner") as HTMLElement;
+
+    if (!progressElement || !button || !inner) return;
+
+    let isOpen = false;
+    let isToggleEnabled = true;
+
+    function checkButtonVisibility(): void {
+      const buttonStyle = window.getComputedStyle(button);
+      const isButtonVisible = buttonStyle.display !== "none";
+
+      if (!isButtonVisible) {
+        // ボタンが非表示の場合：inertを削除、トグル機能無効
+        const links = progressElement.querySelectorAll("a");
+        links.forEach((link) => {
+          link.removeAttribute("inert");
+        });
+
+        // 開いている状態をリセット
+        if (isOpen) {
+          isOpen = false;
+          progressElement.classList.remove("is-open");
+          progressElement.style.right = "";
+        }
+
+        isToggleEnabled = false;
+      } else {
+        // ボタンが表示されている場合：トグル機能有効
+        isToggleEnabled = true;
+        updateInertState();
+        updatePosition();
+      }
+    }
+
+    function updatePosition(): void {
+      const innerWidth = inner.offsetWidth;
+
+      if (isOpen) {
+        progressElement.style.right = "0px";
+      } else {
+        progressElement.style.right = `-${innerWidth}px`;
+      }
+    }
+
+    function updateInertState(): void {
+      const links = progressElement.querySelectorAll("a");
+      links.forEach((link) => {
+        if (isOpen) {
+          link.removeAttribute("inert");
+        } else {
+          link.setAttribute("inert", "");
+        }
+      });
+    }
+
+    function toggle(): void {
+      if (!isToggleEnabled) return;
+
+      isOpen = !isOpen;
+      progressElement.classList.toggle("is-open", isOpen);
+      button.setAttribute("aria-expanded", isOpen.toString());
+      updatePosition();
+      updateInertState();
+    }
+
+    function close(): void {
+      if (!isToggleEnabled || !isOpen) return;
+
+      isOpen = false;
+      progressElement.classList.remove("is-open");
+      button.setAttribute("aria-expanded", "false");
+      updatePosition();
+      updateInertState();
+    }
+
+    function handleKeyDown(e: KeyboardEvent): void {
+      if (!isToggleEnabled) return;
+      if (e.key === "Escape") {
+        close();
+      }
+    }
+
+    function handleDocumentClick(e: Event): void {
+      if (!isToggleEnabled) return;
+      const target = e.target as HTMLElement;
+      if (!progressElement.contains(target)) {
+        close();
+      }
+    }
+
+    function handleScroll(): void {
+      if (!isToggleEnabled) return;
+      close();
+    }
+
+    function handleResize(): void {
+      checkButtonVisibility();
+      if (isToggleEnabled) {
+        updatePosition();
+      }
+    }
+
+    // ボタンクリックイベント
+    button.addEventListener("click", toggle);
+
+    // ESCキーで閉じる
+    document.addEventListener("keydown", handleKeyDown);
+
+    // 要素外クリックで閉じる
+    document.addEventListener("click", handleDocumentClick);
+
+    // スクロールで閉じる
+    window.addEventListener("scroll", handleScroll);
+
+    // リサイズ時の監視
+    window.addEventListener("resize", handleResize);
+
+    // 初期状態をチェック
+    checkButtonVisibility();
+  }
+
+  // li要素がない場合はp-progressを削除
+  function removeProgressIfEmpty(): void {
+    const progressList = document.getElementById("progress-list");
+    const progressElement = document.querySelector(".p-progress");
+
+    if (!progressList || !progressElement) return;
+
+    const hasItems = progressList.children.length > 0;
+    if (!hasItems) progressElement.remove();
+  }
+
+  // Progress toggle初期化
+  window.addEventListener("load", () => {
+    // 目次生成後にチェック
+    setTimeout(() => {
+      removeProgressIfEmpty();
+      // li要素がある場合のみトグル機能を初期化
+      if (document.querySelector(".p-progress")) {
+        initProgressToggle();
+      }
+    }, 100);
+  });
+</script>

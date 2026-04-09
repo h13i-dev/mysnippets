@@ -1,0 +1,75 @@
+@use "@assets/sass/foundations/global/" as g;
+
+/* =================================================
+  .p-note
+================================================= */
+
+@layer components {
+  .p-note {
+    position: relative;
+    font-size: theme("fontSize.sm");
+
+    /**
+    * 単体
+    */
+    &:where(:not(:has(li))) {
+      padding-left: 1.5em;
+
+      &::before {
+        position: absolute;
+        left: 0;
+        content: "※";
+      }
+    }
+
+    /**
+    * リスト
+    */
+    &:where(:has(li)) {
+      padding-left: 1.5em;
+
+      > li {
+        + li {
+          margin-top: 1em;
+        }
+
+        &::before {
+          position: absolute;
+          left: 0;
+          content: "※";
+        }
+      }
+    }
+
+    /**
+    * 番号リスト
+    */
+    &:where(.-number) {
+      padding-left: 2.25em;
+      counter-reset: number 0;
+
+      > li::before {
+        content: "※" counter(number); /* 表示形式を指定 */
+        counter-increment: number 1; /* number カウンタの増加数をセット */
+      }
+    }
+
+    /**
+    * カスタムリスト
+    */
+    &:where(:has(.p-note_type)) {
+      &::before {
+        content: none;
+      }
+
+      li::before {
+        content: none;
+      }
+    }
+  }
+
+  .p-note_type {
+    position: absolute;
+    left: 0;
+  }
+}

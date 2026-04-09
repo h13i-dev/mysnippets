@@ -1,0 +1,17 @@
+@use "sass:math";
+@use "remove-px" as f;
+@use "@assets/sass/foundations/global/variables/" as v;
+
+// ----------------------------------------------------------------
+// px から rem に変換する関数
+// ----------------------------------------------------------------
+@function rem($px) {
+  // バリデーション
+  @if math.unit($px) != "px" {
+    @error '単位は「px」を使用してください。';
+    @return null;
+  }
+
+  // pxを削除し、remに変換
+  @return math.div(f.remove-px($px), f.remove-px(v.$browser-base-font-size)) * 1rem;
+}

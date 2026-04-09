@@ -1,0 +1,94 @@
+{
+  /**
+   * Tools Settings
+   */
+  "editor.codeActionsOnSave": {
+    "source.fixAll.stylelint": "explicit",
+    "source.fixAll.eslint": "explicit",
+    "source.fixAll.biome": "explicit",
+    "source.organizeImports.biome": "explicit"
+  },
+  "stylelint.validate": ["css", "scss"],
+  "eslint.validate": [
+    "javascript",
+    "typescript",
+    "astro",
+    "html",
+    "json",
+    "jsonc"
+  ],
+
+  /**
+   * VSCode Settings
+   */
+  // Code Formatter
+  "editor.formatOnSave": true,
+  "editor.defaultFormatter": "esbenp.prettier-vscode",
+  "[css]": {
+    "editor.defaultFormatter": "biomejs.biome"
+  },
+  "[javascript]": {
+    "editor.defaultFormatter": "biomejs.biome"
+  },
+  "[typescript]": {
+    "editor.defaultFormatter": "biomejs.biome"
+  },
+  "[javascriptreact]": {
+    "editor.defaultFormatter": "biomejs.biome"
+  },
+  "[typescriptreact]": {
+    "editor.defaultFormatter": "biomejs.biome"
+  },
+  "[json]": {
+    "editor.defaultFormatter": "biomejs.biome"
+  },
+  "[jsonc]": {
+    "editor.defaultFormatter": "biomejs.biome"
+  },
+  "biome.lsp.bin": "./node_modules/.pnpm/@biomejs+cli-win32-x64@2.4.9/node_modules/@biomejs/cli-win32-x64/biome.exe",
+
+  // Code Style
+  "editor.tabSize": 2, // タブ幅を2に設定
+  "editor.insertSpaces": true, // タブの代わりにスペースを使用
+  "files.trimTrailingWhitespace": true, // 行末の空白を保存時に削除
+  "files.insertFinalNewline": true, // ファイルの最後に改行を追加
+  "files.trimFinalNewlines": true, // ファイルの最後の余分な改行を削除
+  "[markdown][mdx]": {
+    "files.trimTrailingWhitespace": false
+  },
+
+  // Validation
+  // "typescript.validate": false,
+  // "javascript.validate": false,
+  // "json.validate": false,
+  "css.validate": false, // Stylelintで対応
+  "scss.validate": false, // Stylelintで対応
+
+  /**
+   * Theme Customizations
+   */
+  "workbench.colorCustomizations": {
+    "titleBar.activeBackground": "#2d3748",
+    "titleBar.activeForeground": "#4fd1c5",
+    "statusBar.background": "#2d3748",
+    "statusBar.foreground": "#4fd1c5",
+    "titleBar.inactiveBackground": "#2d374880",
+    "titleBar.inactiveForeground": "#4fd1c580"
+  },
+
+  /**
+   * highlight.regexes
+   */
+  "highlight.regexes": {
+    // font-sizeがpx指定されている箇所をハイライト
+    "(font-size: \\d+px)": {
+      "filterFileRegex": ".*\\.(scss)",
+      "decorations": [{ "backgroundColor": "rgba(245, 130, 32, 0.4)" }]
+    },
+    // type属性のないbuttonタグをハイライト
+    "(<button(?:\\s+(?!type[\\s=>])[^>]*)?(?<!type)>)": {
+      "filterFileRegex": ".*\\.(astro)",
+      "decorations": [{ "backgroundColor": "rgba(245, 130, 32, 0.4)" }]
+    }
+  }
+}

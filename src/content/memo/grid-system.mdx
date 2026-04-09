@@ -1,0 +1,125 @@
+---
+icon: "📝"
+title: "グリッドシステムの選定メモ"
+description: ""
+pubDate: 2025-09-08
+tags: ["メモ", "Grid Layout", "CSS"]
+---
+
+
+## はじめに
+このページはグリッドシステム選定のメモ書きです。  
+- カスタムCSSページは[コチラ](/snippets/components/grid/)  
+- Tailwind CSS実装ページは[コチラ](/snippets/components/grid/tailwindcss/)
+
+
+## カスタムCSSのグリッドシステム
+### [カスタムCSS] メリット
+- **簡潔な実装**: クラス名を指定して実装することが可能
+- **自由度の制限**: 量産対応者の負担を軽減できる
+- **柔軟な切り替え**: gridとflexboxの切り替えが容易で、要件に柔軟に対応可能
+- **プロジェクト特化**: 特定のプロジェクトの要件に最適化した設計が可能
+
+### [カスタムCSS] デメリット
+- **実装方法の差異**: 人によって実装方法が異なるため、値の指定方法が異なり、量産対応者の負担が増す可能性がある
+- **メンテナンス負荷**: カスタムCSSのため、継続的なメンテナンスが必要
+- **ドキュメント整備**: 使用方法やルールの文書化とチーム内共有が必要
+
+## Tailwind CSSのグリッドシステム
+### [Tailwind CSS] メリット
+
+- **統一された記法**: 社内の複数プロジェクトで同じクラス名を使用するため、コードの一貫性が保たれる
+- **学習コストの低減**: 一度覚えれば他のプロジェクトでも同じ知識を活用できる
+- **保守性の向上**: 標準化されたフレームワークのため、属人化を防げる
+- **豊富なユーティリティ**: レスポンシブ対応も含めて幅広いオプションが標準で用意されている
+
+### [Tailwind CSS] デメリット
+
+- **カスタマイズの制約**: フレームワークの範囲を超えた細かい調整が困難な場合がある
+- **複雑なレイアウトでの限界**: [flexboxで実装](/snippets/components/grid/#グリッドシステム（flexbox）)するグリッドシステムは、Tailwind CSSでは実装が困難
+- **導入コスト**: Tailwind CSSのグリッドで要件を満たせるかの検討を含め、チーム全体での合意・学習が必要
+
+## コード比較
+### グリッドシステム
+#### カスタムCSS
+```html
+<div class="c-grid" data-config="[2][sm:3][xl:4]">
+  <div>foo</div>
+  <div>bar</div>
+</div>
+```
+
+#### Tailwind CSS
+```html
+<div class="u-grid u-grid-cols-2 sm:u-grid-cols-3 xl:u-grid-cols-4 u-gap-md">
+  <div>foo</div>
+  <div>bar</div>
+</div>
+```
+
+### グリッドシステム（カラム指定）
+#### カスタムCSS
+```html
+<div class="c-grid">
+  <div data-config="[4][sm:8]">foo</div>
+  <div data-config="[8][sm:4]">bar</div>
+</div>
+```
+
+#### Tailwind CSS
+```html
+<div class="u-grid u-grid-cols-12 u-gap-md">
+  <div class="u-col-span-4 sm:u-col-span-8">foo</div>
+  <div class="u-col-span-8 sm:u-col-span-4">bar</div>
+</div> 
+```
+
+### サブグリッド
+#### カスタムCSS
+```html
+<div class="c-grid" data-config="[1][sm:2][subgrid:2]">
+  <div class="u-gap-xs">
+    <p>foofoofoofoofoofoofoofoofoofoofoofoofoo</p>
+    <p>bar</p>
+  </div>
+  <div class="u-gap-xs">
+    <p>foo</p>
+    <p>barbarbarbarbarbarbarbarbarbarbarbarbar</p>
+  </div>
+</div> 
+```
+
+#### Tailwind CSS
+```html
+<div class="u-grid u-gap-md u-grid-cols-2">
+  <div class="u-grid u-grid-rows-subgrid u-row-span-2 u-gap-xs">
+    <p>foofoofoofoofoofoofoofoofoofoofoofoofoo</p>
+    <p>bar</p>
+  </div>
+  <div class="u-grid u-grid-rows-subgrid u-row-span-2 u-gap-xs">
+    <p>foo</p>
+    <p>barbarbarbarbarbarbarbarbarbarbarbarbar</p>
+  </div>
+</div> 
+```
+
+### フレックスボックス
+フレックスボックス実装の詳細は[コチラ](/snippets/components/grid/#グリッドシステム（flexbox）)
+### カスタムCSS（通常）
+```html
+<div class="c-grid" data-config="[flex][1][sm:2][xl:3]">
+  <div>foo</div>
+  <div>bar</div>
+</div> 
+```
+
+### カスタムCSS（カラム指定）
+```html
+<div class="c-grid" data-config="[flex][2]">
+  <div data-config="[sm:3][xl:9]">bar</div>
+  <div data-config="[sm:9][xl:3]">foo</div>
+</div> 
+```
+
+## 結論
+LPなどの自由度を重視するシンプルな案件であれば、Tailwind CSSのグリッドシステムの導入を検討しても良い。一方、大規模案件で要件が多く、スタイルの共通化を重視する場合は、カスタムCSSを使用した方が良い。プロジェクトの性質と要件の複雑さに応じて選択するのが良いと考える。

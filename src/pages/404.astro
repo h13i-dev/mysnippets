@@ -1,0 +1,28 @@
+---
+import Layout from "@layouts/Layout.astro";
+import Footer from "@components/bases/Footer.astro";
+import BlogLocalNavigation from "@components/bases/BlogLocalNavigation.astro";
+import Breadcrumb from "@components/bases/Breadcrumb";
+import { Button } from "@components/index.tsx";
+
+export const frontmatter: Frontmatter = {
+  title: "ページが見つかりません。",
+  description: "",
+};
+---
+
+<Layout frontmatter={frontmatter}>
+  <BlogLocalNavigation />
+
+  <main id="main" class="l-main">
+    <Breadcrumb currentPath={Astro.url.pathname} />
+    <div class="p-contents-layout">
+      <article class="html-contents">
+        <h1 class="p-contents-title">{frontmatter.title}</h1>
+        <p>URLが間違っているか、ページが存在しない可能性があります。<br aria-hidden="true" />ページ上部のナビゲーションか、トップページから目的のページをお探しください。</p>
+        <Button className="-w-lg u-mx-auto u-mt-lg" href="/">トップページへ戻る</Button>
+      </article>
+    </div>
+    <Footer />
+  </main>
+</Layout>

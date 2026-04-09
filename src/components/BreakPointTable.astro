@@ -1,0 +1,51 @@
+---
+const { class: className } = Astro.props;
+---
+
+<table data-config="default" class:list={["c-table", className]}>
+  <tr>
+    <th class="u-min-w-[6em]">接頭辞</th>
+    <th>適用範囲</th>
+    <th>参考デバイス</th>
+  </tr>
+  <tr>
+    <td>なし</td>
+    <td>全てのウィンドウ幅</td>
+    <td>全てのウィンドウ幅</td>
+  </tr>
+  <tr>
+    <td>xs:</td>
+    <td>375px以上</td>
+    <td>スマホ（360px～639px想定）</td>
+  </tr>
+  <tr>
+    <td>sm:</td>
+    <td>640px以上</td>
+    <td>タブレット（640~1279px想定）</td>
+  </tr>
+  <tr>
+    <td>md:</td>
+    <td>768px以上</td>
+    <td>タブレット（640~1279px想定）</td>
+  </tr>
+  <tr>
+    <td>lg:</td>
+    <td>1024px以上</td>
+    <td>タブレット（640~1279px想定）</td>
+  </tr>
+  <tr>
+    <td>xl:</td>
+    <td>1280px以上</td>
+    <td>PC</td>
+  </tr>
+  <tr>
+    <td>2xl:</td>
+    <td>1536px以上</td>
+    <td>PC</td>
+  </tr>
+  <tr>
+    <td>3xl:</td>
+    <td>1920px以上</td>
+    <td>フルHD・4K</td>
+  </tr>
+</table>

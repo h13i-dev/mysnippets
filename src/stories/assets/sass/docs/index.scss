@@ -1,0 +1,152 @@
+/* stylelint-disable rule-nesting-at-rule-required-list */
+.sb-container {
+  margin-bottom: 48px;
+}
+
+.sb-section {
+  display: flex;
+  flex-direction: row;
+  gap: 20px;
+  width: 100%;
+}
+
+img {
+  object-fit: cover;
+}
+
+.sb-section-title {
+  margin-bottom: 32px;
+}
+
+.sb-section a:not(h1 a, h2 a, h3 a) {
+  font-size: 14px;
+}
+
+.sb-section-item,
+.sb-grid-item {
+  display: flex;
+  flex: 1;
+  flex-direction: column;
+}
+
+.sb-section-item-heading {
+  padding-top: 20px !important;
+  padding-bottom: 5px !important;
+  margin: 0 !important;
+}
+
+.sb-section-item-paragraph {
+  padding-bottom: 10px;
+  margin: 0;
+}
+
+.sb-chevron {
+  margin-left: 5px;
+}
+
+.sb-features-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 32px 20px;
+}
+
+.sb-socials {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+}
+
+.sb-socials p {
+  margin-bottom: 10px;
+}
+
+.sb-explore-image {
+  align-self: flex-start;
+  max-height: 32px;
+}
+
+.sb-addon {
+  position: relative;
+  display: flex;
+  align-items: center;
+  width: 100%;
+  height: 180px;
+  margin-bottom: 48px;
+  overflow: hidden;
+  background: #eef3f8;
+  background-color: #eef3f8;
+  border: 1px solid rgb(0 0 0 / 5%);
+  border-radius: 5px;
+}
+
+.sb-addon-text {
+  max-width: 240px;
+  padding-left: 48px;
+}
+
+.sb-addon-text h4 {
+  padding-top: 0;
+}
+
+.sb-addon-img {
+  position: absolute;
+  top: 0;
+  left: 345px;
+  width: 200%;
+  height: 100%;
+  overflow: hidden;
+}
+
+.sb-addon-img img {
+  width: 650px;
+  margin-top: -72px;
+  margin-left: 40px;
+  box-shadow: 0 0 1px rgb(255 255 255 / 0%);
+  transform: rotate(-15deg);
+  backface-visibility: hidden;
+}
+
+@media screen and (width <= 800px) {
+  .sb-addon-img {
+    left: 300px;
+  }
+}
+
+@media screen and (width <= 600px) {
+  .sb-section {
+    flex-direction: column;
+  }
+
+  .sb-features-grid {
+    grid-template-columns: repeat(1, 1fr);
+  }
+
+  .sb-socials {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  .sb-addon {
+    align-items: flex-start;
+    height: 280px;
+    padding-top: 32px;
+    overflow: hidden;
+  }
+
+  .sb-addon-text {
+    padding-left: 24px;
+  }
+
+  .sb-addon-img {
+    inset: 130px 0 0;
+    width: 124%;
+    height: auto;
+    overflow: hidden;
+  }
+
+  .sb-addon-img img {
+    width: 1200px;
+    margin-top: 48px;
+    margin-bottom: -40px;
+    margin-left: -24px;
+    transform: rotate(-12deg);
+  }
+}

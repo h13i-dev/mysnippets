@@ -1,0 +1,59 @@
+@use "sass:list";
+@use "sass:math";
+
+// ---------------------------------------------------
+// 三角形生成
+// ---------------------------------------------------
+/// @param {String} $direction 三角形の方向
+/// @param {Number} $width 三角形の横幅
+/// @param {Number} $height 三角形の高さ
+/// @param {String} $color 三角形の色
+@mixin triangle($direction, $width, $height, $color: currentColor) {
+  @if not list.index("up" "right" "down" "left" "top-left" "top-right" "bottom-left" "bottom-right", $direction) {
+    @error 'triangle()の方向は"up","right","down","left","top-left","top-right","bottom-left","bottom-right"から指定してください';
+  }
+
+  width: 0;
+  height: 0;
+  border-style: solid;
+
+  @if $direction == "up" {
+    border-color: transparent transparent $color;
+    border-width: 0 math.div($width, 2) $height math.div($width, 2);
+  }
+
+  @if $direction == "right" {
+    border-color: transparent transparent transparent $color;
+    border-width: math.div($height, 2) 0 math.div($height, 2) $width;
+  }
+
+  @if $direction == "down" {
+    border-color: $color transparent transparent transparent;
+    border-width: $height math.div($width, 2) 0 math.div($width, 2);
+  }
+
+  @if $direction == "left" {
+    border-color: transparent $color transparent transparent;
+    border-width: math.div($height, 2) $width math.div($height, 2) 0;
+  }
+
+  @if $direction == "top-left" {
+    border-color: $color transparent transparent transparent;
+    border-width: $width $width 0 0;
+  }
+
+  @if $direction == "top-right" {
+    border-color: transparent $color transparent transparent;
+    border-width: 0 $width $width 0;
+  }
+
+  @if $direction == "bottom-left" {
+    border-color: transparent transparent transparent $color;
+    border-width: $width 0 0 $width;
+  }
+
+  @if $direction == "bottom-right" {
+    border-color: transparent transparent $color;
+    border-width: 0 0 $width $width;
+  }
+}

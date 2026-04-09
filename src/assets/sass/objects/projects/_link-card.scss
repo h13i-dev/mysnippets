@@ -1,0 +1,99 @@
+@use "@assets/sass/foundations/global/" as g;
+
+@layer components {
+  $breakpoint: "sm";
+
+  .p-link-card {
+    position: relative;
+    display: flex;
+    gap: theme("spacing.sm");
+    justify-content: space-between;
+    padding: theme("spacing.sm");
+    word-break: break-all;
+    border: 1px solid theme("colors.slate.200");
+    border-radius: theme("borderRadius.sm");
+
+    .icon_external {
+      position: absolute;
+      top: 0.4em;
+      right: 0.4em;
+      height: 0.9em;
+      font-size: 1.1em;
+      color: theme("colors.slate.500");
+    }
+
+    @include g.hover {
+      .p-link-card_page-title {
+        text-decoration: underline;
+        text-decoration-color: transparent;
+        transition: text-decoration-color var(--default-transition);
+      }
+
+      &[href]:hover .p-link-card_page-title {
+        text-decoration-color: currentcolor;
+      }
+    }
+  }
+
+  .p-link-card_meta {
+    display: flex;
+    flex-direction: column;
+    gap: theme("spacing.2");
+  }
+
+  .p-link-card_page-title {
+    font-size: theme("fontSize.base");
+    font-weight: bold;
+  }
+
+  .p-link-card_description {
+    font-size: theme("fontSize.xs");
+  }
+
+  .p-link-card_info {
+    display: flex;
+    gap: theme("spacing.2");
+    align-items: center;
+  }
+
+  .p-link-card_icon {
+    flex-shrink: 0;
+
+    img {
+      width: 20px;
+      aspect-ratio: 1;
+      border-radius: theme("borderRadius.sm");
+    }
+  }
+
+  .p-link-card_site-title {
+    font-size: theme("fontSize.xs");
+    font-weight: 500;
+  }
+
+  .p-link-card_url {
+    display: none;
+    font-size: theme("fontSize.xs");
+    color: theme("colors.slate.500");
+
+    @include g.mq(#{$breakpoint}) {
+      @apply u-text-overflow-[1];
+    }
+  }
+
+  .p-link-card_img {
+    display: none;
+    align-items: center;
+    max-width: 30%;
+    height: auto;
+
+    img {
+      width: 100%;
+      object-fit: contain;
+    }
+
+    @include g.mq(#{$breakpoint}) {
+      display: flex;
+    }
+  }
+}

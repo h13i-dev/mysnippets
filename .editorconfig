@@ -1,0 +1,14 @@
+# Docs: http://editorconfig.org
+
+root = true
+
+[*]
+charset = utf-8
+end_of_line = lf
+indent_style = space
+indent_size = 2
+trim_trailing_whitespace = true # 行末の空白文字を削除
+insert_final_newline = false # 最終行を追加（作業途中で自動的に改行してしまうためfalseに設定。最終行の追加はprettierで行なっている。）
+
+[*.{md,mdx}]
+trim_trailing_whitespace = false

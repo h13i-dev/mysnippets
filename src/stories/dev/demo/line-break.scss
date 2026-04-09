@@ -1,0 +1,74 @@
+/* stylelint-disable rule-nesting-at-rule-required-list */
+.demo-line-break {
+  section {
+    margin-bottom: 3rem;
+    padding: 1.5rem;
+    background-color: #f9f9f9;
+    border-radius: 4px;
+  }
+
+  .demo-heading {
+    margin-bottom: 0.75rem;
+    font-size: 1.25rem;
+    font-weight: bold;
+    color: #333;
+  }
+
+  .demo-comment {
+    margin-bottom: 1rem;
+    padding: 0.75rem;
+    font-size: 0.875rem;
+    color: #666;
+    background-color: #fff;
+    border-left: 3px solid #2196f3;
+  }
+
+  .demo-box {
+    padding: 1rem;
+    background-color: #fff;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+  }
+}
+
+/* カラム表示 */
+.p-column {
+  padding: 1rem;
+  background-color: #fff;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  column-count: 3;
+  column-gap: 20px;
+  column-rule: 1px solid #ddd;
+}
+
+/* word-break プロパティ */
+.u-break-normal {
+  word-break: normal;
+}
+
+.u-break-all {
+  word-break: break-all;
+}
+
+.u-break-keep {
+  word-break: keep-all;
+}
+
+/* overflow-wrap プロパティ */
+.u-wrap-normal {
+  overflow-wrap: normal;
+}
+
+.u-wrap-anywhere {
+  overflow-wrap: anywhere;
+}
+
+.u-wrap-break-word {
+  overflow-wrap: break-word;
+}
+
+/* ユーティリティ */
+.u-mt-sm {
+  margin-top: 1rem;
+}

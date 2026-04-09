@@ -1,0 +1,113 @@
+{
+  // Place your snippets for astro here. Each snippet is defined under a snippet name and has a prefix, body and
+  // description. The prefix is what is used to trigger the snippet and the body will be expanded and inserted. Possible variables are:
+  // $1, $2 for tab stops, $0 for the final cursor position, and ${1:label}, ${2:another} for placeholders. Placeholders with the
+  // same ids are connected.
+  // Example:
+  // "Print to console": {
+  // 	"prefix": "log",
+  // 	"body": [
+  // 		"console.log('$1');",
+  // 		"$2"
+  // 	],
+  // 	"description": "Log output to console"
+  // }
+
+  // *********************************
+  //  コーディング
+  // *********************************
+  "project: ignore prettier": {
+    "prefix": "ignore prettier",
+    "body": ["<!-- prettier-ignore -->"],
+    "description": "Prettierのフォーマットを無効化",
+  },
+  "project: ignore eslint": {
+    "prefix": "ignore eslint",
+    "body": ["<!-- eslint-disable-next-line -->"],
+    "description": "ESLintを無効化",
+  },
+  "project: l-section": {
+    "prefix": "section.l-section",
+    "body": ["<section class=\"l-section\">", "$1", "</section>"],
+  },
+  "project: c-container": {
+    "prefix": ".c-container",
+    "body": ["<div class=\"c-container\">", "$1", "</div>"],
+  },
+  "project: l-section set": {
+    "prefix": "section.l-section>.c-container",
+    "body": ["<section class=\"l-section\">", "\t<div class=\"c-container\">", "\t\t$1", "\t</div>", "</section>"],
+  },
+  "project: picture set": {
+    "prefix": "picture>source+img",
+    "body": ["<picture>", "\t<source srcset=\"/assets/\" media=\"(min-width: 630px)\" />", "\t<img src=\"/assets/\" alt=\"\" width=\"\" height=\"\" loading=\"lazy\" />", "</picture>"],
+  },
+  "project: table set": {
+    "prefix": "table>caption+thead>tr>th*3^^tbody>tr>th+td*2^^tfoot>tr>th+td*2",
+    "body": ["<table>", "\t<caption>${1:タイトル}</caption>", "\t<thead>", "\t\t<tr>", "\t\t\t<th></th>", "\t\t\t<th></th>", "\t\t\t<th></th>", "\t\t</tr>", "\t</thead>", "\t<tbody>", "\t\t<tr>", "\t\t\t<th></th>", "\t\t\t<td></td>", "\t\t\t<td></td>", "\t\t</tr>", "\t</tbody>", "\t<tfoot>", "\t\t<tr>", "\t\t\t<th></th>", "\t\t\t<td></td>", "\t\t\t<td></td>", "\t\t</tr>", "\t</tfoot>", "</table>"],
+  },
+  "project: ruby": {
+    "prefix": "ruby>rb+rp>rt",
+    "body": "<ruby><rb>${1:漢字}</rb><rp>（</rp><rt>${2:かんじ}</rt><rp>）</rp></ruby>",
+  },
+  "project: breadcrumb": {
+    "prefix": "breadcrumb",
+    "body": ["<ul class=\"p-breadcrumb\" itemscope itemtype=\"https://schema.org/BreadcrumbList\">", "\t<li class=\"p-breadcrumb_item\" itemprop=\"itemListElement\" itemscope itemtype=\"https://schema.org/ListItem\">", "\t\t<a itemprop=\"item\" href=\"/\"><span itemprop=\"name\">${1:HOME}</span></a>", "\t\t<meta itemprop=\"position\" content=\"1\" />", "\t</li>", "\t<li class=\"p-breadcrumb_item\" itemprop=\"itemListElement\" itemscope itemtype=\"https://schema.org/ListItem\">", "\t\t<a itemprop=\"item\" href=\"/${2:xxx}/\"><span itemprop=\"name\">${3:第2階層}</span></a>", "\t\t<meta itemprop=\"position\" content=\"2\" />", "\t</li>", "\t<li class=\"p-breadcrumb_item\" itemprop=\"itemListElement\" itemscope itemtype=\"https://schema.org/ListItem\">", "\t\t<a itemprop=\"item\" href=\"/${4:xxx/xxx/}\" aria-current=\"page\"><span itemprop=\"name\">${5:第3階層}</span></a>", "\t\t<meta itemprop=\"position\" content=\"3\" />", "\t</li>", "</ul>"],
+  },
+  "project: l-footer": {
+    "prefix": "l-footer",
+    "body": ["<footer id=\"footer\" class=\"l-footer l-section\">", "\t<div class=\"c-container\">$1</div>", "</footer>"],
+  },
+  "project: img": {
+    "prefix": "img[width=\"\" height=\"\" loading=\"lazy\"]",
+    "body": "<img src=\"/assets/$1\" alt=\"$2\" width=\"$3\" height=\"$4\" loading=\"${5:lazy}\" />",
+  },
+  "project: summary": {
+    "prefix": "accordion set (detail-summary)",
+    "body": ["<details class=\"${1:c-accordion}\">", "\t<summary class=\"${2:c-accordion_summary}\">I have keys but no doors. I have space but no room. You can enter but can’t leave. What am I?</summary>", "<div class=\"${3:c-accordion_content}\"></div>", "</details>"],
+  },
+
+  // *********************************
+  //  Utils
+  // *********************************
+  "project: CO2": {
+    "prefix": "CO2",
+    "body": "CO<sub>2</sub>",
+  },
+  "project: H2O": {
+    "prefix": "H2O",
+    "body": "H<sub>2</sub>O",
+  },
+  "project: m2": {
+    "prefix": "m2",
+    "body": "m<sup>2</sup>",
+  },
+  "project: m3": {
+    "prefix": "m3",
+    "body": "m<sup>3</sup>",
+  },
+  "project: star3": {
+    "prefix": "star3",
+    "body": ["★★★"],
+  },
+  "&lt;": {
+    "prefix": "<(&lt;)",
+    "body": "&lt;",
+  },
+  "&gt;": {
+    "prefix": ">(&gt;)",
+    "body": "&gt;",
+  },
+  "&amp;": {
+    "prefix": "&(&amp;)",
+    "body": "&amp;",
+  },
+  "&quot;": {
+    "prefix": "\"(&quot;)",
+    "body": "&quot;",
+  },
+  "&apos;": {
+    "prefix": "'(&apos;)",
+    "body": "&apos;",
+  },
+}

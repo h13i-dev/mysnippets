@@ -1,0 +1,15 @@
+// Bootstrap カスタムインポート
+
+// 必須の基礎部分
+@import "bootstrap/scss/functions";
+@import "bootstrap/scss/variables";
+@import "bootstrap/scss/maps";
+@import "bootstrap/scss/mixins";
+
+// Root
+@import "bootstrap/scss/root";
+
+// 必要なコンポーネントのみ
+@import "bootstrap/scss/nav";
+@import "bootstrap/scss/buttons";
+@import "bootstrap/scss/card";

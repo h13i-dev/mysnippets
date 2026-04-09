@@ -1,0 +1,162 @@
+import { Meta } from "@storybook/addon-docs/blocks";
+
+<Meta title="Modules/オーバーレイ" />
+
+# オーバーレイ
+
+## 概要
+クリックでオーバーレイを表示・非表示できるモジュールです。クリック、キーボード操作、スクロール検知などを適切に処理し、アクセシビリティ属性を維持します。
+
+[デモページ](demo/backdrop/)
+
+### HTMLコード
+```html
+<div class="c-backdrop js-backdrop" aria-hidden="true"></div>
+<button type="button" class="js-backdrop-trigger">オーバーレイを開く</button>
+```
+
+### 使い方
+```javascript
+import Backdrop from "@assets/js/modules/Backdrop";
+
+new Backdrop({
+  button: ".js-backdrop-trigger",
+  backdrop: ".js-backdrop",
+  closeButton: ".js-close-btn",
+  closeOnResize: false,
+  excludeClose: [".header"],
+  activeClass: "is-active"
+});
+```
+
+### 設定オプション
+
+<table>
+  <thead>
+    <tr>
+      <th>オプション</th>
+      <th>型</th>
+      <th>必須</th>
+      <th>デフォルト</th>
+      <th>概要</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>button</td>
+      <td>`string`</td>
+      <td>✓</td>
+      <td>-</td>
+      <td>トグルボタンのセレクター</td>
+    </tr>
+    <tr>
+      <td>backdrop</td>
+      <td>`string`</td>
+      <td>✓</td>
+      <td>-</td>
+      <td>オーバーレイのセレクター</td>
+    </tr>
+    <tr>
+      <td>closeButton</td>
+      <td>`string`</td>
+      <td>-</td>
+      <td>-</td>
+      <td>閉じるボタンのセレクター</td>
+    </tr>
+    <tr>
+      <td>closeOnResize</td>
+      <td>`boolean`</td>
+      <td>-</td>
+      <td>`false`</td>
+      <td>windowリサイズ時にオーバーレイを閉じるか</td>
+    </tr>
+    <tr>
+      <td>excludeClose</td>
+      <td>`Array<string>`</td>
+      <td>-</td>
+      <td>-</td>
+      <td>クリックイベントを無視するエリアのセレクター</td>
+    </tr>
+    <tr>
+      <td>activeClass</td>
+      <td>`string`</td>
+      <td>-</td>
+      <td>`'is-active'`</td>
+      <td>アクティブ時に付与されるクラス名</td>
+    </tr>
+  </tbody>
+</table>
+
+### 主な機能
+- ボタンクリックでオーバーレイの開閉
+- ESCキーで閉じる
+- オーバーレイ外クリックで閉じる
+- 除外エリア設定（ヘッダーなど特定のエリアをクリックしても閉じない）
+- aria-expanded属性による適切なアクセシビリティ対応
+- リサイズ時の自動クローズオプション
+
+## オプション
+
+### button
+
+トグルボタンのセレクターを指定します（必須）。
+```js
+new Backdrop({
+  button: ".js-backdrop-trigger",
+  backdrop: ".js-backdrop",
+});
+```
+
+### backdrop
+
+オーバーレイのセレクターを指定します（必須）。
+```js
+new Backdrop({
+  button: ".js-backdrop-trigger",
+  backdrop: ".js-backdrop",
+});
+```
+
+### closeButton
+
+閉じるボタンのセレクターを指定します。オーバーレイ内にナビゲーションなどが含まれる場合に便利です。
+```js
+new Backdrop({
+  button: ".js-backdrop-trigger",
+  backdrop: ".js-backdrop",
+  closeButton: ".js-close-btn",
+});
+```
+
+### excludeClose
+
+クリックイベントを無視するエリアのセレクターを配列で指定します。ヘッダーなど特定のエリアをクリックしてもオーバーレイが閉じないようにできます。
+```js
+new Backdrop({
+  button: ".js-backdrop-trigger",
+  backdrop: ".js-backdrop",
+  excludeClose: [".header", ".sidebar"],
+});
+```
+
+### closeOnResize
+
+windowリサイズ時にオーバーレイを閉じるかどうかを設定します。デフォルトはfalseです。
+```js
+new Backdrop({
+  button: ".js-backdrop-trigger",
+  backdrop: ".js-backdrop",
+  closeOnResize: true,
+});
+```
+
+### activeClass
+
+アクティブ時に付与されるクラス名を指定します。デフォルトは'is-active'です。
+```js
+new Backdrop({
+  button: ".js-backdrop-trigger",
+  backdrop: ".js-backdrop",
+  activeClass: "is-open",
+});
+```

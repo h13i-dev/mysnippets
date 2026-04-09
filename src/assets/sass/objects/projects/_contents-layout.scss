@@ -1,0 +1,36 @@
+@use "@assets/sass/foundations/global/" as g;
+
+@layer components {
+  .p-contents-layout {
+    display: grid;
+    grid-area: contents;
+    grid-template: "contents" 1fr / min(theme("screens.lg"), 100cqw);
+    gap: theme("gap.lg") theme("gap.md");
+    justify-content: center;
+    margin-top: theme("spacing.xl");
+
+    body:has(.p-breadcrumb) & {
+      margin-top: theme("spacing.2xl");
+    }
+  }
+
+  .p-contents-layout:has(.html-contents):has(.p-progress) {
+    @include g.mq("xl") {
+      grid-template: "contents progress" 1fr / theme("screens.md") auto /* stylelint-disable-line named-grid-areas-no-invalid */;
+      width: 100%;
+      max-width: 100%;
+    }
+  }
+
+  .p-contents-layout:has(.markdown-contents) {
+    grid-template:
+      "markdown-header" auto
+      "contents" 1fr / min(theme("screens.md"), 100cqw);
+
+    @include g.mq("xl") {
+      grid-template:
+        "markdown-header markdown-header" auto
+        "contents progress" 1fr / min(theme("screens.md"), 100cqw) auto /* stylelint-disable-line named-grid-areas-no-invalid */;
+    }
+  }
+}

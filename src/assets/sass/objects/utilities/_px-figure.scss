@@ -1,0 +1,7 @@
+@use "@assets/sass/foundations/global/" as g;
+
+@layer utilities {
+  .u-px-figure {
+    padding-inline: g.minmax(20px, 36px);
+  }
+}

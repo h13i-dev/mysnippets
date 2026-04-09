@@ -1,0 +1,80 @@
+---
+import ContentsLayout from "@layouts/ContentsLayout.astro";
+
+export const frontmatter: Frontmatter = {
+  title: "Popover API グローバルナビゲーションデモ",
+  description: "Popover APIを使用したグローバルナビゲーション。複数のボタンとポップオーバーを1つのクラスで管理できます。",
+};
+---
+
+<ContentsLayout frontmatter={frontmatter}>
+  <article class="html-contents">
+    <h1 class="p-contents-title">{frontmatter.title}</h1>
+
+    <div class="demo-popup-area">
+      <ul class="demo-popup-buttons">
+        <li class="demo-popup_item">
+          <button type="button" class="js-popupBtn p-btn" aria-label="デモナビゲーション1" popovertarget="demo-popover-1">メニュー1</button>
+          <nav id="demo-popover-1" class="demo-popup" popover="auto">
+            <h2>メニュー1の内容</h2>
+            <ul>
+              <li><a class="js-popup-start" href="#demo1-1">メニュー1 - リンク1</a></li>
+              <li><a href="#demo1-2">メニュー1 - リンク2</a></li>
+              <li><a class="js-popup-end" href="#demo1-3">メニュー1 - リンク3</a></li>
+            </ul>
+          </nav>
+        </li>
+
+        <li class="demo-popup_item">
+          <button type="button" class="js-popupBtn p-btn" aria-label="デモナビゲーション2" popovertarget="demo-popover-2">メニュー2</button>
+          <nav id="demo-popover-2" class="demo-popup" popover="auto">
+            <h2>メニュー2の内容</h2>
+            <ul>
+              <li><a class="js-popup-start" href="#demo2-1">メニュー2 - リンク1</a></li>
+              <li><a href="#demo2-2">メニュー2 - リンク2</a></li>
+              <li><a class="js-popup-end" href="#demo2-3">メニュー2 - リンク3</a></li>
+            </ul>
+          </nav>
+        </li>
+
+        <li class="demo-popup_item">
+          <button type="button" class="js-popupBtn p-btn" aria-label="デモナビゲーション3" popovertarget="demo-popover-3">メニュー3</button>
+          <nav id="demo-popover-3" class="demo-popup" popover="auto">
+            <h2>メニュー3の内容</h2>
+            <ul>
+              <li><a class="js-popup-start" href="#demo3-1">メニュー3 - リンク1</a></li>
+              <li><a href="#demo3-2">メニュー3 - リンク2</a></li>
+              <li><a class="js-popup-end" href="#demo3-3">メニュー3 - リンク3</a></li>
+            </ul>
+          </nav>
+        </li>
+
+        <li class="demo-popup_item">
+          <button type="button" class="js-popupBtn p-btn" aria-label="デモナビゲーション4" popovertarget="demo-popover-4">メニュー4</button>
+          <nav id="demo-popover-4" class="demo-popup" popover="auto">
+            <h2>メニュー4の内容</h2>
+            <ul>
+              <li><a class="js-popup-start" href="#demo4-1">メニュー4 - リンク1</a></li>
+              <li><a href="#demo4-2">メニュー4 - リンク2</a></li>
+              <li><a class="js-popup-end" href="#demo4-3">メニュー4 - リンク3</a></li>
+            </ul>
+          </nav>
+        </li>
+      </ul>
+    </div>
+  </article>
+
+  <Fragment slot="end-head">
+    <meta name="robots" content="noindex,nofollow" />
+  </Fragment>
+</ContentsLayout>
+
+<script>
+  import GlobalNavigation from "@assets/js/modules/GlobalNavigation.ts";
+
+  // 1つの初期化で複数のナビゲーションに対応
+  new GlobalNavigation({
+    button: ".js-popupBtn",
+    focusTrap: [".js-popup-start", ".js-popup-end"],
+  });
+</script>

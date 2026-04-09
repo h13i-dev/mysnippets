@@ -1,0 +1,24 @@
+@use "@assets/sass/foundations/global/" as g;
+
+@layer components {
+  @include g.scrollbar-stable(".c-backdrop.is-active");
+
+  .c-backdrop {
+    position: fixed;
+    inset: 0;
+    z-index: var(--z-backdrop);
+    visibility: hidden;
+    width: 100%;
+    height: 100%;
+    background-color: var(--color-bg-backdrop);
+    opacity: 0;
+    transition:
+      visibility var(--default-transition),
+      opacity var(--default-transition);
+
+    &.is-active {
+      visibility: visible;
+      opacity: 1;
+    }
+  }
+}

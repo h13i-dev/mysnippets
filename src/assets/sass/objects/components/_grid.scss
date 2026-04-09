@@ -1,0 +1,164 @@
+@use "@assets/sass/foundations/global/" as g;
+@use "sass:math";
+
+@layer components {
+  // =============================================================================
+  // ヘルパー関数
+  // =============================================================================
+  @function build-data-selector($attribute, $prefix, $value) {
+    @if $prefix == "" {
+      @return '[data-#{$attribute}="#{$value}"], [data-#{$attribute}*="[#{$value}]"]';
+    } @else {
+      @return '[data-#{$attribute}*="[#{$prefix}#{$value}]"]';
+    }
+  }
+
+  @function grid-selector($prefix, $i) {
+    @return build-data-selector("config", $prefix, $i);
+  }
+
+  @function span-selector($prefix, $i) {
+    @return build-data-selector("span", $prefix, $i);
+  }
+
+  // =============================================================================
+  // CSS Grid ベースのグリッドシステム
+  // =============================================================================
+
+  /**
+  * Grid ヘルパー関数
+  */
+  @function subgrid-selector($prefix, $i) {
+    @return build-data-selector("subgrid", $prefix, $i);
+  }
+
+  /**
+  * Grid Mixin
+  */
+  @mixin generate-grid-layouts($prefix: "", $max-columns: 12) {
+    @for $i from 1 through $max-columns {
+      $selector: grid-selector($prefix, $i);
+      $span-selector: span-selector($prefix, $i);
+
+      // コンテナにカラム数を設定
+      &:where(#{$selector}) {
+        grid-template-columns: repeat(#{$i}, 1fr);
+      }
+
+      // 子要素にスパン設定
+      &:has(#{$span-selector}) {
+        @if $i != $max-columns {
+          grid-template-columns: repeat(12, 1fr);
+        }
+
+        @if $i == $max-columns {
+          grid-template-columns: 1fr;
+        }
+
+        > *:where(#{$span-selector}) {
+          @if $i != $max-columns {
+            grid-column: span #{$i};
+          }
+
+          @if $i == $max-columns {
+            grid-column: span 1;
+          }
+        }
+      }
+    }
+  }
+
+  @mixin generate-subgrid-layouts($prefix: "", $max-rows: 6) {
+    @for $i from 1 through $max-rows {
+      $selector: subgrid-selector($prefix, $i);
+
+      &:where(#{$selector}) .c-subgrid {
+        grid-row: span $i;
+      }
+    }
+  }
+
+  /**
+  * Grid セレクター
+  */
+  .c-grid:where(:not([data-config*="[flex]"])) {
+    display: grid;
+    gap: var(--row-gap) var(--column-gap);
+
+    // レスポンシブグリッドレイアウトの生成
+    @each $breakpoint in g.$module-breakpoints {
+      @if $breakpoint == "" {
+        @include generate-grid-layouts;
+        @include generate-subgrid-layouts;
+      } @else {
+        @include g.mq($breakpoint) {
+          @include generate-grid-layouts($prefix: "#{$breakpoint}\\:");
+          @include generate-subgrid-layouts($prefix: "#{$breakpoint}\\:");
+        }
+      }
+    }
+  }
+
+  .c-subgrid {
+    display: grid;
+    grid-template-rows: subgrid;
+    row-gap: 0; // 親のgapを継承させない
+  }
+
+  // =============================================================================
+  // Flexbox ベースのグリッドシステム
+  // =============================================================================
+
+  /**
+  * Flexbox Mixin
+  */
+  @mixin generate-flex-layouts($prefix: "", $max-columns: 12) {
+    @for $i from 1 through $max-columns {
+      $selector: grid-selector($prefix, $i);
+      $span-selector: span-selector($prefix, $i);
+
+      // コンテナレベルでの幅設定
+      &:where(#{$selector}) > * {
+        $gap-adjustment: calc(var(--column-gap) / #{$i});
+
+        width: calc(#{math.div(100%, $i)} - var(--column-gap) + #{$gap-adjustment});
+      }
+
+      // 個別アイテムでの幅設定
+      > *:where(#{$span-selector}) {
+        $gap-adjustment: calc(var(--column-gap) * #{$i} / #{$max-columns});
+
+        width: calc(#{math.div(100%, math.div($max-columns, $i))} - var(--column-gap) + #{$gap-adjustment});
+      }
+    }
+  }
+
+  /**
+  * Flexbox セレクター
+  */
+  .c-grid:where([data-config*="[flex]"]) {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--row-gap) var(--column-gap);
+
+    &[data-config*="[center]"] {
+      align-items: center;
+      justify-content: center;
+    }
+
+    &[data-config*="[reverse]"] {
+      flex-direction: row-reverse;
+    }
+
+    // レスポンシブFlexレイアウトの生成
+    @each $breakpoint in g.$module-breakpoints {
+      @if $breakpoint == "" {
+        @include generate-flex-layouts;
+      } @else {
+        @include g.mq($breakpoint) {
+          @include generate-flex-layouts($prefix: "#{$breakpoint}\\:");
+        }
+      }
+    }
+  }
+}

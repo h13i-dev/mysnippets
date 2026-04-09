@@ -1,0 +1,60 @@
+---
+import { getCollection } from "astro:content";
+import Layout from "@layouts/Layout.astro";
+import Footer from "@components/bases/Footer.astro";
+import BlogLocalNavigation from "@components/bases/BlogLocalNavigation.astro";
+import { ArticleCard, Button } from "@components/index.tsx";
+import { getZennArticles, type ZennArticle } from "@src/utils/frontmatter/getZennArticles";
+const articles = await getZennArticles();
+
+export const frontmatter: Frontmatter = {
+  title: "",
+  description: "",
+};
+
+const allBlogPosts = await getCollection("blog");
+const publishedPosts = allBlogPosts.filter((post) => !post.data.draft).sort((a, b) => new Date(b.data.pubDate).getTime() - new Date(a.data.pubDate).getTime());
+---
+
+<Layout frontmatter={frontmatter}>
+  <BlogLocalNavigation />
+
+  <main id="main" class="l-main">
+    <div class="p-contents-layout">
+      <article class="html-contents">
+        <hgroup class="p-home-heading">
+          <h1 class="c-logo p-home-heading_title">My Snippets</h1>
+          <p class="p-home-heading_subtitle">私的な学習記録と備忘録サイト</p>
+        </hgroup>
+        <section class="l-section u-mt-xl">
+          <h2 class="p-contents-title">ブログ</h2>
+          <div class="c-grid" data-config="[1][md:2]">
+            {publishedPosts.slice(0, 6).map((post) => <ArticleCard href={`/blog/${post.slug}/`} tags={post.data.tags} title={post.data.title} date={post.data.pubDate.toLocaleDateString("ja-JP", { year: "numeric", month: "2-digit", day: "2-digit" }).replace(/\//g, ".")} icon={post.data.icon} />)}
+          </div>
+          {
+            publishedPosts.length > 6 && (
+              <Button className="-min-w-md u-mt-lg u-mx-auto" href="/blog/">
+                ブログ一覧
+              </Button>
+            )
+          }
+        </section>
+
+        <section class="l-section u-mt-xl">
+          <h2 class="p-contents-title">Zenn記事</h2>
+          <div class="c-grid" data-config="[1][md:2]">
+            {articles.slice(0, 6).map((article: ZennArticle) => <ArticleCard type="zenn" href={`https://zenn.dev${article.path}`} icon={article.emoji} title={article.title} date={new Date(article.published_at).toLocaleDateString("ja-JP")} liked={article.liked_count} tags={[article.article_type]} target="_blank" />)}
+          </div>
+          {
+            articles.length > 6 && (
+              <Button className="-min-w-md u-mt-lg u-mx-auto" href="https://zenn.dev/kg98ztd" target="_blank">
+                Zenn記事一覧
+              </Button>
+            )
+          }
+        </section>
+      </article>
+    </div>
+    <Footer />
+  </main>
+</Layout>

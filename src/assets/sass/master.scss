@@ -1,0 +1,95 @@
+@use "@astrojs/tailwind/base.css" as tailwind-base;
+@use "scroll-hint/css/scroll-hint";
+
+// ************************************************
+// foundations
+// ************************************************
+@use "foundations/base";
+
+// ************************************************
+// layouts
+// ************************************************
+@use "layouts/header";
+@use "layouts/main";
+@use "layouts/local-navigation";
+@use "layouts/footer";
+
+// ************************************************
+// objects/components
+// ************************************************
+// 子要素に他の要素を内包するコンポーネント（詳細度の影響を避けるため上部に定義）
+@use "objects/components/accordion" as accordion-component;
+@use "objects/components/img-layout" as img-layout-component;
+@use "objects/components/grid" as grid-component;
+@use "objects/components/modal" as modal-component;
+@use "objects/components/popover" as popover-component;
+@use "objects/components/table" as table-component;
+@use "objects/components/container" as container-component;
+
+// 単体
+@use "objects/components/btn" as btn-component;
+@use "objects/components/card" as card-component;
+@use "objects/components/figure" as figure-component;
+@use "objects/components/link" as link-component;
+@use "objects/components/media" as media-component;
+@use "objects/components/pagetop" as pagetop-component;
+@use "objects/components/backdrop" as backdrop-component;
+
+// ************************************************
+// objects/projects
+// ************************************************
+// objects/componentsとスタイルを共有しているもの
+@use "objects/projects/modal-contents";
+@use "objects/projects/modal-page";
+@use "objects/projects/accordion";
+@use "objects/projects/img-layout";
+@use "objects/projects/btn";
+@use "objects/projects/link";
+@use "objects/projects/figure";
+@use "objects/projects/card";
+@use "objects/projects/table";
+
+// その他
+@use "objects/projects/note";
+@use "objects/projects/list";
+@use "objects/projects/description";
+@use "objects/projects/breadcrumb";
+@use "objects/projects/box";
+@use "objects/projects/heading";
+@use "objects/projects/home";
+@use "objects/projects/about-profile";
+@use "objects/projects/blockquote";
+@use "objects/projects/quote";
+@use "objects/projects/code";
+@use "objects/projects/link-card";
+@use "objects/projects/youtube-card";
+@use "objects/projects/comment";
+@use "objects/projects/gnav-sp";
+@use "objects/projects/emoji";
+@use "objects/projects/icon";
+@use "objects/projects/menu-btn";
+@use "objects/projects/tag";
+@use "objects/projects/article-card";
+@use "objects/projects/progress";
+@use "objects/projects/html-contents";
+@use "objects/projects/markdown-contents";
+@use "objects/projects/markdown-layout";
+@use "objects/projects/contents-layout";
+
+// blog
+@use "objects/projects/blog/blog-masonry";
+
+// demo
+@use "objects/projects/demo/demo-global-navigation";
+@use "objects/projects/demo/demo-popup";
+@use "objects/projects/demo/demo-pagetop";
+
+// print
+@use "objects/projects/print";
+
+// ************************************************
+// objects/utilities
+// ************************************************
+@use "objects/utilities/animations" as animations-utility;
+@use "objects/utilities/px-figure" as px-figure-utility;
+@use "objects/utilities/bg-img" as bg-img-utility;

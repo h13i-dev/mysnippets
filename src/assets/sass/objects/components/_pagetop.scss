@@ -1,0 +1,14 @@
+@layer components {
+  .c-pagetop {
+    visibility: hidden;
+    opacity: 0;
+    transition:
+      opacity var(--default-transition),
+      visibility var(--default-transition);
+
+    &.is-active {
+      visibility: visible;
+      opacity: 1;
+    }
+  }
+}

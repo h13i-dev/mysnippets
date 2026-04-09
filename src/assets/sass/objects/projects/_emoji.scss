@@ -1,0 +1,58 @@
+@layer components {
+  // Twemoji絵文字のスタイル
+  .emoji {
+    display: inline-block;
+    width: 1.2em;
+    height: 1.2em;
+    margin: 0 0.1em;
+    vertical-align: text-bottom;
+
+    // タイトルや見出し用の絵文字
+    &--title {
+      width: 1.4em;
+      height: 1.4em;
+      margin: 0 0.2em;
+      vertical-align: text-bottom;
+    }
+
+    // 小さいサイズの絵文字
+    &--small {
+      width: 1em;
+      height: 1em;
+      margin: 0 0.05em;
+    }
+
+    // 大きいサイズの絵文字
+    &--large {
+      width: 2em;
+      height: 2em;
+      margin: 0 0.2em;
+    }
+
+    // ダークモード対応
+    @media (prefers-color-scheme: dark) {
+      filter: brightness(0.9);
+    }
+  }
+
+  // ボタンやリンク内の絵文字
+  button .emoji,
+  a .emoji {
+    margin: 0 0.1em;
+    vertical-align: text-bottom;
+  }
+
+  // 特定の要素内での絵文字調整
+  .p-contents-title .emoji,
+  .p-heading-lv1 .emoji,
+  .p-heading-lv2 .emoji,
+  .p-heading-lv3 .emoji {
+    margin: 0 0.1em;
+    vertical-align: baseline;
+  }
+
+  // カード内の絵文字
+  .p-article-card .emoji {
+    vertical-align: text-bottom;
+  }
+}

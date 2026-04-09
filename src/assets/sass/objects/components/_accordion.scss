@@ -1,0 +1,35 @@
+@layer components {
+  .c-accordion {
+    &::details-content {
+      display: grid;
+      content-visibility: unset; // Safariのバグ対応
+
+      @media (prefers-reduced-motion: no-preference) {
+        transition: grid-template-rows var(--default-transition);
+      }
+    }
+
+    &:not([open]) {
+      &::details-content {
+        grid-template-rows: 0fr;
+      }
+
+      .c-accordion_body {
+        padding-block: initial;
+      }
+    }
+
+    &[open]::details-content {
+      grid-template-rows: 1fr;
+    }
+  }
+
+  .c-accordion_body {
+    overflow: hidden;
+    transition:
+      overflow var(--default-transition),
+      padding var(--default-transition),
+      height var(--default-transition),
+      margin-top var(--default-transition);
+  }
+}
