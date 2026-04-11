@@ -5,7 +5,7 @@
   "scripts": {
     "dev": "astro dev",
     "start": "astro dev",
-    "build": "astro build && npm run compress",
+    "build": "astro build",
     "build:only": "astro build",
     "build:compress": "svgo -rf dist && npm run compress",
     "build:all": "npm run build && npm run build-storybook",
