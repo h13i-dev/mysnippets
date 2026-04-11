@@ -39,6 +39,3 @@ results
 
 # internal notes
 note/
-
-.vercel
-.env*.local
