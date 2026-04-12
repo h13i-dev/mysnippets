@@ -20,6 +20,12 @@ importers:
       '@astrojs/tailwind':
         specifier: ^6.0.2
         version: 6.0.2(astro@5.18.1(@types/node@25.5.0)(jiti@1.21.7)(rollup@4.60.0)(sass@1.98.0)(terser@5.46.1)(typescript@5.9.3)(yaml@2.8.3))(tailwindcss@3.4.19(yaml@2.8.3))
+      '@fontsource-variable/noto-sans-jp':
+        specifier: ^5.2.10
+        version: 5.2.10
+      '@fontsource/big-shoulders-stencil':
+        specifier: ^5.2.6
+        version: 5.2.6
       '@twemoji/api':
         specifier: ^16.0.1
         version: 16.0.1
@@ -834,6 +840,12 @@ packages:
   '@eslint/plugin-kit@0.4.1':
     resolution: {integrity: sha512-43/qtrDUokr7LJqoF2c3+RInu/t4zfrpYdoSDfYyhg52rwLV6TnOvdG4fXm7IkSB3wErkcmJS9iEhjVtOSEjjA==}
     engines: {node: ^18.18.0 || ^20.9.0 || >=21.1.0}
+
+  '@fontsource-variable/noto-sans-jp@5.2.10':
+    resolution: {integrity: sha512-m0XfZ38rZtCaGAuAQL0cBPQ6fc/RguYEOqw66zvuLOV9vNRUBf9MFqyoazTu2JVCRIcnkrxbwF29UUaHHgTKdg==}
+
+  '@fontsource/big-shoulders-stencil@5.2.6':
+    resolution: {integrity: sha512-p2bFuCqYJqohXLwglLe3JYxodDbzAtesTuZSiNIQ/YYTEINbui2VTrDm76naxfSI7h0izlYAPgdI8AifP/Weuw==}
 
   '@html-eslint/eslint-plugin@0.47.1':
     resolution: {integrity: sha512-q5kkM2SxI2GGhHeWaMTw3XwaZdeU7D3s8FWPVfqnsgdQwHemCjoPTx35svmVfz4bJRd2fVoHAMQcEJmAbcFJlw==}
@@ -5203,6 +5215,10 @@ snapshots:
     dependencies:
       '@eslint/core': 0.17.0
       levn: 0.4.1
+
+  '@fontsource-variable/noto-sans-jp@5.2.10': {}
+
+  '@fontsource/big-shoulders-stencil@5.2.6': {}
 
   '@html-eslint/eslint-plugin@0.47.1(eslint@9.39.4(jiti@1.21.7))(jiti@1.21.7)':
     dependencies:

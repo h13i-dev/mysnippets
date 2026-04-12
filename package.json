@@ -31,6 +31,8 @@
     "@astrojs/react": "^4.4.1",
     "@astrojs/sitemap": "^3.6.1",
     "@astrojs/tailwind": "^6.0.2",
+    "@fontsource-variable/noto-sans-jp": "^5.2.10",
+    "@fontsource/big-shoulders-stencil": "^5.2.6",
     "@twemoji/api": "^16.0.1",
     "@types/react": "^19.2.2",
     "@types/react-dom": "^19.2.2",
