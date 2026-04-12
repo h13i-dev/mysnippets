@@ -7,11 +7,11 @@ export const config = {
 };
 
 export default function middleware(request: Request) {
-  const isProduction = process.env.VERCEL_ENV === 'production';
+  const isPreview = process.env.VERCEL_ENV === 'preview';
   const authorizationHeader = request.headers.get('authorization');
 
   const isAuthenticated = (() => {
-    if (isProduction) return true;
+    if (!isPreview) return true;
     if (!authorizationHeader) return false;
     const basicAuth = authorizationHeader.split(' ')[1];
     const [user, password] = atob(basicAuth).toString().split(':');
