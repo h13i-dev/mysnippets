@@ -1,5 +1,8 @@
 ---
 import "@assets/sass/master.scss";
+import notoSansJapaneseUrl from "@fontsource-variable/noto-sans-jp/files/noto-sans-jp-119-wght-normal.woff2?url";
+import notoSansLatinUrl from "@fontsource-variable/noto-sans-jp/files/noto-sans-jp-latin-wght-normal.woff2?url";
+import bigShouldersUrl from "@fontsource/big-shoulders-stencil/files/big-shoulders-stencil-latin-700-normal.woff2?url";
 import Header from "@components/bases/Header.astro";
 // import GoogleTagManager from "@components/bases/GoogleTagManager.astro";
 import { getCategory } from "@src/utils/frontmatter/getCategory";
@@ -45,6 +48,12 @@ const ogpPath = "/assets/images/ogp.png";
     <meta name="twitter:image" content={siteUrl + ogpPath} />
     <link rel="canonical" href={siteUrl + currentPath} />
     <link rel="shortcut icon" href="/favicon.ico" />
+    <!-- eslint-disable-next-line @html-eslint/sort-attrs -->
+    <link rel="preload" as="font" type="font/woff2" crossorigin href={notoSansJapaneseUrl} />
+    <!-- eslint-disable-next-line @html-eslint/sort-attrs -->
+    <link rel="preload" as="font" type="font/woff2" crossorigin href={notoSansLatinUrl} />
+    <!-- eslint-disable-next-line @html-eslint/sort-attrs -->
+    <link rel="preload" as="font" type="font/woff2" crossorigin href={bigShouldersUrl} />
     <link rel="sitemap" href="/sitemap-index.xml" />
     <slot name="end-head" />
   </head>
