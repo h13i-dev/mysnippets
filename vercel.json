@@ -1,12 +1,4 @@
 {
-  "trailingSlash": true,
-  "redirects": [
-    {
-      "source": "/old-page",
-      "destination": "/new-page",
-      "permanent": true
-    }
-  ],
   "headers": [
     {
       "source": "/(.*)",
@@ -21,5 +13,13 @@
         }
       ]
     }
-  ]
+  ],
+  "redirects": [
+    {
+      "source": "/old-page",
+      "destination": "/new-page",
+      "permanent": true
+    }
+  ],
+  "trailingSlash": true
 }
