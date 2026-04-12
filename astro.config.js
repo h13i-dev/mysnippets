@@ -18,6 +18,7 @@ const isDev = process.env.NODE_ENV === 'development';
 export default defineConfig({
   site: 'https://mysnippets.com',
   base: '/',
+  trailingSlash: 'always',
   server: {
     open: true,
     port: isDev ? 4321 : 4000,
