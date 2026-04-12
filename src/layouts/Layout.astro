@@ -21,10 +21,6 @@ const Category = getCategory(currentPath);
 const metaTitle = generateMetaTitle(frontmatter.title, Category, siteName);
 const ogType = currentPath === import.meta.env.BASE_URL ? "website" : "article";
 const ogpPath = "/assets/images/ogp.png";
-
-// Google Fonts
-const notoSans = "https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@300;400;500;700&display=swap";
-const bigShoulders = "https://fonts.googleapis.com/css2?family=Big+Shoulders+Stencil:opsz,wght@10..72,700&display=swap&text=MySnippets";
 ---
 
 <!doctype html>
@@ -49,12 +45,6 @@ const bigShoulders = "https://fonts.googleapis.com/css2?family=Big+Shoulders+Ste
     <meta name="twitter:image" content={siteUrl + ogpPath} />
     <link rel="canonical" href={siteUrl + currentPath} />
     <link rel="shortcut icon" href="/favicon.ico" />
-    <link rel="preconnect" href="https://fonts.googleapis.com" />
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-    <link rel="preload" as="style" fetchpriority="high" href={notoSans} />
-    <link rel="stylesheet" href={notoSans} media="print" onload="this.media='all'" />
-    <link rel="preload" as="style" fetchpriority="high" href={bigShoulders} />
-    <link rel="stylesheet" href={bigShoulders} />
     <link rel="sitemap" href="/sitemap-index.xml" />
     <slot name="end-head" />
   </head>
