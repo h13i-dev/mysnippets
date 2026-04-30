@@ -32,31 +32,28 @@ export default class Tab {
     this.activeClass = options.activeClass || null;
     this.storageKey = `tab-state-${options.tabSelector.replace(/[^a-zA-Z0-9]/g, '')}`;
 
-    this.validateElements();
-    this.initialize();
+    if (this.validateElements()) {
+      this.initialize();
+    }
   }
 
   /**
    * 要素の存在をバリデーション
    */
-  private validateElements(): void {
+  private validateElements(): boolean {
     if (!this.options.tabSelector || !this.options.contentSelector) {
-      throw new Error('tabSelector と contentSelector は必須です');
+      return false;
     }
 
-    if (this.tabElements.length === 0) {
-      throw new Error(`指定されたタブボタン "${this.options.tabSelector}" が見つかりません`);
-    }
-
-    if (this.contentElements.length === 0) {
-      throw new Error(
-        `指定されたタブコンテンツ "${this.options.contentSelector}" が見つかりません`,
-      );
+    if (this.tabElements.length === 0 || this.contentElements.length === 0) {
+      return false;
     }
 
     if (this.tabElements.length !== this.contentElements.length) {
-      throw new Error('タブボタンとコンテンツの数が一致しません');
+      return false;
     }
+
+    return true;
   }
 
   /**
@@ -181,7 +178,6 @@ export default class Tab {
    * タブパネルがフォーカス可能であるべきかどうか判定
    */
   private shouldTabpanelBeFocusable(contentElement: HTMLElement): boolean {
-    // フォーカス可能要素のセレクタ
     const focusableSelectors = [
       'button:not([disabled])',
       'input:not([disabled])',
@@ -198,32 +194,7 @@ export default class Tab {
       '[contenteditable="true"]',
     ].join(',');
 
-    // 1. タブパネルにフォーカス可能な要素が含まれていない場合
-    const focusableElements = contentElement.querySelectorAll(focusableSelectors);
-    if (focusableElements.length === 0) {
-      return true;
-    }
-
-    // 2. コンテンツを含む最初の要素がフォーカス可能でない場合
-    const firstContentElement = this.getFirstContentElement(contentElement);
-    if (firstContentElement && !firstContentElement.matches(focusableSelectors)) {
-      return true;
-    }
-
-    return false;
-  }
-
-  /**
-   * コンテンツを含む最初の要素を取得
-   */
-  private getFirstContentElement(element: HTMLElement): Element | null {
-    for (const node of element.childNodes) {
-      if (node.nodeType === Node.ELEMENT_NODE) {
-        const elementNode = node as Element;
-        if (elementNode.innerHTML.trim() !== '') return elementNode;
-      }
-    }
-    return null;
+    return contentElement.querySelectorAll(focusableSelectors).length === 0;
   }
 
   /**
@@ -321,16 +292,33 @@ export default class Tab {
 
     switch (key) {
       case 'ArrowRight':
-        return currentIndex === tabCount - 1 ? 0 : currentIndex + 1;
+        return this.findNextEnabledIndex(currentIndex, 1);
       case 'ArrowLeft':
-        return currentIndex === 0 ? tabCount - 1 : currentIndex - 1;
+        return this.findNextEnabledIndex(currentIndex, -1);
       case 'Home':
-        return 0;
+        return this.findNextEnabledIndex(-1, 1);
       case 'End':
-        return tabCount - 1;
+        return this.findNextEnabledIndex(tabCount, -1);
       default:
         return null;
     }
+  }
+
+  /**
+   * 指定方向で次のdisabledでないタブのインデックスを取得
+   */
+  private findNextEnabledIndex(currentIndex: number, direction: 1 | -1): number | null {
+    const tabCount = this.tabElements.length;
+    let index = currentIndex;
+
+    for (let i = 0; i < tabCount; i++) {
+      index = (index + direction + tabCount) % tabCount;
+      if (!(this.tabElements[index] as HTMLButtonElement).disabled) {
+        return index;
+      }
+    }
+
+    return null;
   }
 
   /**
