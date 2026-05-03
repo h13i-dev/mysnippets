@@ -29,7 +29,6 @@
 
   body {
     display: grid;
-    text-autospace: normal;
     grid-template-areas:
       "header"
       "main"
@@ -40,6 +39,7 @@
     font-size: theme("fontSize.base");
     color: theme("colors.text");
     background-color: #fff;
+    text-autospace: normal;
 
     @include g.mq("lg") {
       &:has(.l-localnav) {
