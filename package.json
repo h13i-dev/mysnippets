@@ -88,6 +88,7 @@
     "sass": "^1.93.2",
     "sharp": "^0.34.4",
     "storybook": "^10.1.11",
+    "stylelint": "^17.10.0",
     "stylelint-config-recess-order": "^7.3.0",
     "stylelint-config-recommended": "^17.0.0",
     "stylelint-config-recommended-scss": "^16.0.2",
