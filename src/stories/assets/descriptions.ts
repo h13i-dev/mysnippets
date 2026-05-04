@@ -58,4 +58,4 @@ export const gridDescription = `### グリッドシステムについて
 | \`2xl:\` | \`@media (width >= 1536px) { ... }\` |
 `;
 
-export const gridSystemNote = `<a href="/docs/記事モジュール（運用）-グリッドシステム-グリッドシステム-gridプロパティ--docs">※レイアウトの制御にはGridプロパティのグリッドシステムを使用してください。Gridプロパティで実現できない実装がある場合のみ、Flexboxを使用してください。</a>`;
+export const gridSystemNote = `<a href="/?path=/docs/this-site-グリッドシステム-gridプロパティ--docs">※レイアウトの制御にはGridプロパティのグリッドシステムを使用してください。Gridプロパティで実現できない実装がある場合のみ、Flexboxを使用してください。</a>`;

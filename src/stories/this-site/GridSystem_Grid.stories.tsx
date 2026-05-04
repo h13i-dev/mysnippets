@@ -14,7 +14,7 @@ interface GridStoryProps {
 }
 
 const meta: Meta<GridStoryProps> = {
-  title: 'This-Site/グリッドシステム/グリッドシステム_Gridプロパティ',
+  title: 'This-Site/グリッドシステム_Gridプロパティ',
   tags: ['autodocs'],
   parameters: {
     docs: {
