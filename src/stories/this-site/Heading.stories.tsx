@@ -53,10 +53,3 @@ export const HeadingLv3: Story = {
     children: '見出しレベル3',
   },
 };
-
-export const MarginSample: Story = {
-  name: 'コンテンツタイトル',
-  render: () => {
-    return <h1 className="p-contents-title">コンテンツタイトル</h1>;
-  },
-};
