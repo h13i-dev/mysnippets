@@ -1,2 +1,6 @@
 [features]
 codex_hooks = true
+
+[agents]
+max_threads = 8
+max_depth = 2
