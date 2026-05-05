@@ -45,8 +45,6 @@
   "[jsonc]": {
     "editor.defaultFormatter": "biomejs.biome"
   },
-  "biome.lsp.bin": "./node_modules/.pnpm/@biomejs+cli-win32-x64@2.4.9/node_modules/@biomejs/cli-win32-x64/biome.exe",
-
   // Code Style
   "editor.tabSize": 2, // タブ幅を2に設定
   "editor.insertSpaces": true, // タブの代わりにスペースを使用
