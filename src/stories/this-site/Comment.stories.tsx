@@ -9,7 +9,7 @@ const meta: Meta<BaseProps> = {
   tags: ['autodocs'],
   parameters: {
     docs: {
-      source: createHtmlSource('dynamic'),
+      source: createHtmlSource({ extract: 'dynamic' }),
     },
   },
   // args: {

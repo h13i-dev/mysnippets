@@ -10,7 +10,7 @@ const meta: Meta<QuoteArgs> = {
   tags: ['autodocs'],
   parameters: {
     docs: {
-      source: createHtmlSource('code'),
+      source: createHtmlSource({ extract: 'code' }),
     },
   },
   decorators: [

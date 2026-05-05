@@ -9,7 +9,7 @@ const meta = {
   tags: ['autodocs'],
   parameters: {
     docs: {
-      source: createHtmlSource('code'),
+      source: createHtmlSource({ extract: 'code' }),
       description: {
         component: `
 ### オプション

@@ -57,7 +57,7 @@ export const Default: Story = {
   tags: ['!dev', '!autodocs'],
   parameters: {
     docs: {
-      source: createHtmlSource('code'),
+      source: createHtmlSource({ extract: 'code' }),
       canvas: {
         sourceState: 'none',
       },
@@ -83,7 +83,7 @@ export const ConfigUsage: Story = {
   tags: ['!dev'],
   parameters: {
     docs: {
-      source: createHtmlSource('code'),
+      source: createHtmlSource({ extract: 'code' }),
       description: {
         story: `\`data-config\`属性でブレークポイントごとのカラム数を指定し、レスポンシブなレイアウトに対応します。
 
@@ -129,7 +129,7 @@ export const ConfigGrid: Story = {
   name: 'カラム数の指定（data-config属性）の例',
   parameters: {
     docs: {
-      source: createHtmlSource('code'),
+      source: createHtmlSource({ extract: 'code' }),
     },
   },
   decorators: [
@@ -162,7 +162,7 @@ export const SpanUsage: Story = {
   tags: ['!dev'],
   parameters: {
     docs: {
-      source: createHtmlSource('code'),
+      source: createHtmlSource({ extract: 'code' }),
       description: {
         story: `\`data-span\`属性で各アイテムが占めるスパン数を指定し、レスポンシブなレイアウトに対応します。
 
@@ -208,7 +208,7 @@ export const SpanGrid: Story = {
   name: 'アイテム幅の指定（data-span属性）の例',
   parameters: {
     docs: {
-      source: createHtmlSource('code'),
+      source: createHtmlSource({ extract: 'code' }),
     },
   },
   decorators: [
@@ -252,7 +252,7 @@ export const GridSubgrid: Story = {
   name: 'サブグリッド',
   parameters: {
     docs: {
-      source: createHtmlSource('code'),
+      source: createHtmlSource({ extract: 'code' }),
     },
   },
   decorators: [
@@ -308,7 +308,7 @@ export const FlexboxCenter: Story = {
   name: '【Flexbox】縦横の中央配置',
   parameters: {
     docs: {
-      source: createHtmlSource('code'),
+      source: createHtmlSource({ extract: 'code' }),
       description: {
         story: `要素を縦横中央に配置する場合は、Flexboxレイアウトを使用し、\`data-config="[flex][center]"\`を指定してください。`,
       },
@@ -321,7 +321,7 @@ export const Gap: Story = {
   name: 'gapの指定',
   parameters: {
     docs: {
-      source: createHtmlSource('code'),
+      source: createHtmlSource({ extract: 'code' }),
       description: {
         story: `gapは、\`u-gap-x-8px\`～\`u-gap-x-40px\`（列の余白）、\`u-gap-y-8px\`～\`u-gap-y-40px\`（行の余白）のヘルパークラス（いずれも8px刻み）で調整可能です。${breakpointPrefixDescription}`,
       },

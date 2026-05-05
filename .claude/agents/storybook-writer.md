@@ -3,8 +3,8 @@ name: storybook-writer
 description: >
   Storybookのストーリー作成を依頼されたときに呼び出す。
   対象コンポーネントを解析し、CSF3形式のストーリーファイルを自動生成する。
-  Default・各バリアント・インタラクションテストを網羅する。
-  Astro 5 / React 19 / TypeScript / Storybook 10 プロジェクトに特化。
+  Default・各バリアントを網羅する。
+  Astro 5 / React 19 / TypeScript 5 / Storybook 10 プロジェクトに特化。
 model: sonnet
 tools:
   - Read
@@ -20,7 +20,7 @@ tools:
 
 ## 呼び出された時の動作
 
-1. 対象コンポーネントファイル（`.tsx` / `.astro`）を読み込む
+1. 対象コンポーネントファイル（`.tsx`）を読み込む
 2. Props 型・デフォルト値・バリアントを把握する
 3. 既存ストーリーファイルがあれば読み込み、スタイルに合わせる
 4. 以下の方針でストーリーを生成し `src/stories/` に書き出す
@@ -53,42 +53,27 @@ export default meta
 type Story = StoryObj<typeof meta>
 ```
 
-### 2. 必須ストーリー
+### 2. ストーリー構成
 
-| ストーリー名 | 内容 |
-|---|---|
-| `Default` | 最も基本的な使用例 |
-| 各バリアント | Props の組み合わせパターン（サイズ・状態・カラー等） |
-| `Disabled` | 無効状態（該当する場合） |
-| `Loading` | ローディング状態（該当する場合） |
-| `Empty` | データなし状態（該当する場合） |
+コンポーネントの Props・状態・バリアントを分析し、それぞれの意図が伝わる名前を付ける。命名例：
 
-### 3. インタラクションテスト（操作を伴うコンポーネント）
-
-```typescript
-import { userEvent, within, expect } from '@storybook/test'
-
-export const WithInteraction: Story = {
-  play: async ({ canvasElement }) => {
-    const canvas = within(canvasElement)
-    await userEvent.click(canvas.getByRole('button'))
-    await expect(canvas.getByText('結果テキスト')).toBeInTheDocument()
-  },
-}
-```
+- バリアント: `PrimaryButton`, `OutlineButton`
+- 状態: `WithIcon`, `ExternalLink`, `MultipleItems`
+- オプション: `WithScroll`, `PersistState`
 
 ## カテゴリ命名規則
 
-| コンポーネントの場所 | title の形式 |
-|---|---|
-| `src/components/bases/` | `Bases/ComponentName` |
-| `src/components/mdx/` | `MDX/ComponentName` |
-| `src/components/` | `Components/ComponentName` |
+| カテゴリ | 基準 | ストーリー配置先 |
+|---|---|---|
+| `This-Site/` | このサイト固有のコンポーネント | `src/stories/this-site/` |
+| `Modules/` | JS が必要なインタラクティブモジュール | `src/stories/modules/` |
+| `Components/` | 他サイトでも使い回せる汎用コンポーネント | `src/stories/components/` |
+| `_Dev/` | 開発・テスト用 | `src/stories/dev/` |
 
 ## 生成時の注意事項
 
 - `args` はできるだけ実際の使用例に近い値を設定する
 - `argTypes` で Props の意図が伝わる `description` を追加する
 - ストーリー名は英語、`title` のカテゴリ部分も英語にする
-- インタラクションがないコンポーネントでも `tags: ['autodocs']` は必ず付ける
+- `tags: ['autodocs']` は必ず付ける
 - Astro コンポーネント（`.astro`）は React ラッパーが必要な場合があるため、`.tsx` コンポーネントを優先してストーリー化する

@@ -11,7 +11,6 @@ export const useHtmlTransform = import.meta.env.STORYBOOK_HTML_TRANSFORM === 'tr
 
 // Storybook の storyContext の型定義
 type StoryContext = {
-  parameters?: { useHtmlTransform?: boolean };
   originalStoryFn: (args: unknown) => React.ReactElement;
   args: unknown;
   component?: React.ComponentType<unknown>;
@@ -186,17 +185,9 @@ const renderComponentToHtml = (
 
 /**
  * Storybook の source.transform 用の変換関数を生成
- *
- * 個別ストーリーで無効化したい場合:
- * parameters: { useHtmlTransform: false }
  */
 export const createHtmlTransform = () => {
   return (code: string, storyContext: StoryContext): string => {
-    const shouldTransform = storyContext.parameters?.useHtmlTransform ?? true;
-    if (!shouldTransform) {
-      return code;
-    }
-
     // render 関数からの変換を試みる
     try {
       const story = storyContext.originalStoryFn(storyContext.args);
@@ -257,25 +248,33 @@ const extractComponentFromRender = (code: string): string => {
   return code;
 };
 
+interface HtmlSourceOptions {
+  /**
+   * ソースの取得方法
+   * - 'dynamic': args に追従してソースをリアルタイム更新（Storybook デフォルト）
+   * - 'code': ファイルに書いた render 関数のコードをそのまま表示
+   */
+  extract: 'dynamic' | 'code';
+  /**
+   * ソースの表示フォーマット
+   * - 'html': レンダリング後のHTMLを表示
+   * - 'jsx': JSXをそのまま表示
+   * - 省略時: グローバル設定（STORYBOOK_HTML_TRANSFORM 環境変数）を使用
+   */
+  format?: 'html' | 'jsx';
+}
+
 /**
- * HTML変換用の source 設定を生成
- *
- * @param sourceType - 'code' (主にrender使用時) または 'dynamic' (主にargs使用時)
- * - 'code': Component.Nameのコンポーネントをrenderでコードを表示する場合。コンポーネント部分のみ抽出して表示（build時にComponent.Nameのコンポーネントの表示が崩れる）
- * - 'dynamic': argsでコードを表示する場合、またはComponent.Name以外のコンポーネントをrenderで表示する場合に使用
- * @param enableHtmlTransform - HTML変換の有効/無効を個別に指定（省略時はグローバル設定を使用）
+ * Storybook の source 設定を生成する
  */
-export const createHtmlSource = (
-  sourceType: 'code' | 'dynamic' = 'dynamic',
-  enableHtmlTransform?: boolean,
-) => {
-  const shouldTransform = enableHtmlTransform ?? useHtmlTransform;
+export const createHtmlSource = ({ extract, format }: HtmlSourceOptions) => {
+  const shouldTransform = format === 'html' ? true : format === 'jsx' ? false : useHtmlTransform;
 
   if (shouldTransform) {
     return { language: 'html' as const, transform: createHtmlTransform() };
   }
 
-  if (sourceType === 'code') {
+  if (extract === 'code') {
     return {
       type: 'code' as const,
       transform: extractComponentFromRender,
