@@ -2,6 +2,7 @@ import Dialog from '@assets/js/modules/Dialog';
 import checkScrollbar from '@assets/js/modules/utils/checkScrollbar.ts';
 import { ContentsModal, PageModal } from '@components/index.tsx';
 import { createHtmlSource } from '@stories/assets/utils/htmlTransform';
+import { sbdocsPreviewHiddenCss } from '@stories/assets/utils/utils';
 import type { Meta, StoryObj } from '@storybook/react-vite';
 import React, { useEffect } from 'react';
 
@@ -63,11 +64,7 @@ Dialog.initAll({
   decorators: [
     (Story) => (
       <>
-        <style>{`
-          .sbdocs-preview.css-hd7ysc {
-            position: fixed;
-          }
-      `}</style>
+        <style>{sbdocsPreviewHiddenCss}</style>
         <Story />
       </>
     ),
