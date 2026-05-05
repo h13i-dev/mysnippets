@@ -5,8 +5,9 @@ import { renderToStaticMarkup } from 'react-dom/server';
  * HTML変換のグローバルフラグ
  * - true: HTML変換を有効化
  * - false: HTML変換を無効化（JSX表示）
+ * - build-storybook 実行時は環境変数 STORYBOOK_HTML_TRANSFORM で制御
  */
-export const useHtmlTransform = false;
+export const useHtmlTransform = import.meta.env.STORYBOOK_HTML_TRANSFORM === 'true' || false;
 
 // Storybook の storyContext の型定義
 type StoryContext = {
@@ -125,19 +126,24 @@ const formatHtml = (html: string, baseIndent = 0): string => {
       addLine(fullTag + content + closingTag, baseIndent);
     } else {
       // 子要素がある場合
-      const leadingText = content.match(/^([^<]+)/);
+      const leadingText = content.match(/^([^<]+)/)?.[1] || '';
+      const trailingText = content.match(/([^>]+)$/)?.[1] || '';
+      const hasLeading = leadingText.trim().length > 0;
+      const hasTrailing = trailingText.trim().length > 0;
 
-      if (leadingText?.[1].trim()) {
-        // テキストと子要素が混在
-        addLine(fullTag + leadingText[1], baseIndent);
-        appendFormattedContent(content.substring(leadingText[1].length), baseIndent + 1);
-      } else {
-        // 子要素のみ
-        addLine(fullTag, baseIndent);
-        appendFormattedContent(content, baseIndent + 1);
+      // 開始タグ（+ 先頭テキスト）
+      addLine(fullTag + (hasLeading ? leadingText : ''), baseIndent);
+
+      // 中間コンテンツ（子要素）
+      const middleStart = hasLeading ? leadingText.length : 0;
+      const middleEnd = content.length - (hasTrailing ? trailingText.length : 0);
+      const middleContent = content.substring(middleStart, middleEnd);
+      if (middleContent.trim()) {
+        appendFormattedContent(middleContent, baseIndent + 1);
       }
 
-      addLine(closingTag, baseIndent);
+      // 終了タグ（+ 末尾テキスト）
+      addLine((hasTrailing ? trailingText : '') + closingTag, baseIndent);
     }
 
     i = closingTagIndex + closingTag.length;
@@ -216,36 +222,34 @@ export const createHtmlTransform = () => {
  * renderのコードからコンポーネント部分のみを抽出するtransform関数
  */
 const extractComponentFromRender = (code: string): string => {
-  // JSXコンポーネント部分を抽出（<Component>...</Component> または <p>...</p> など）
-  // 最初の < から対応する終了タグまでを抽出
-  const jsxStart = code.indexOf('<');
-  if (jsxStart === -1) return code;
-
-  // React Fragment (<>...</>) の検出
-  if (code.substring(jsxStart, jsxStart + 2) === '<>') {
-    const fragmentEnd = code.lastIndexOf('</>');
-    if (fragmentEnd !== -1) {
-      // Fragment内のコンテンツを抽出
-      const innerContent = code.substring(jsxStart + 2, fragmentEnd).trim();
-      // 内側のコンポーネントを再帰的に抽出
-      return extractComponentFromRender(innerContent);
-    }
+  // render: から始まるセクションを抽出（decorators などを除外）
+  const renderMatch = code.match(/render\s*:\s*\([^)]*\)\s*=>\s*([\s\S]*?)(?:,\s*\}|$)/);
+  let extractedCode = code;
+  if (renderMatch && renderMatch[1]) {
+    extractedCode = renderMatch[1].trim();
   }
 
+  // JSXコンポーネント部分を抽出（<Component>...</Component> または <p>...</p> など）
+  // 最初の < から対応する終了タグまでを抽出
+  const jsxStart = extractedCode.indexOf('<');
+  if (jsxStart === -1) return code;
+
   // 開始タグ名を取得（大文字のReactコンポーネントと小文字のHTML要素の両方に対応）
-  const tagNameMatch = code.substring(jsxStart).match(/^<([a-zA-Z][a-zA-Z0-9.]*)/);
+  const tagNameMatch = extractedCode.substring(jsxStart).match(/^<([a-zA-Z][a-zA-Z0-9.]*)/);
   if (!tagNameMatch) return code;
 
   const tagName = tagNameMatch[1];
   const closingTag = `</${tagName}>`;
-  const closingTagIndex = code.lastIndexOf(closingTag);
+  const closingTagIndex = findClosingTag(extractedCode, jsxStart + tagName.length + 1, tagName);
 
   if (closingTagIndex !== -1) {
-    return code.substring(jsxStart, closingTagIndex + closingTag.length);
+    return extractedCode.substring(jsxStart, closingTagIndex + closingTag.length);
   }
 
   // 自己終了タグの場合
-  const selfClosingMatch = code.substring(jsxStart).match(new RegExp(`<${tagName}[^>]*/>`));
+  const selfClosingMatch = extractedCode
+    .substring(jsxStart)
+    .match(new RegExp(`<${tagName}[^>]*/>`));
   if (selfClosingMatch) {
     return selfClosingMatch[0];
   }
