@@ -9,7 +9,7 @@ const meta = {
   component: Button,
   parameters: {
     docs: {
-      source: createHtmlSource('dynamic'),
+      source: createHtmlSource({ extract: 'dynamic' }),
     },
   },
   // This component will have an automatically generated Autodocs entry: https://storybook.js.org/docs/writing-docs/autodocs

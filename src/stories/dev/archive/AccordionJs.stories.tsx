@@ -15,7 +15,7 @@ const meta: Meta<AccordionJsArgs> = {
   tags: ['autodocs'],
   parameters: {
     docs: {
-      source: createHtmlSource('dynamic'),
+      source: createHtmlSource({ extract: 'dynamic' }),
       description: {
         component: `
 JavaScriptでアニメーションを制御するアコーディオンコンポーネントです。

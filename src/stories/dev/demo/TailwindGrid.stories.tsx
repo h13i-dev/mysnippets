@@ -6,7 +6,7 @@ const meta = {
   tags: ['autodocs'],
   parameters: {
     docs: {
-      source: createHtmlSource('dynamic'),
+      source: createHtmlSource({ extract: 'dynamic' }),
     },
   },
 };

@@ -7,7 +7,7 @@ const meta = {
   tags: ['autodocs'],
   parameters: {
     docs: {
-      source: createHtmlSource('dynamic'),
+      source: createHtmlSource({ extract: 'dynamic' }),
       description: {
         component:
           '改行しなければテキストがコンテンツボックスからあふれる場合の、改行制御に関するデモです。',
