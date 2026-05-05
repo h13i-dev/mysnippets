@@ -47,22 +47,18 @@ export const Default: Story = {
 
 <img src={hiddenPreview} class="u-border sm:u-w-4/5" alt="Storybook設定チートシートのプレビュー非表示画像" />
 
-非表示設定が見つからなかったため、力技で非表示	Storybook設定チートシートのプレビュー非表示画像<br />
-※要素を非表示にするときは、`display: none`などで要素を消してしまうとjsを使用している場合、効かなくなるため、要素を存在させつつ非表示にする方法でスタイルを調整する
+`sbdocsPreviewHiddenCss`（`@stories/assets/utils/utils`）を使用する。
 
 ```typescript
+import { sbdocsPreviewHiddenCss } from '@stories/assets/utils/utils';
+
 const meta = {
   title: "タイトルが入ります",
   component: XXX,
   decorators: [
     (Story) => (
       <>
-        <style>{`
-          .sbdocs-preview.css-hd7ysc {
-            position: fixed; 
-            opacity: 0;
-          }
-      `}</style>
+        <style>{sbdocsPreviewHiddenCss}</style>
         <Story />
       </>
     ),

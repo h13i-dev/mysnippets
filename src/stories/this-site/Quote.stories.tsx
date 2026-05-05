@@ -1,5 +1,6 @@
 import Quote from '@components/Quote';
 import { createHtmlSource } from '@stories/assets/utils/htmlTransform';
+import { sbdocsPreviewHiddenCss } from '@stories/assets/utils/utils';
 import type { Meta, StoryObj } from '@storybook/react-vite';
 
 interface QuoteArgs {}
@@ -15,11 +16,7 @@ const meta: Meta<QuoteArgs> = {
   decorators: [
     (Story) => (
       <>
-        <style>{`
-          .sbdocs-preview.css-hd7ysc {
-            display: none;
-          }
-      `}</style>
+        <style>{sbdocsPreviewHiddenCss}</style>
         <Story />
       </>
     ),

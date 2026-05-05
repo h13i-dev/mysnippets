@@ -1,5 +1,16 @@
 {
   "hooks": {
+    "Notification": [
+      {
+        "matcher": "permission_prompt",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "node .claude/hooks/notify.js 確認が必要です"
+          }
+        ]
+      }
+    ],
     "Stop": [
       {
         "hooks": [
