@@ -12,7 +12,7 @@ const meta: Meta = {
       description: {
         component: `${imageDescription}`,
       },
-      source: createHtmlSource({ mode: 'static' }),
+      source: createHtmlSource('static'),
     },
   },
   argTypes: {

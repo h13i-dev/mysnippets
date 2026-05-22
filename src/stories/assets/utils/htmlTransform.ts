@@ -260,16 +260,7 @@ const extractComponentFromRender = (code: string): string => {
   return code;
 };
 
-interface HtmlSourceOptions {
-  /**
-   * ソースコードパネルの表示モード
-   * - 'dynamic' (default): args に追従する JSX を表示
-   * - 'static':            render に書いた JSX をそのまま静的に表示（render が必須）
-   * - 'html':              args に追従する HTML を表示
-   * - 省略時: 'dynamic' になる
-   */
-  mode?: 'dynamic' | 'static' | 'html';
-}
+type HtmlSourceMode = 'dynamic' | 'static' | 'html';
 
 /**
  * Storybook の source 設定を生成する
@@ -283,18 +274,18 @@ interface HtmlSourceOptions {
  * 注: `'static'` は `render` のコードを抽出する仕組みなので、`render` を使うストーリーでのみ機能する。
  *
  * @example
- * // デフォルト（args 連動の JSX）。明示的に書くなら mode: 'dynamic' でも可
+ * // デフォルト（args 連動の JSX）。明示的に書くなら 'dynamic' でも可
  * parameters: { docs: { source: createHtmlSource() } }
  *
  * @example
  * // render に書いた JSX を静的に表示（Compound Components 等）
- * parameters: { docs: { source: createHtmlSource({ mode: 'static' }) } }
+ * parameters: { docs: { source: createHtmlSource('static') } }
  *
  * @example
  * // HTML を表示
- * parameters: { docs: { source: createHtmlSource({ mode: 'html' }) } }
+ * parameters: { docs: { source: createHtmlSource('html') } }
  */
-export const createHtmlSource = ({ mode = 'dynamic' }: HtmlSourceOptions = {}) => {
+export const createHtmlSource = (mode: HtmlSourceMode = 'dynamic') => {
   if (mode === 'html') {
     return { language: 'html' as const, transform: createHtmlTransform() };
   }

@@ -9,7 +9,7 @@ const meta: Meta<CardProps> = {
   tags: ['autodocs'],
   parameters: {
     docs: {
-      source: createHtmlSource({ mode: 'static' }),
+      source: createHtmlSource('static'),
     },
   },
 };
