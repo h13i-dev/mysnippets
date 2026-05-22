@@ -1,0 +1,36 @@
+{
+  "hooks": {
+    "PermissionRequest": [
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "node .codex/hooks/notify.js 確認が必要です"
+          }
+        ]
+      }
+    ],
+    "Stop": [
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "node .codex/hooks/notify.js タスクが完了しました"
+          }
+        ]
+      }
+    ],
+    "PostToolUse": [
+      {
+        "matcher": "apply_patch",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "node .codex/hooks/format.js",
+            "statusMessage": "フォーマット中..."
+          }
+        ]
+      }
+    ]
+  }
+}
