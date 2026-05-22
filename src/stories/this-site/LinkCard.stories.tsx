@@ -9,7 +9,7 @@ const meta: Meta<LinkCardProps> = {
   tags: ['autodocs'],
   parameters: {
     docs: {
-      source: createHtmlSource({ extract: 'dynamic' }),
+      source: createHtmlSource(),
     },
   },
   argTypes: {

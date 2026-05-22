@@ -10,7 +10,7 @@ const meta: Meta<BoxArgs> = {
   tags: ['autodocs'],
   parameters: {
     docs: {
-      source: createHtmlSource({ extract: 'dynamic' }),
+      source: createHtmlSource(),
     },
   },
   args: {

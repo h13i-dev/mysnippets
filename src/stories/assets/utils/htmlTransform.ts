@@ -1,19 +1,18 @@
 import React from 'react';
 import { renderToStaticMarkup } from 'react-dom/server';
 
-/**
- * HTML変換のグローバルフラグ
- * - true: HTML変換を有効化
- * - false: HTML変換を無効化（JSX表示）
- * - build-storybook 実行時は環境変数 STORYBOOK_HTML_TRANSFORM で制御
- */
-export const useHtmlTransform = import.meta.env.STORYBOOK_HTML_TRANSFORM === 'true' || false;
-
 // Storybook の storyContext の型定義
 type StoryContext = {
   originalStoryFn: (args: unknown) => React.ReactElement;
   args: unknown;
   component?: React.ComponentType<unknown>;
+  title?: string;
+  name?: string;
+};
+
+const formatStoryLabel = (storyContext: StoryContext): string => {
+  const parts = [storyContext.title, storyContext.name].filter(Boolean);
+  return parts.length > 0 ? `[${parts.join(' / ')}]` : '[unknown story]';
 };
 
 /**
@@ -194,8 +193,11 @@ export const createHtmlTransform = () => {
       if (React.isValidElement(story)) {
         return jsxToHtml(story);
       }
-    } catch {
-      // render 関数が失敗した場合はフォールバック
+    } catch (error) {
+      console.warn(
+        `[htmlTransform] ${formatStoryLabel(storyContext)} render 関数の評価に失敗しました:`,
+        error,
+      );
     }
 
     // component + args からの変換を試みる
@@ -204,13 +206,23 @@ export const createHtmlTransform = () => {
       if (html) return html;
     }
 
-    console.warn('HTML変換に失敗しました');
+    console.warn(
+      `[htmlTransform] ${formatStoryLabel(storyContext)} HTML変換に失敗しました。元のコードを返します。`,
+    );
     return code;
   };
 };
 
 /**
- * renderのコードからコンポーネント部分のみを抽出するtransform関数
+ * render のコードからコンポーネント部分のみを抽出する transform 関数
+ *
+ * 既知の制約:
+ * - 正規表現ベースのため、以下のケースでは抽出が不完全になる可能性がある
+ *   - render の引数に複雑な分割代入（ネストした関数呼び出し）が含まれる
+ *   - JSX 内の文字列リテラルに `<` や `>` を含む
+ *   - render 内に複数の return 文がある
+ *   - コメント内に `<` や JSX 風の記述がある
+ * - 抽出に失敗した場合は元のコード全体を返す（フォールバック）
  */
 const extractComponentFromRender = (code: string): string => {
   // render: から始まるセクションを抽出（decorators などを除外）
@@ -250,31 +262,44 @@ const extractComponentFromRender = (code: string): string => {
 
 interface HtmlSourceOptions {
   /**
-   * ソースの取得方法
-   * - 'dynamic': args に追従してソースをリアルタイム更新（Storybook デフォルト）
-   * - 'code': ファイルに書いた render 関数のコードをそのまま表示
+   * ソースコードパネルの表示モード
+   * - 'dynamic' (default): args に追従する JSX を表示
+   * - 'static':            render に書いた JSX をそのまま静的に表示（render が必須）
+   * - 'html':              args に追従する HTML を表示
+   * - 省略時: 'dynamic' になる
    */
-  extract: 'dynamic' | 'code';
-  /**
-   * ソースの表示フォーマット
-   * - 'html': レンダリング後のHTMLを表示
-   * - 'jsx': JSXをそのまま表示
-   * - 省略時: グローバル設定（STORYBOOK_HTML_TRANSFORM 環境変数）を使用
-   */
-  format?: 'html' | 'jsx';
+  mode?: 'dynamic' | 'static' | 'html';
 }
 
 /**
  * Storybook の source 設定を生成する
+ *
+ * | mode               | 表示内容             | args 連動 |
+ * | ------------------ | -------------------- | --------- |
+ * | 'dynamic' (default)| JSX                  | ○         |
+ * | 'static'           | render に書いた JSX  | ×         |
+ * | 'html'             | HTML                 | ○         |
+ *
+ * 注: `'static'` は `render` のコードを抽出する仕組みなので、`render` を使うストーリーでのみ機能する。
+ *
+ * @example
+ * // デフォルト（args 連動の JSX）。明示的に書くなら mode: 'dynamic' でも可
+ * parameters: { docs: { source: createHtmlSource() } }
+ *
+ * @example
+ * // render に書いた JSX を静的に表示（Compound Components 等）
+ * parameters: { docs: { source: createHtmlSource({ mode: 'static' }) } }
+ *
+ * @example
+ * // HTML を表示
+ * parameters: { docs: { source: createHtmlSource({ mode: 'html' }) } }
  */
-export const createHtmlSource = ({ extract, format }: HtmlSourceOptions) => {
-  const shouldTransform = format === 'html' ? true : format === 'jsx' ? false : useHtmlTransform;
-
-  if (shouldTransform) {
+export const createHtmlSource = ({ mode = 'dynamic' }: HtmlSourceOptions = {}) => {
+  if (mode === 'html') {
     return { language: 'html' as const, transform: createHtmlTransform() };
   }
 
-  if (extract === 'code') {
+  if (mode === 'static') {
     return {
       type: 'code' as const,
       transform: extractComponentFromRender,

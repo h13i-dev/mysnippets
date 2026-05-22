@@ -9,7 +9,7 @@ const meta = {
   parameters: {
     layout: 'centered',
     docs: {
-      source: createHtmlSource({ extract: 'dynamic' }),
+      source: createHtmlSource(),
       description: {
         component: `
 ### 概要
