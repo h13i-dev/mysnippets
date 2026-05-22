@@ -9,7 +9,7 @@ const meta: Meta<YouTubeCardProps> = {
   tags: ['autodocs'],
   parameters: {
     docs: {
-      source: createHtmlSource('dynamic'),
+      source: createHtmlSource(),
       description: {
         component: `
 ### 対応するYouTube URL形式

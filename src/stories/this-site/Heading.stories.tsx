@@ -8,7 +8,7 @@ const meta: Meta<typeof Heading> = {
   tags: ['autodocs'],
   parameters: {
     docs: {
-      source: createHtmlSource('dynamic'),
+      source: createHtmlSource(),
     },
   },
   argTypes: {
@@ -51,12 +51,5 @@ export const HeadingLv3: Story = {
   args: {
     lv: '3',
     children: '見出しレベル3',
-  },
-};
-
-export const MarginSample: Story = {
-  name: 'コンテンツタイトル',
-  render: () => {
-    return <h1 className="p-contents-title">コンテンツタイトル</h1>;
   },
 };

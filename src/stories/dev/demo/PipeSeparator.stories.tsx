@@ -7,7 +7,7 @@ const meta = {
   tags: ['autodocs'],
   parameters: {
     docs: {
-      source: createHtmlSource('dynamic'),
+      source: createHtmlSource(),
       description: {
         component:
           'HTMLリスト要素を縦線（パイプ記号）で区切るための3つの実装方法を比較するデモです。',

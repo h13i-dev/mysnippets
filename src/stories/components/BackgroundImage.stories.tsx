@@ -1,4 +1,5 @@
 import { createHtmlSource } from '@stories/assets/utils/htmlTransform';
+import { sbdocsPreviewHiddenCss } from '@stories/assets/utils/utils';
 import type { Meta, StoryObj } from '@storybook/react-vite';
 import '@stories/assets/sass/storybook/icon.scss';
 
@@ -8,18 +9,13 @@ const meta: Meta = {
   tags: ['autodocs'],
   parameters: {
     docs: {
-      source: createHtmlSource('code'),
+      source: createHtmlSource({ mode: 'static' }),
     },
   },
   decorators: [
     (Story) => (
       <>
-        <style>{`
-          .sbdocs-preview.css-hd7ysc {
-            position: fixed;
-            opacity: 0;
-          }
-      `}</style>
+        <style>{sbdocsPreviewHiddenCss}</style>
         <Story />
       </>
     ),

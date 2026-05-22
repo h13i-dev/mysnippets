@@ -9,7 +9,7 @@ const meta: Meta = {
   tags: ['autodocs'],
   parameters: {
     docs: {
-      source: createHtmlSource('code'),
+      source: createHtmlSource({ mode: 'static' }),
     },
   },
   argTypes: {

@@ -15,7 +15,7 @@ const meta = {
   ],
   parameters: {
     docs: {
-      source: createHtmlSource('dynamic'),
+      source: createHtmlSource(),
       description: {
         component: `
 ### 概要

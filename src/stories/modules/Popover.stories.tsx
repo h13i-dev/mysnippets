@@ -8,7 +8,7 @@ const meta = {
   tags: ['autodocs'],
   parameters: {
     docs: {
-      source: createHtmlSource('code'),
+      source: createHtmlSource({ mode: 'static' }),
       description: {
         component: `
 ### Popover API を使用した実装

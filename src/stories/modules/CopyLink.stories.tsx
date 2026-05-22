@@ -9,7 +9,7 @@ const meta = {
   parameters: {
     layout: 'centered',
     docs: {
-      source: createHtmlSource('dynamic'),
+      source: createHtmlSource(),
     },
   },
   tags: ['autodocs', '!dev'],

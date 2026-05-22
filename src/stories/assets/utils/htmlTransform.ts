@@ -1,19 +1,18 @@
 import React from 'react';
 import { renderToStaticMarkup } from 'react-dom/server';
 
-/**
- * HTML変換のグローバルフラグ
- * - true: HTML変換を有効化
- * - false: HTML変換を無効化（JSX表示）
- */
-export const useHtmlTransform = false;
-
 // Storybook の storyContext の型定義
 type StoryContext = {
-  parameters?: { useHtmlTransform?: boolean };
   originalStoryFn: (args: unknown) => React.ReactElement;
   args: unknown;
   component?: React.ComponentType<unknown>;
+  title?: string;
+  name?: string;
+};
+
+const formatStoryLabel = (storyContext: StoryContext): string => {
+  const parts = [storyContext.title, storyContext.name].filter(Boolean);
+  return parts.length > 0 ? `[${parts.join(' / ')}]` : '[unknown story]';
 };
 
 /**
@@ -125,19 +124,24 @@ const formatHtml = (html: string, baseIndent = 0): string => {
       addLine(fullTag + content + closingTag, baseIndent);
     } else {
       // 子要素がある場合
-      const leadingText = content.match(/^([^<]+)/);
+      const leadingText = content.match(/^([^<]+)/)?.[1] || '';
+      const trailingText = content.match(/([^>]+)$/)?.[1] || '';
+      const hasLeading = leadingText.trim().length > 0;
+      const hasTrailing = trailingText.trim().length > 0;
 
-      if (leadingText?.[1].trim()) {
-        // テキストと子要素が混在
-        addLine(fullTag + leadingText[1], baseIndent);
-        appendFormattedContent(content.substring(leadingText[1].length), baseIndent + 1);
-      } else {
-        // 子要素のみ
-        addLine(fullTag, baseIndent);
-        appendFormattedContent(content, baseIndent + 1);
+      // 開始タグ（+ 先頭テキスト）
+      addLine(fullTag + (hasLeading ? leadingText : ''), baseIndent);
+
+      // 中間コンテンツ（子要素）
+      const middleStart = hasLeading ? leadingText.length : 0;
+      const middleEnd = content.length - (hasTrailing ? trailingText.length : 0);
+      const middleContent = content.substring(middleStart, middleEnd);
+      if (middleContent.trim()) {
+        appendFormattedContent(middleContent, baseIndent + 1);
       }
 
-      addLine(closingTag, baseIndent);
+      // 終了タグ（+ 末尾テキスト）
+      addLine((hasTrailing ? trailingText : '') + closingTag, baseIndent);
     }
 
     i = closingTagIndex + closingTag.length;
@@ -180,25 +184,20 @@ const renderComponentToHtml = (
 
 /**
  * Storybook の source.transform 用の変換関数を生成
- *
- * 個別ストーリーで無効化したい場合:
- * parameters: { useHtmlTransform: false }
  */
 export const createHtmlTransform = () => {
   return (code: string, storyContext: StoryContext): string => {
-    const shouldTransform = storyContext.parameters?.useHtmlTransform ?? true;
-    if (!shouldTransform) {
-      return code;
-    }
-
     // render 関数からの変換を試みる
     try {
       const story = storyContext.originalStoryFn(storyContext.args);
       if (React.isValidElement(story)) {
         return jsxToHtml(story);
       }
-    } catch {
-      // render 関数が失敗した場合はフォールバック
+    } catch (error) {
+      console.warn(
+        `[htmlTransform] ${formatStoryLabel(storyContext)} render 関数の評価に失敗しました:`,
+        error,
+      );
     }
 
     // component + args からの変換を試みる
@@ -207,45 +206,53 @@ export const createHtmlTransform = () => {
       if (html) return html;
     }
 
-    console.warn('HTML変換に失敗しました');
+    console.warn(
+      `[htmlTransform] ${formatStoryLabel(storyContext)} HTML変換に失敗しました。元のコードを返します。`,
+    );
     return code;
   };
 };
 
 /**
- * renderのコードからコンポーネント部分のみを抽出するtransform関数
+ * render のコードからコンポーネント部分のみを抽出する transform 関数
+ *
+ * 既知の制約:
+ * - 正規表現ベースのため、以下のケースでは抽出が不完全になる可能性がある
+ *   - render の引数に複雑な分割代入（ネストした関数呼び出し）が含まれる
+ *   - JSX 内の文字列リテラルに `<` や `>` を含む
+ *   - render 内に複数の return 文がある
+ *   - コメント内に `<` や JSX 風の記述がある
+ * - 抽出に失敗した場合は元のコード全体を返す（フォールバック）
  */
 const extractComponentFromRender = (code: string): string => {
-  // JSXコンポーネント部分を抽出（<Component>...</Component> または <p>...</p> など）
-  // 最初の < から対応する終了タグまでを抽出
-  const jsxStart = code.indexOf('<');
-  if (jsxStart === -1) return code;
-
-  // React Fragment (<>...</>) の検出
-  if (code.substring(jsxStart, jsxStart + 2) === '<>') {
-    const fragmentEnd = code.lastIndexOf('</>');
-    if (fragmentEnd !== -1) {
-      // Fragment内のコンテンツを抽出
-      const innerContent = code.substring(jsxStart + 2, fragmentEnd).trim();
-      // 内側のコンポーネントを再帰的に抽出
-      return extractComponentFromRender(innerContent);
-    }
+  // render: から始まるセクションを抽出（decorators などを除外）
+  const renderMatch = code.match(/render\s*:\s*\([^)]*\)\s*=>\s*([\s\S]*?)(?:,\s*\}|$)/);
+  let extractedCode = code;
+  if (renderMatch && renderMatch[1]) {
+    extractedCode = renderMatch[1].trim();
   }
 
+  // JSXコンポーネント部分を抽出（<Component>...</Component> または <p>...</p> など）
+  // 最初の < から対応する終了タグまでを抽出
+  const jsxStart = extractedCode.indexOf('<');
+  if (jsxStart === -1) return code;
+
   // 開始タグ名を取得（大文字のReactコンポーネントと小文字のHTML要素の両方に対応）
-  const tagNameMatch = code.substring(jsxStart).match(/^<([a-zA-Z][a-zA-Z0-9.]*)/);
+  const tagNameMatch = extractedCode.substring(jsxStart).match(/^<([a-zA-Z][a-zA-Z0-9.]*)/);
   if (!tagNameMatch) return code;
 
   const tagName = tagNameMatch[1];
   const closingTag = `</${tagName}>`;
-  const closingTagIndex = code.lastIndexOf(closingTag);
+  const closingTagIndex = findClosingTag(extractedCode, jsxStart + tagName.length + 1, tagName);
 
   if (closingTagIndex !== -1) {
-    return code.substring(jsxStart, closingTagIndex + closingTag.length);
+    return extractedCode.substring(jsxStart, closingTagIndex + closingTag.length);
   }
 
   // 自己終了タグの場合
-  const selfClosingMatch = code.substring(jsxStart).match(new RegExp(`<${tagName}[^>]*/>`));
+  const selfClosingMatch = extractedCode
+    .substring(jsxStart)
+    .match(new RegExp(`<${tagName}[^>]*/>`));
   if (selfClosingMatch) {
     return selfClosingMatch[0];
   }
@@ -253,25 +260,46 @@ const extractComponentFromRender = (code: string): string => {
   return code;
 };
 
-/**
- * HTML変換用の source 設定を生成
- *
- * @param sourceType - 'code' (主にrender使用時) または 'dynamic' (主にargs使用時)
- * - 'code': Component.Nameのコンポーネントをrenderでコードを表示する場合。コンポーネント部分のみ抽出して表示（build時にComponent.Nameのコンポーネントの表示が崩れる）
- * - 'dynamic': argsでコードを表示する場合、またはComponent.Name以外のコンポーネントをrenderで表示する場合に使用
- * @param enableHtmlTransform - HTML変換の有効/無効を個別に指定（省略時はグローバル設定を使用）
- */
-export const createHtmlSource = (
-  sourceType: 'code' | 'dynamic' = 'dynamic',
-  enableHtmlTransform?: boolean,
-) => {
-  const shouldTransform = enableHtmlTransform ?? useHtmlTransform;
+interface HtmlSourceOptions {
+  /**
+   * ソースコードパネルの表示モード
+   * - 'dynamic' (default): args に追従する JSX を表示
+   * - 'static':            render に書いた JSX をそのまま静的に表示（render が必須）
+   * - 'html':              args に追従する HTML を表示
+   * - 省略時: 'dynamic' になる
+   */
+  mode?: 'dynamic' | 'static' | 'html';
+}
 
-  if (shouldTransform) {
+/**
+ * Storybook の source 設定を生成する
+ *
+ * | mode               | 表示内容             | args 連動 |
+ * | ------------------ | -------------------- | --------- |
+ * | 'dynamic' (default)| JSX                  | ○         |
+ * | 'static'           | render に書いた JSX  | ×         |
+ * | 'html'             | HTML                 | ○         |
+ *
+ * 注: `'static'` は `render` のコードを抽出する仕組みなので、`render` を使うストーリーでのみ機能する。
+ *
+ * @example
+ * // デフォルト（args 連動の JSX）。明示的に書くなら mode: 'dynamic' でも可
+ * parameters: { docs: { source: createHtmlSource() } }
+ *
+ * @example
+ * // render に書いた JSX を静的に表示（Compound Components 等）
+ * parameters: { docs: { source: createHtmlSource({ mode: 'static' }) } }
+ *
+ * @example
+ * // HTML を表示
+ * parameters: { docs: { source: createHtmlSource({ mode: 'html' }) } }
+ */
+export const createHtmlSource = ({ mode = 'dynamic' }: HtmlSourceOptions = {}) => {
+  if (mode === 'html') {
     return { language: 'html' as const, transform: createHtmlTransform() };
   }
 
-  if (sourceType === 'code') {
+  if (mode === 'static') {
     return {
       type: 'code' as const,
       transform: extractComponentFromRender,

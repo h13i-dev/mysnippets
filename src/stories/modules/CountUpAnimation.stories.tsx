@@ -8,7 +8,7 @@ const meta = {
   parameters: {
     layout: 'centered',
     docs: {
-      source: createHtmlSource('dynamic'),
+      source: createHtmlSource(),
       description: {
         component: `
 ### ライブラリのインストール

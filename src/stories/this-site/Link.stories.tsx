@@ -7,7 +7,7 @@ const meta = {
   component: Link,
   parameters: {
     docs: {
-      source: createHtmlSource('dynamic'),
+      source: createHtmlSource(),
     },
   },
   tags: ['autodocs'],
@@ -52,6 +52,13 @@ export const HTML: Story = {
     href: '★★★',
     children: 'リンク',
   },
+  render: (args) => (
+    <p>
+      テキストテキスト
+      <Link {...args} />
+      テキストテキスト
+    </p>
+  ),
 };
 
 export const ExternalLink: Story = {
@@ -69,6 +76,13 @@ export const ExternalLink: Story = {
       },
     },
   },
+  render: (args) => (
+    <p>
+      テキストテキスト
+      <Link {...args} />
+      テキストテキスト
+    </p>
+  ),
 };
 
 export const PdfLink: Story = {
@@ -85,4 +99,11 @@ export const PdfLink: Story = {
       },
     },
   },
+  render: (args) => (
+    <p>
+      テキストテキスト
+      <Link {...args} />
+      テキストテキスト
+    </p>
+  ),
 };

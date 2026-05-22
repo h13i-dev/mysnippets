@@ -146,6 +146,14 @@
       justify-content: center;
     }
 
+    &[data-config*="[center-x]"] {
+      justify-content: center;
+    }
+
+    &[data-config*="[center-y]"] {
+      align-items: center;
+    }
+
     &[data-config*="[reverse]"] {
       flex-direction: row-reverse;
     }

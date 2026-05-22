@@ -9,7 +9,7 @@ const meta: Meta<ArticleCardProps> = {
   tags: ['autodocs'],
   parameters: {
     docs: {
-      source: createHtmlSource('dynamic'),
+      source: createHtmlSource(),
     },
   },
   argTypes: {
