@@ -11,7 +11,7 @@ const meta = {
       description: {
         component: `${imageDescription}`,
       },
-      source: createHtmlSource({ extract: 'dynamic' }),
+      source: createHtmlSource(),
     },
   },
   tags: ['autodocs'],

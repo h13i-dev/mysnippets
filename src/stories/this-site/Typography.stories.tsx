@@ -14,7 +14,7 @@ const meta: Meta<TypographyArgs> = {
   tags: ['autodocs'],
   parameters: {
     docs: {
-      source: createHtmlSource({ extract: 'dynamic' }),
+      source: createHtmlSource(),
     },
   },
   args: {

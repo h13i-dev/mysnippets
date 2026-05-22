@@ -2,8 +2,9 @@ import { Accordion, Heading } from '@components/index.tsx';
 import { createHtmlSource } from '@stories/assets/utils/htmlTransform';
 import type { Meta, StoryObj } from '@storybook/react-vite';
 
-const meta: Meta = {
-  title: '_Dev/Tests/テスト_HtmlSource',
+const meta: Meta<typeof Heading> = {
+  title: '_Dev/Docs/Storybookのコード設定',
+  component: Heading,
   tags: ['autodocs'],
   parameters: {
     docs: {
@@ -18,67 +19,73 @@ import { createHtmlSource } from "@stories/assets/utils/htmlTransform";
 
 parameters: {
   docs: {
-    source: createHtmlSource({ extract: 'dynamic' }),
+    source: createHtmlSource({ mode: 'dynamic' }),
   },
 },
 \`\`\`
 
 ## オプション
 
-### \`extract\`（必須）
+### \`mode\`（省略可）
 
-ソースコードの取得方法を指定します。
+ソースコードパネルの表示モードを指定します。
 
 <table>
-  <thead><tr><th>値</th><th>用途</th></tr></thead>
+  <thead><tr><th>値</th><th>表示内容</th><th>args 連動</th></tr></thead>
   <tbody>
-    <tr><td><code>'dynamic'</code></td><td>args に追従してソースをリアルタイム更新</td></tr>
-    <tr><td><code>'code'</code></td><td>ファイルに書いた render 関数のコードをそのまま表示</td></tr>
+    <tr><td><code>'dynamic'</code>（default）</td><td>JSX を表示</td><td>○</td></tr>
+    <tr><td><code>'static'</code></td><td>render に書いた JSX をそのまま表示</td><td>×（静的）</td></tr>
+    <tr><td><code>'html'</code></td><td>HTML を表示</td><td>○</td></tr>
+  </tbody>
+</table>
+
+> **注意**: \`'static'\` は \`render\` のコードを抽出して表示する仕組みなので、**\`render\` を使うストーリーでしか機能しません**。\`args\` のみのストーリーに \`'static'\` を指定すると、意図しない表示になります。
+
+#### 用語
+
+- **args 連動（○）**: Storybook の Controls パネルで args を変更すると、コードパネルの表示も追従して更新される
+- **静的（×）**: render 関数に書いたコードがそのまま固定で表示される。args を変えてもコードパネルの表示は変わらない
+
+#### 使い分けの目安
+
+<table>
+  <thead><tr><th>状況</th><th>推奨</th></tr></thead>
+  <tbody>
+    <tr><td>args を変えてコントロールパネルから操作したい</td><td>省略（<code>'dynamic'</code> default）</td></tr>
+    <tr><td>Compound Components や複数の子要素を表示したい</td><td><code>'static'</code></td></tr>
+    <tr><td>args を使わず、固定の JSX を見せたい</td><td><code>'static'</code></td></tr>
+    <tr><td>コードを書いたままのフォーマットで見せたい</td><td><code>'static'</code></td></tr>
+    <tr><td>HTML として表示したい</td><td><code>'html'</code></td></tr>
+  </tbody>
+</table>
+
+#### dynamic と static の表示の違い
+
+<table>
+  <thead><tr><th></th><th><code>'dynamic'</code>（default）</th><th><code>'static'</code></th></tr></thead>
+  <tbody>
+    <tr><td>コードの整形・改行</td><td>Storybook の再生成に依存</td><td>書いたまま保持</td></tr>
+    <tr><td>コメント</td><td>消える</td><td>残る</td></tr>
+    <tr><td>変数・式</td><td>評価後の値になる</td><td>そのまま残る</td></tr>
+    <tr><td>コンポーネント名</td><td><code>displayName</code> に置き換わる</td><td>import した名前のまま</td></tr>
+    <tr><td>args 連動</td><td>○</td><td>×</td></tr>
   </tbody>
 </table>
 
 \`\`\`typescript
-// args を使うストーリー
+// args を使うストーリー（デフォルト）
 parameters: {
-  docs: { source: createHtmlSource({ extract: 'dynamic' }) },
+  docs: { source: createHtmlSource() },
 },
 args: { label: 'ボタン' },
 
-// render を使うストーリー
+// render に書いた JSX を静的に表示するストーリー
 parameters: {
-  docs: { source: createHtmlSource({ extract: 'code' }) },
+  docs: { source: createHtmlSource({ mode: 'static' }) },
 },
 render: () => <Component><Child /></Component>,
 \`\`\`
 
-### \`format\`（省略可）
-
-ソースの表示フォーマットを指定します。
-
-<table>
-  <thead><tr><th>値</th><th>表示内容</th></tr></thead>
-  <tbody>
-    <tr><td><code>'html'</code></td><td>レンダリング後のHTMLを表示</td></tr>
-    <tr><td><code>'jsx'</code></td><td>JSXをそのまま表示</td></tr>
-    <tr><td>省略</td><td>グローバル設定（<code>STORYBOOK_HTML_TRANSFORM</code> 環境変数）を使用</td></tr>
-  </tbody>
-</table>
-
-\`\`\`typescript
-createHtmlSource({ extract: 'code', format: 'html' })    // HTMLを表示
-createHtmlSource({ extract: 'dynamic', format: 'jsx' })  // JSXを表示
-createHtmlSource({ extract: 'dynamic' })                  // グローバル設定に従う
-\`\`\`
-
-## グローバル設定
-
-\`STORYBOOK_HTML_TRANSFORM\` 環境変数で全体の動作を制御できます。
-
-\`\`\`bash
-STORYBOOK_HTML_TRANSFORM=true npm run build-storybook  # HTML変換ON
-\`\`\`
-
-デフォルトは \`false\`（JSX表示）です。
         `,
       },
     },
@@ -89,76 +96,56 @@ export default meta;
 type Story = StoryObj;
 
 // ----------------------------------------------------------------
-// extract: 'dynamic'
+// 各モードのデモストーリー
 // ----------------------------------------------------------------
 
-export const ArgsFormatDefault: Story = {
-  name: 'dynamic / format: 省略',
+export const ModeDynamic: Story = {
+  name: 'mode: dynamic（明示）',
   parameters: {
     docs: {
-      source: createHtmlSource({ extract: 'dynamic' }),
-      description: { story: "グローバル設定に従う<br>`createHtmlSource({ extract: 'dynamic' })`" },
-    },
-  },
-  args: { lv: '2', children: '見出しレベル2' },
-  render: ({ lv, children }) => <Heading lv={lv}>{children}</Heading>,
-};
-
-export const ArgsFormatJsx: Story = {
-  name: 'dynamic / format: jsx',
-  parameters: {
-    docs: {
-      source: createHtmlSource({ extract: 'dynamic', format: 'jsx' }),
+      source: createHtmlSource({ mode: 'dynamic' }),
       description: {
-        story: "JSX を表示する<br>`createHtmlSource({ extract: 'dynamic', format: 'jsx' })`",
+        story: `\`\`\`tsx
+args: { lv: '2', children: '見出しレベル2' },
+parameters: { docs: { source: createHtmlSource({ mode: 'dynamic' }) } },
+\`\`\``,
       },
     },
   },
   args: { lv: '2', children: '見出しレベル2' },
-  render: ({ lv, children }) => <Heading lv={lv}>{children}</Heading>,
 };
 
-export const ArgsFormatHtml: Story = {
-  name: 'dynamic / format: html',
+export const ModeDefault: Story = {
+  name: 'mode: 省略（dynamic 相当）',
   parameters: {
     docs: {
-      source: createHtmlSource({ extract: 'dynamic', format: 'html' }),
+      source: createHtmlSource(),
       description: {
-        story: "HTML を表示する<br>`createHtmlSource({ extract: 'dynamic', format: 'html' })`",
+        story: `\`\`\`tsx
+args: { lv: '2', children: '見出しレベル2' },
+parameters: { docs: { source: createHtmlSource() } },
+\`\`\``,
       },
     },
   },
   args: { lv: '2', children: '見出しレベル2' },
-  render: ({ lv, children }) => <Heading lv={lv}>{children}</Heading>,
 };
 
-// ----------------------------------------------------------------
-// extract: 'code'
-// ----------------------------------------------------------------
-
-export const RenderFormatDefault: Story = {
-  name: 'code / format: 省略',
+export const ModeStatic: Story = {
+  name: 'mode: static',
   parameters: {
     docs: {
-      source: createHtmlSource({ extract: 'code' }),
-      description: { story: "グローバル設定に従う<br>`createHtmlSource({ extract: 'code' })`" },
-    },
-  },
-  render: () => (
-    <Accordion>
-      <Accordion.Summary>アコーディオンのタイトル</Accordion.Summary>
-      <Accordion.Body>アコーディオンの本文です。</Accordion.Body>
-    </Accordion>
-  ),
-};
-
-export const RenderFormatJsx: Story = {
-  name: 'code / format: jsx',
-  parameters: {
-    docs: {
-      source: createHtmlSource({ extract: 'code', format: 'jsx' }),
+      source: createHtmlSource({ mode: 'static' }),
       description: {
-        story: "JSX を表示する<br>`createHtmlSource({ extract: 'code', format: 'jsx' })`",
+        story: `\`\`\`tsx
+render: () => (
+  <Accordion>
+    <Accordion.Summary>アコーディオンのタイトル</Accordion.Summary>
+    <Accordion.Body>アコーディオンの本文です。</Accordion.Body>
+  </Accordion>
+),
+parameters: { docs: { source: createHtmlSource({ mode: 'static' }) } },
+\`\`\``,
       },
     },
   },
@@ -170,20 +157,18 @@ export const RenderFormatJsx: Story = {
   ),
 };
 
-export const RenderFormatHtml: Story = {
-  name: 'code / format: html',
+export const ModeHtml: Story = {
+  name: 'mode: html',
   parameters: {
     docs: {
-      source: createHtmlSource({ extract: 'code', format: 'html' }),
+      source: createHtmlSource({ mode: 'html' }),
       description: {
-        story: "HTML を表示する<br>`createHtmlSource({ extract: 'code', format: 'html' })`",
+        story: `\`\`\`tsx
+args: { lv: '2', children: '見出しレベル2' },
+parameters: { docs: { source: createHtmlSource({ mode: 'html' }) } },
+\`\`\``,
       },
     },
   },
-  render: () => (
-    <Accordion>
-      <Accordion.Summary>アコーディオンのタイトル</Accordion.Summary>
-      <Accordion.Body>アコーディオンの本文です。</Accordion.Body>
-    </Accordion>
-  ),
+  args: { lv: '2', children: '見出しレベル2' },
 };

@@ -8,7 +8,7 @@ const meta: Meta<typeof Heading> = {
   tags: ['autodocs'],
   parameters: {
     docs: {
-      source: createHtmlSource({ extract: 'dynamic' }),
+      source: createHtmlSource(),
     },
   },
   argTypes: {

@@ -7,7 +7,7 @@ const meta = {
   component: Link,
   parameters: {
     docs: {
-      source: createHtmlSource({ extract: 'dynamic' }),
+      source: createHtmlSource(),
     },
   },
   tags: ['autodocs'],
