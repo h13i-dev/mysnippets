@@ -8,7 +8,7 @@ const meta = {
   tags: ['autodocs'],
   parameters: {
     docs: {
-      source: createHtmlSource({ mode: 'static' }),
+      source: createHtmlSource('static'),
       description: {
         component: `
 ### 概要

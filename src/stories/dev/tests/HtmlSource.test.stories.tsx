@@ -19,7 +19,7 @@ import { createHtmlSource } from "@stories/assets/utils/htmlTransform";
 
 parameters: {
   docs: {
-    source: createHtmlSource({ mode: 'dynamic' }),
+    source: createHtmlSource('dynamic'),
   },
 },
 \`\`\`
@@ -81,7 +81,7 @@ args: { label: 'ボタン' },
 
 // render に書いた JSX を静的に表示するストーリー
 parameters: {
-  docs: { source: createHtmlSource({ mode: 'static' }) },
+  docs: { source: createHtmlSource('static') },
 },
 render: () => <Component><Child /></Component>,
 \`\`\`
@@ -103,11 +103,11 @@ export const ModeDynamic: Story = {
   name: 'mode: dynamic（明示）',
   parameters: {
     docs: {
-      source: createHtmlSource({ mode: 'dynamic' }),
+      source: createHtmlSource('dynamic'),
       description: {
         story: `\`\`\`tsx
 args: { lv: '2', children: '見出しレベル2' },
-parameters: { docs: { source: createHtmlSource({ mode: 'dynamic' }) } },
+parameters: { docs: { source: createHtmlSource('dynamic') } },
 \`\`\``,
       },
     },
@@ -135,7 +135,7 @@ export const ModeStatic: Story = {
   name: 'mode: static',
   parameters: {
     docs: {
-      source: createHtmlSource({ mode: 'static' }),
+      source: createHtmlSource('static'),
       description: {
         story: `\`\`\`tsx
 render: () => (
@@ -144,7 +144,7 @@ render: () => (
     <Accordion.Body>アコーディオンの本文です。</Accordion.Body>
   </Accordion>
 ),
-parameters: { docs: { source: createHtmlSource({ mode: 'static' }) } },
+parameters: { docs: { source: createHtmlSource('static') } },
 \`\`\``,
       },
     },
@@ -161,11 +161,11 @@ export const ModeHtml: Story = {
   name: 'mode: html',
   parameters: {
     docs: {
-      source: createHtmlSource({ mode: 'html' }),
+      source: createHtmlSource('html'),
       description: {
         story: `\`\`\`tsx
 args: { lv: '2', children: '見出しレベル2' },
-parameters: { docs: { source: createHtmlSource({ mode: 'html' }) } },
+parameters: { docs: { source: createHtmlSource('html') } },
 \`\`\``,
       },
     },

@@ -58,7 +58,7 @@ export const Default: Story = {
   tags: ['!dev', '!autodocs'],
   parameters: {
     docs: {
-      source: createHtmlSource({ mode: 'static' }),
+      source: createHtmlSource('static'),
       canvas: {
         sourceState: 'none',
       },
@@ -82,7 +82,7 @@ export const ConfigUsage: Story = {
   tags: ['!dev'],
   parameters: {
     docs: {
-      source: createHtmlSource({ mode: 'static' }),
+      source: createHtmlSource('static'),
       description: {
         story: `${gridSystemNote}
 
@@ -132,7 +132,7 @@ export const ConfigFlex: Story = {
   name: 'カラム数の指定（data-config属性）の例',
   parameters: {
     docs: {
-      source: createHtmlSource({ mode: 'static' }),
+      source: createHtmlSource('static'),
     },
   },
   decorators: [
@@ -165,7 +165,7 @@ export const SpanUsage: Story = {
   tags: ['!dev'],
   parameters: {
     docs: {
-      source: createHtmlSource({ mode: 'static' }),
+      source: createHtmlSource('static'),
       description: {
         story: `${gridSystemNote}
 
@@ -213,7 +213,7 @@ export const SpanFlex: Story = {
   name: 'アイテム幅の指定（data-span属性）の例',
   parameters: {
     docs: {
-      source: createHtmlSource({ mode: 'static' }),
+      source: createHtmlSource('static'),
     },
   },
   decorators: [
@@ -257,7 +257,7 @@ export const FlexItemsCenter: Story = {
   name: '縦横の中央配置（PC: 2列）_要素がコンテンツ幅の場合',
   parameters: {
     docs: {
-      source: createHtmlSource({ mode: 'static' }),
+      source: createHtmlSource('static'),
       description: {
         story: `縦横中央に配置する場合は、\`data-config="[center]"\`を指定してください。`,
       },
@@ -279,7 +279,7 @@ export const FlexCenter: Story = {
   name: '縦横の中央配置（PC: 2行・4列）',
   parameters: {
     docs: {
-      source: createHtmlSource({ mode: 'static' }),
+      source: createHtmlSource('static'),
       description: {
         story: `縦横中央に配置する場合は、\`data-config="[center]"\`を指定してください。`,
       },
@@ -306,7 +306,7 @@ export const FlexVerticalCenter: Story = {
   name: '縦の中央配置',
   parameters: {
     docs: {
-      source: createHtmlSource({ mode: 'static' }),
+      source: createHtmlSource('static'),
     },
   },
   render: () => (
@@ -333,7 +333,7 @@ export const FlexReverse: Story = {
   name: '逆順',
   parameters: {
     docs: {
-      source: createHtmlSource({ mode: 'static' }),
+      source: createHtmlSource('static'),
     },
   },
   render: () => (
@@ -349,7 +349,7 @@ export const Gap: Story = {
   name: 'gapの指定',
   parameters: {
     docs: {
-      source: createHtmlSource({ mode: 'static' }),
+      source: createHtmlSource('static'),
       description: {
         story: `gapは、\`u-gap-x-8px\`～\`u-gap-x-40px\`（列の余白）、\`u-gap-y-8px\`～\`u-gap-y-40px\`（行の余白）のヘルパークラス（いずれも8px刻み）で調整可能です。${breakpointPrefixDescription}`,
       },
