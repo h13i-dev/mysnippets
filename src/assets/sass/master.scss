@@ -30,7 +30,6 @@
 
 // 単体
 @use "objects/components/btn" as btn-component;
-@use "objects/components/card" as card-component;
 @use "objects/components/figure" as figure-component;
 @use "objects/components/link" as link-component;
 @use "objects/components/media" as media-component;
@@ -48,7 +47,6 @@
 @use "objects/projects/btn";
 @use "objects/projects/link";
 @use "objects/projects/figure";
-@use "objects/projects/card";
 @use "objects/projects/table";
 
 // その他
