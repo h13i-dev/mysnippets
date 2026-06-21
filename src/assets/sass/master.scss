@@ -23,7 +23,6 @@
 @use "objects/components/accordion" as accordion-component;
 @use "objects/components/img-layout" as img-layout-component;
 @use "objects/components/grid" as grid-component;
-@use "objects/components/modal" as modal-component;
 @use "objects/components/popover" as popover-component;
 @use "objects/components/table" as table-component;
 @use "objects/components/container" as container-component;
@@ -39,8 +38,6 @@
 // objects/projects
 // ************************************************
 // objects/componentsとスタイルを共有しているもの
-@use "objects/projects/modal-contents";
-@use "objects/projects/modal-page";
 @use "objects/projects/accordion";
 @use "objects/projects/img-layout";
 @use "objects/projects/btn";
