@@ -33,7 +33,6 @@
 @use "objects/components/figure" as figure-component;
 @use "objects/components/link" as link-component;
 @use "objects/components/media" as media-component;
-@use "objects/components/pagetop" as pagetop-component;
 @use "objects/components/backdrop" as backdrop-component;
 
 // ************************************************
@@ -82,7 +81,6 @@
 // demo
 @use "objects/projects/demo/demo-global-navigation";
 @use "objects/projects/demo/demo-popup";
-@use "objects/projects/demo/demo-pagetop";
 
 // print
 @use "objects/projects/print";
