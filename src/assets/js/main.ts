@@ -1,4 +1,3 @@
-import CustomDropdown from '@assets/js/modules/CustomDropdown.ts';
 import GlobalNavigation from '@assets/js/modules/GlobalNavigation.ts';
 import checkScrollbar from '@assets/js/modules/utils/checkScrollbar.ts';
 import {
@@ -163,10 +162,6 @@ function init() {
     button: '.js-gnavSpBtn',
     focusTrap: ['#gnav-btn', '.js-gnav-end'],
     breakpoint: 'lg', // 1024px以上で無効化
-  });
-
-  new CustomDropdown({
-    selector: '.p-dropdown',
   });
 }
 
