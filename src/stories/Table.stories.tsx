@@ -5,7 +5,7 @@ import React, { useEffect } from 'react';
 import ScrollHint from 'scroll-hint';
 
 const meta: Meta = {
-  title: 'This-Site/テーブル',
+  title: 'テーブル',
   tags: ['autodocs'],
   parameters: {
     docs: {

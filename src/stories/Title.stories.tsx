@@ -2,7 +2,7 @@ import { createHtmlSource } from '@stories/assets/utils/htmlTransform';
 import type { Meta, StoryObj } from '@storybook/react';
 
 const meta: Meta = {
-  title: 'This-Site/コンテンツタイトル',
+  title: 'コンテンツタイトル',
   tags: ['autodocs'],
   parameters: {
     docs: {

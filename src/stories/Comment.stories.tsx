@@ -4,7 +4,7 @@ import { createHtmlSource } from '@stories/assets/utils/htmlTransform';
 import type { Meta, StoryObj } from '@storybook/react-vite';
 
 const meta: Meta<BaseProps> = {
-  title: 'This-Site/固有モジュール/コメント',
+  title: 'コメント',
   component: Comment,
   tags: ['autodocs'],
   parameters: {

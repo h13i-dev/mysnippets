@@ -4,7 +4,7 @@ import { createHtmlSource } from '@stories/assets/utils/htmlTransform';
 import type { Meta, StoryObj } from '@storybook/react-vite';
 
 const meta: Meta<YouTubeCardProps> = {
-  title: 'This-Site/固有モジュール/YouTubeカード',
+  title: 'YouTubeカード',
   component: YouTubeCard,
   tags: ['autodocs'],
   parameters: {

@@ -4,7 +4,7 @@ import { createHtmlSource } from '@stories/assets/utils/htmlTransform';
 import type { Meta, StoryObj } from '@storybook/react-vite';
 
 const meta = {
-  title: 'This-Site/図表・メディア',
+  title: '図表・メディア',
   component: Media,
   parameters: {
     docs: {

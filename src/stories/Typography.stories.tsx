@@ -1,7 +1,7 @@
 import { createHtmlSource } from '@stories/assets/utils/htmlTransform';
 import type { Meta, StoryObj } from '@storybook/react-vite';
 import clsx from 'clsx';
-import Highlight from '../../components/Highlight';
+import Highlight from '../components/Highlight';
 
 interface TypographyArgs {
   size?: string;
@@ -10,7 +10,7 @@ interface TypographyArgs {
 }
 
 const meta: Meta<TypographyArgs> = {
-  title: 'This-Site/タイポグラフィー',
+  title: 'タイポグラフィー',
   tags: ['autodocs'],
   parameters: {
     docs: {

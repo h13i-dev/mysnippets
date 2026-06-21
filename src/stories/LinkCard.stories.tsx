@@ -4,7 +4,7 @@ import { createHtmlSource } from '@stories/assets/utils/htmlTransform';
 import type { Meta, StoryObj } from '@storybook/react-vite';
 
 const meta: Meta<LinkCardProps> = {
-  title: 'This-Site/固有モジュール/リンクカード',
+  title: 'リンクカード',
   component: LinkCard,
   tags: ['autodocs'],
   parameters: {

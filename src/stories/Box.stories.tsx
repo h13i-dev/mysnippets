@@ -6,7 +6,7 @@ interface BoxArgs {
 }
 
 const meta: Meta<BoxArgs> = {
-  title: 'This-Site/ボックス',
+  title: 'ボックス',
   tags: ['autodocs'],
   parameters: {
     docs: {

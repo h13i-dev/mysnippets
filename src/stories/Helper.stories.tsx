@@ -2,7 +2,7 @@ import { createHtmlSource } from '@stories/assets/utils/htmlTransform';
 import type { Meta, StoryObj } from '@storybook/react-vite';
 
 const meta = {
-  title: 'This-Site/ヘルパークラス',
+  title: 'ヘルパークラス',
   tags: ['autodocs'],
   parameters: {
     docs: {

@@ -3,7 +3,7 @@ import { createHtmlSource } from '@stories/assets/utils/htmlTransform';
 import type { Meta, StoryObj } from '@storybook/react-vite';
 
 const meta = {
-  title: 'This-Site/リンク',
+  title: 'リンク',
   component: Link,
   parameters: {
     docs: {

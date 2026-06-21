@@ -1,9 +1,12 @@
 import { Grid } from '@components/index.tsx';
-import { breakpointPrefixDescription, gridDescription } from '@src/stories/assets/descriptions.ts';
+import {
+  breakpointPrefixDescription,
+  gridDescription,
+  gridSystemNote,
+} from '@src/stories/assets/descriptions.ts';
 import { createHtmlSource } from '@src/stories/assets/utils/htmlTransform';
 import type { Meta, StoryObj } from '@storybook/react-vite';
 import clsx from 'clsx';
-import { FlexCenter } from './GridSystem_Flexbox.stories.tsx';
 
 interface GridStoryProps {
   itemCount?: number;
@@ -14,12 +17,15 @@ interface GridStoryProps {
 }
 
 const meta: Meta<GridStoryProps> = {
-  title: 'This-Site/グリッドシステム_Gridプロパティ',
+  title: 'グリッドシステム_Flexboxプロパティ',
   tags: ['autodocs'],
   parameters: {
     docs: {
       description: {
-        component: gridDescription,
+        component: `${gridSystemNote}
+
+
+${gridDescription}`,
       },
     },
   },
@@ -30,11 +36,7 @@ const meta: Meta<GridStoryProps> = {
     },
     config: {
       control: 'text',
-      description: 'カスタムconfig設定（例: [2][sm:3][xl:4]）',
-    },
-    subgrid: {
-      control: 'text',
-      description: 'サブグリッド設定（例: [2][sm:3][xl:4]）',
+      description: 'カスタムconfig設定（例: [flex][2][sm:3][xl:4]）',
     },
     className: {
       control: 'text',
@@ -43,8 +45,7 @@ const meta: Meta<GridStoryProps> = {
   },
   args: {
     itemCount: 6,
-    config: '[1][sm:2][xl:3]',
-    subgrid: '',
+    config: '[flex][1][sm:2][xl:3]',
     className: '',
   },
 };
@@ -63,14 +64,12 @@ export const Default: Story = {
       },
     },
   },
-  render: ({ itemCount, config, subgrid, className }) => {
+  render: ({ itemCount, config, className }) => {
     return (
       <div>
-        <Grid className={className} config={config} subgrid={subgrid}>
+        <Grid className={className} config={config}>
           {Array.from({ length: itemCount || 6 }, (_, i) => (
-            <Grid.Item className={clsx('sg-grid-item', subgrid && 'c-subgrid')}>
-              Grid Item {i + 1}
-            </Grid.Item>
+            <Grid.Item className="sg-grid-item">Flexbox Item {i + 1}</Grid.Item>
           ))}
         </Grid>
       </div>
@@ -85,9 +84,13 @@ export const ConfigUsage: Story = {
     docs: {
       source: createHtmlSource('static'),
       description: {
-        story: `\`data-config\`属性でブレークポイントごとのカラム数を指定し、レスポンシブなレイアウトに対応します。
+        story: `${gridSystemNote}
 
-**例**: \`data-config="[1][sm:2][xl:4]"\`
+\`data-config\`属性でブレークポイントごとのカラム数を指定し、レスポンシブなレイアウトに対応します。
+
+**Flexboxレイアウトを使用する場合は、\`data-config\`に\`[flex]\`を指定してください。**
+
+**例**: \`data-config="[flex][1][sm:2][xl:4]"\`
 - **[1] = 640px未満**: 1カラム（縦に並ぶ）
 - **[sm:2] = 640px以上**: 2カラム
 - **[xl:4] = 1280px以上**: 4カラム
@@ -125,7 +128,7 @@ export const ConfigUsage: Story = {
   render: () => <></>,
 };
 
-export const ConfigGrid: Story = {
+export const ConfigFlex: Story = {
   name: 'カラム数の指定（data-config属性）の例',
   parameters: {
     docs: {
@@ -146,13 +149,13 @@ export const ConfigGrid: Story = {
     ),
   ],
   render: () => (
-    <Grid config="[1][sm:2][xl:4]">
-      <Grid.Item className="sg-grid-item">Grid Item 1</Grid.Item>
-      <Grid.Item className="sg-grid-item">Grid Item 2</Grid.Item>
-      <Grid.Item className="sg-grid-item">Grid Item 3</Grid.Item>
-      <Grid.Item className="sg-grid-item">Grid Item 4</Grid.Item>
-      <Grid.Item className="sg-grid-item">Grid Item 5</Grid.Item>
-      <Grid.Item className="sg-grid-item">Grid Item 6</Grid.Item>
+    <Grid config="[flex][1][sm:2][xl:4]">
+      <Grid.Item className="sg-grid-item">Flexbox Item 1</Grid.Item>
+      <Grid.Item className="sg-grid-item">Flexbox Item 2</Grid.Item>
+      <Grid.Item className="sg-grid-item">Flexbox Item 3</Grid.Item>
+      <Grid.Item className="sg-grid-item">Flexbox Item 4</Grid.Item>
+      <Grid.Item className="sg-grid-item">Flexbox Item 5</Grid.Item>
+      <Grid.Item className="sg-grid-item">Flexbox Item 6</Grid.Item>
     </Grid>
   ),
 };
@@ -164,7 +167,9 @@ export const SpanUsage: Story = {
     docs: {
       source: createHtmlSource('static'),
       description: {
-        story: `\`data-span\`属性で各アイテムが占めるスパン数を指定し、レスポンシブなレイアウトに対応します。
+        story: `${gridSystemNote}
+
+\`data-span\`属性で各アイテムが占めるスパン数を指定し、レスポンシブなレイアウトに対応します。
 
 **例**: \`data-span="[12][sm:6][xl:4]"\`
 - **[12] = 640px未満**: 12スパン（全幅）
@@ -204,7 +209,7 @@ export const SpanUsage: Story = {
   render: () => <></>,
 };
 
-export const SpanGrid: Story = {
+export const SpanFlex: Story = {
   name: 'アイテム幅の指定（data-span属性）の例',
   parameters: {
     docs: {
@@ -225,96 +230,119 @@ export const SpanGrid: Story = {
     ),
   ],
   render: () => (
-    <Grid>
+    <Grid config="[flex]">
       <Grid.Item className="sg-grid-item" span="[12][sm:6][xl:4]">
-        Grid Item 1
+        Flexbox Item 1
       </Grid.Item>
       <Grid.Item className="sg-grid-item" span="[12][sm:6][xl:4]">
-        Grid Item 2
+        Flexbox Item 2
       </Grid.Item>
       <Grid.Item className="sg-grid-item" span="[12][sm:6][xl:4]">
-        Grid Item 3
+        Flexbox Item 3
       </Grid.Item>
       <Grid.Item className="sg-grid-item" span="[12][sm:6][xl:4]">
-        Grid Item 4
+        Flexbox Item 4
       </Grid.Item>
       <Grid.Item className="sg-grid-item" span="[12][sm:6][xl:4]">
-        Grid Item 5
+        Flexbox Item 5
       </Grid.Item>
       <Grid.Item className="sg-grid-item" span="[12][sm:6][xl:4]">
-        Grid Item 6
+        Flexbox Item 6
       </Grid.Item>
     </Grid>
   ),
 };
 
-export const GridSubgrid: Story = {
-  name: 'サブグリッド',
-  parameters: {
-    docs: {
-      source: createHtmlSource('static'),
-    },
-  },
-  decorators: [
-    (Story) => (
-      <div className="[&_.c-subgrid]:u-grid">
-        <Story />
-      </div>
-    ),
-  ],
-  render: () => (
-    <Grid config="[1][sm:2]" subgrid="4">
-      <Grid.Item className="card c-subgrid">
-        <img
-          src="https://placehold.jp/600x400.png"
-          className="card-img-top"
-          alt=""
-          width="600"
-          height="400"
-        />
-        <div className="card-body c-subgrid u-gap-y-4">
-          <h5 className="u-font-bold u-text-xl">タイトルが入ります</h5>
-          <p>
-            サブグリッドにより、テキストが少ない場合でも隣のカードを参照してスペースが確保されます。
-          </p>
-          <a href="★★★" className="btn btn-primary">
-            詳しく見る
-          </a>
-        </div>
-      </Grid.Item>
-      <Grid.Item className="card c-subgrid">
-        <img
-          src="https://placehold.jp/600x400.png"
-          className="card-img-top"
-          alt=""
-          width="600"
-          height="400"
-        />
-        <div className="card-body c-subgrid u-gap-y-4">
-          <h5 className="u-font-bold u-text-xl">吾輩は猫である</h5>
-          <p>
-            吾輩わがはいは猫である。名前はまだ無い。どこで生れたかとんと見当けんとうがつかぬ。何でも薄暗いじめじめした所でニャーニャー泣いていた事だけは記憶している。吾輩はここで始めて人間というものを見た。
-          </p>
-          <a href="★★★" className="btn btn-primary">
-            詳しく見る
-          </a>
-        </div>
-      </Grid.Item>
-    </Grid>
-  ),
-};
-
-export const FlexboxCenter: Story = {
-  name: '【Flexbox】縦横の中央配置',
+export const FlexItemsCenter: Story = {
+  name: '縦横の中央配置（PC: 2列）_要素がコンテンツ幅の場合',
   parameters: {
     docs: {
       source: createHtmlSource('static'),
       description: {
-        story: `要素を縦横中央に配置する場合は、Flexboxレイアウトを使用し、\`data-config="[flex][center]"\`を指定してください。`,
+        story: `縦横中央に配置する場合は、\`data-config="[center]"\`を指定してください。`,
       },
     },
   },
-  render: FlexCenter.render,
+  render: () => (
+    <Grid config="[flex][center][1][sm:2]">
+      <Grid.Item className="sg-grid-item u-w-fit">Flexbox Item</Grid.Item>
+      <Grid.Item className="sg-grid-item u-w-fit">
+        Flexbox Item
+        <br />
+        Flexbox Item
+      </Grid.Item>
+    </Grid>
+  ),
+};
+
+export const FlexCenter: Story = {
+  name: '縦横の中央配置（PC: 2行・4列）',
+  parameters: {
+    docs: {
+      source: createHtmlSource('static'),
+      description: {
+        story: `縦横中央に配置する場合は、\`data-config="[center]"\`を指定してください。`,
+      },
+    },
+  },
+  render: () => (
+    <Grid config="[flex][center][1][sm:4]">
+      <Grid.Item className="sg-grid-item">Flexbox Item</Grid.Item>
+      <Grid.Item className="sg-grid-item">Flexbox Item</Grid.Item>
+      <Grid.Item className="sg-grid-item">Flexbox Item</Grid.Item>
+      <Grid.Item className="sg-grid-item">Flexbox Item</Grid.Item>
+      <Grid.Item className="sg-grid-item">Flexbox Item</Grid.Item>
+      <Grid.Item className="sg-grid-item">Flexbox Item</Grid.Item>
+      <Grid.Item className="sg-grid-item">
+        Flexbox Item
+        <br />
+        Flexbox Item
+      </Grid.Item>
+    </Grid>
+  ),
+};
+
+export const FlexVerticalCenter: Story = {
+  name: '縦の中央配置',
+  parameters: {
+    docs: {
+      source: createHtmlSource('static'),
+    },
+  },
+  render: () => (
+    <Grid config="[flex][center][1][sm:4]" as="div">
+      <Grid.Item className="sg-grid-item" as="p">
+        Flexbox Item
+      </Grid.Item>
+      <div className="u-flex u-flex-col u-gap-6">
+        <Grid.Item className="sg-grid-item" as="p">
+          Flexbox Item
+        </Grid.Item>
+        <Grid.Item className="sg-grid-item" as="p">
+          Flexbox Item
+        </Grid.Item>
+      </div>
+      <Grid.Item className="sg-grid-item" as="p">
+        Flexbox Item
+      </Grid.Item>
+    </Grid>
+  ),
+};
+
+export const FlexReverse: Story = {
+  name: '逆順',
+  parameters: {
+    docs: {
+      source: createHtmlSource('static'),
+    },
+  },
+  render: () => (
+    <Grid config="[flex][reverse][3]">
+      <Grid.Item className="sg-grid-item">1</Grid.Item>
+      <Grid.Item className="sg-grid-item">2</Grid.Item>
+      <Grid.Item className="sg-grid-item">3</Grid.Item>
+    </Grid>
+  ),
 };
 
 export const Gap: Story = {
@@ -328,13 +356,13 @@ export const Gap: Story = {
     },
   },
   render: () => (
-    <Grid config="[1][sm:3]" className="u-gap-x-40px u-gap-y-8px">
-      <Grid.Item className="sg-grid-item">Grid Item</Grid.Item>
-      <Grid.Item className="sg-grid-item">Grid Item</Grid.Item>
-      <Grid.Item className="sg-grid-item">Grid Item</Grid.Item>
-      <Grid.Item className="sg-grid-item">Grid Item</Grid.Item>
-      <Grid.Item className="sg-grid-item">Grid Item</Grid.Item>
-      <Grid.Item className="sg-grid-item">Grid Item</Grid.Item>
+    <Grid config="[flex][1][sm:3]" className="u-gap-x-40px u-gap-y-8px">
+      <Grid.Item className="sg-grid-item">Flexbox Item</Grid.Item>
+      <Grid.Item className="sg-grid-item">Flexbox Item</Grid.Item>
+      <Grid.Item className="sg-grid-item">Flexbox Item</Grid.Item>
+      <Grid.Item className="sg-grid-item">Flexbox Item</Grid.Item>
+      <Grid.Item className="sg-grid-item">Flexbox Item</Grid.Item>
+      <Grid.Item className="sg-grid-item">Flexbox Item</Grid.Item>
     </Grid>
   ),
 };

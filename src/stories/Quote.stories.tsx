@@ -6,7 +6,7 @@ import type { Meta, StoryObj } from '@storybook/react-vite';
 interface QuoteArgs {}
 
 const meta: Meta<QuoteArgs> = {
-  title: 'This-Site/引用',
+  title: '引用',
   tags: ['autodocs'],
   parameters: {
     docs: {

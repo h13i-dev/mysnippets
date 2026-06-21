@@ -5,7 +5,7 @@ import type { Meta, StoryObj } from '@storybook/react-vite';
 import React, { useEffect, useRef } from 'react';
 
 const meta: Meta = {
-  title: 'This-Site/画像レイアウト',
+  title: '画像レイアウト',
   tags: ['autodocs'],
   parameters: {
     docs: {
