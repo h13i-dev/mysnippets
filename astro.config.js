@@ -75,10 +75,4 @@ export default defineConfig({
       },
     },
   },
-  redirects: {
-    '/snippets/modules/page-top-btn/': '/snippets/modules/pagetop/',
-    '/snippets/modules/page-top-btn/demo/': '/snippets/modules/pagetop/demo/',
-    '/snippets/modules/global-navigation/demo/': '/demo/global-navigation/',
-    '/snippets/modules/pagetop/demo/': '/demo/pagetop/',
-  },
 });
