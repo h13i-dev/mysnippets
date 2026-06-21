@@ -14,7 +14,6 @@ export { default as List } from '@components/List';
 export { default as Media } from '@components/Media';
 export { default as Note } from '@components/Note';
 export { default as PageModal } from '@components/PageModal';
-export { default as Popover } from '@components/Popover';
 export { default as Quote } from '@components/Quote';
 export { default as Table } from '@components/Table';
 export { default as YouTubeCard } from '@components/YouTubeCard';
